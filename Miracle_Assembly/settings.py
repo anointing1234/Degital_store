@@ -28,13 +28,13 @@ environ.Env.read_env(os.path.join(BASE_DIR,'file.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-e3ec$7#reodkc*g83cbqpntdo@-2#b8c-)&^$0p=0cvrb=xraw'
 
-# CSRF_TRUSTED_ORIGINS = ["https://soccer247gv.com"]
-# ALLOWED_HOSTS = ["soccer247gv.com"]
+CSRF_TRUSTED_ORIGINS = ["https://miracleassembly-production.up.railway.app"]
+ALLOWED_HOSTS = ["miracleassembly-production.up.railway.app"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 # DEBUG_PROPAGATE_EXCEPTIONS = True
 
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
 # 127.0.0.1", "localhost
 
 
