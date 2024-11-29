@@ -1,0 +1,195 @@
+{% load form_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <!-- Bootstrap 5 CSS -->
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'Custom_css/style.css' %}" />
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %} " />
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  </head>
+
+  <style>
+    input:focus,
+    input:active,
+    textarea:focus,
+    textarea:active,
+    select:focus,
+    select:active {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+    
+    .animated-button {
+      position: relative;
+      overflow: hidden;
+      border-radius: 50px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .animated-button.loading {
+      background-color: #6c757d;
+      pointer-events: none;
+    }
+    
+    .animated-button.loading::after {
+      content: '';
+      position: absolute;
+      left: 45%;
+      bottom: 30px;
+      top: 40%;
+      width: 30px; /* Size of the loader */
+      height: 30px; /* Size of the loader */
+      border: 4px solid white; /* Loader color */
+      border-top: 4px solid transparent; /* Loader color */
+      border-radius: 50%;
+      animation: spin 1s linear infinite; /* Spin animation */
+      transform: translate(-50%, -50%);
+    }
+    
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+  <body>
+    <div class="container mt-5">
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+          <div class="card bg-white border-white">
+            <div class="card-header bg-white border-white text-dark">
+              <h4 class="text-center">Register | Account</h4>
+            </div>
+            <div class="card-body">
+              <form id="registerForm" method="POST" action="{% url 'register' %}">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                  <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name</label>
+                  {{ form.first_name|add_class:'form-control' }} <!-- Add form-control -->
+                  {% if form.first_name.errors %}
+                    <div class="text-danger">{{ form.first_name.errors }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="mb-3">
+                  <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                  {{ form.last_name|add_class:'form-control' }} <!-- Add form-control -->
+                  {% if form.last_name.errors %}
+                    <div class="text-danger">{{ form.last_name.errors }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="mb-3">
+                  <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                  {{ form.username|add_class:'form-control' }} <!-- Add form-control -->
+                  {% if form.username.errors %}
+                    <div class="text-danger">{{ form.username.errors }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="mb-3">
+                  <label for="{{ form.email.id_for_label }}" class="form-label">Email Address</label>
+                  {{ form.email|add_class:'form-control' }} <!-- Add form-control -->
+                  {% if form.email.errors %}
+                    <div class="text-danger">{{ form.email.errors }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="mb-3">
+                  <label for="{{ form.password1.id_for_label }}" class="form-label">Password</label>
+                  {{ form.password1|add_class:'form-control' }} <!-- Add form-control -->
+                  {% if form.password1.errors %}
+                    <div class="text-danger">{{ form.password1.errors }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="mb-3">
+                  <label for="{{ form.password2.id_for_label }}" class="form-label">Confirm Password</label>
+                  {{ form.password2|add_class:'form-control' }} <!-- Add form-control -->
+                  {% if form.password2.errors %}
+                    <div class="text-danger">{{ form.password2.errors }}</div>
+                  {% endif %}
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn btn-dark w-100 animated-button">Register</button>
+              </form>
+            </div>
+            <div class="card-footer bg-white border-white text-center">
+              <p>
+                Already have an account? <a href="{% url 'login' %}" class="text-decoration-none text-dark">Login here</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer style="font-size: small;border-top: 1px solid white;" class="text-dark pt-5 mt-5">
+      <div class="container-fluid p-0 bg-light mt-1 pt-1">
+        <div class="container py-5">
+          <div class="row">
+            <div class="col-md-4 mb-2">
+              <h5 class="text-uppercase mb-1">Main Menu</h5>
+              <ul class="list-unstyled">
+                <li>
+                  <a href="#" class="text-dark text-decoration-none">Home</a>
+                </li>
+                <li>
+                  <a href="#" class="text-dark text-decoration-none">All Products</a>
+                </li>
+                <li>
+                  <a href="#" class="text-dark text-decoration-none">My digital library</a>
+                </li>
+                <li>
+                  <a href="#" class="text-dark text-decoration-none">Contact</a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-4 mb-2">
+              <h5 class="text-uppercase mb-3">Church Locations</h5>
+              <p class="mb-2">Church 1: 147 Upper Owina Street by Evbuotubu Police Station, Benin City.</p>
+              <p>Church 2: 64 Boundary Road, Off Airport Road, GRA, Benin City.</p>
+            </div>
+            <div id="contact" class="col-md-3 mb-2">
+              <h5 class="text-uppercase mb-3">Contact Us</h5>
+              <p>contact@jeffreyiyonawan.com</p>
+
+              <p>
+                &copy; <span id="year"></span> <a class="text-dark" href="tel:+234802354-1175 ">+234 (802) 354-1175 (9am - 5pm EST, Monday - Friday)</a>
+              </p>
+            </div>
+          </div>
+          <div class="text-center mt-2">
+            <p class="mb-0">Follow us on:</p>
+            <a href="#" class="text-dark me-3"><i class="fab fa-facebook-f"></i> Facebook</a>
+            <a href="#" class="text-dark me-3"><i class="fab fa-twitter"></i> Twitter</a>
+            <a href="#" class="text-dark me-3"><i class="fab fa-instagram"></i> Instagram</a>
+          </div>
+          <div class="container mt-2">
+            <img style="height: 100px; width: 200px;" src="{% static 'img/logo-dark.png' %}" alt="Logo" /><p class="text-dark">Home of life changing messages.....</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <!-- Bootstrap 5 JS -->
+    <script>
+      document.getElementById('registerForm').addEventListener('submit', function () {
+        var submitBtn = document.getElementById('submitBtn')
+        submitBtn.classList.add('loading') // Add loading class
+        submitBtn.innerHTML = 'Registering user.....' // Change button text
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+{% load static %}
+
+<footer style="font-size: small;" class="text-dark pt-5 mt-5">
+  <div class="container-fluid shadow p-0 bg-light mt-1 pt-1">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-md-4 mb-2">
+          <h5 class="text-uppercase mb-1">Main Menu</h5>
+          <ul class="list-unstyled">
+            <li>
+              <a href="#" class="text-dark text-decoration-none">Home</a>
+            </li>
+            <li>
+              <a href="#" class="text-dark text-decoration-none">All Products</a>
+            </li>
+            <li>
+              <a href="#" class="text-dark text-decoration-none">My digital library</a>
+            </li>
+            <li>
+              <a href="#" class="text-dark text-decoration-none">Contact</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-2">
+          <h5 class="text-uppercase mb-3">Church Locations</h5>
+          <p class="mb-2">Church 1: 147 Upper Owina Street by Evbuotubu Police Station, Benin City.</p>
+          <p>Church 2: 64 Boundary Road, Off Airport Road, GRA, Benin City.</p>
+        </div>
+        <div id="contact" class="col-md-3 mb-2">
+          <h5 class="text-uppercase mb-3">Contact Us</h5>
+          <p>contact@jeffreyiyonawan.com</p>
+
+          <p>
+            &copy; <span id="year"></span> <a class="text-dark" href="tel:+234802354-1175 ">+234 (802) 354-1175 (9am - 5pm EST, Monday - Friday)</a>
+          </p>
+        </div>
+      </div>
+      <div class="text-center mt-2">
+        <p class="mb-0">Follow us on:</p>
+        <a href="#" class="text-dark me-3"><i class="fab fa-facebook-f"></i> Facebook</a>
+        <a href="#" class="text-dark me-3"><i class="fab fa-twitter"></i> Twitter</a>
+        <a href="#" class="text-dark me-3"><i class="fab fa-instagram"></i> Instagram</a>
+      </div>
+      <div class="container mt-2">
+        <img style="height: 100px; width: 200px;" src="{% static 'img/logo-dark.png' %}" alt="Logo" /><p class="text-dark">Home of life changing messages.....</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  ScrollReveal({
+    reset: false,
+    distance: '60px',
+    duration: 2500,
+    delay: 400
+  })
+  ScrollReveal().reveal('.nav-big', { delay: 500, origin: 'left' })
+  ScrollReveal().reveal('.punchline', { delay: 2000 })
+</script>

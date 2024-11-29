@@ -1,0 +1,255 @@
+{% load static %}
+{% load form_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'Custom_css/style.css' %}" />
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %} " />
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <style>
+      .form-control {
+        border: 1px solid black;
+        background-color: none;
+      }
+      input:focus,
+      input:active,
+      textarea:focus,
+      textarea:active,
+      select:focus,
+      select:active {
+        outline: none !important;
+        box-shadow: none !important;
+      }
+      
+      .alert {
+        /* Size of the loader */
+        height: 2cm;
+      }
+      
+      .animated-button {
+        position: relative;
+        overflow: hidden;
+        border-radius: 50px; /* Rounded button */
+        transition: background-color 0.3s ease;
+      }
+      
+      .animated-button.loading {
+        background-color: #6c757d; /* Change color when loading */
+        pointer-events: none; /* Disable button clicks */
+      }
+      
+      .animated-button.loading::after {
+        content: '';
+        position: absolute;
+        left: 45%;
+        bottom: 30px;
+        top: 40%;
+        width: 30px; /* Size of the loader */
+        height: 30px; /* Size of the loader */
+        border: 4px solid white; /* Loader color */
+        border-top: 4px solid transparent; /* Loader color */
+        border-radius: 50%;
+        animation: spin 1s linear infinite; /* Spin animation */
+        transform: translate(-50%, -50%);
+      }
+      
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid mt-4"></div>
+    <div class="container-fluid d-flex justify-content-center mt-2 pt-2 py-5">
+      <div class="col-md-4 grid-margin stretch-card">
+        <div class="card border-white bg-transparent">
+          <div class="card-body">
+            <h3 class="text-center text-dark fw-bold mt-5 mb-3">Login | Account</h3>
+
+            <form id="LoginForm" class="forms-sample" method="POST" action="{% url 'Login' %}">
+              {% csrf_token %}
+
+              <div class="mb-3">
+                <label for="username" class="text-dark form-text">Username</label>
+                {{ form.username|add_class:'form-control' }}
+                {% if form.username.errors %}
+                  <div class="text-danger">{{ form.username.errors }}</div>
+                {% endif %}
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-text">Password</label>
+                {{ form.password|add_class:'form-control' }}
+                {% if form.password.errors %}
+                  <div class="text-danger">{{ form.password.errors }}</div>
+                {% endif %}
+              </div>
+
+              <div class="input-group">
+                <div class="container d-flex justify-content-center">
+                  <p class="create text-dark">
+                    Don't have an account? <a class="text-dark" href="{% url 'signup' %}">Signup</a>
+                  </p>
+                </div>
+                <div class="container d-flex justify-content-center">
+                  <p class="create text-dark">
+                    Forgot password? <a class="text-dark" href="{% url 'send_password_reset' %}">Reset password</a>
+                  </p>
+                </div>
+              </div>
+
+              <button id="submitBtn" type="submit" class="btn btn-dark col-12 animated-button text-light">Submit</button>
+            </form>
+          </div>
+        </div>
+        <div class="alert-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+          {% if messages %}
+            {% with messages=messages %}
+              {% for message in messages %}
+                {% if 'reset' in message.tags %}
+                  <div class="custom-alert success" role="alert">
+                    <p class="mb-0">{{ message }}</p>
+                  </div>
+                {% else %}
+                  <div class="custom-alert error" role="alert">
+                    <p class="mb-0">{{ message }}</p>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            {% endwith %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <footer style="font-size: small;border-top: 1px solid white;" class="text-dark pt-5 mt-5">
+      <div class="container-fluid p-0 bg-light mt-1 pt-1">
+        <div class="container py-5">
+          <div class="row">
+            <div class="col-md-4 mb-2">
+              <h5 class="text-uppercase mb-1">Main Menu</h5>
+              <ul class="list-unstyled">
+                <li>
+                  <a href="#" class="text-dark text-decoration-none">Home</a>
+                </li>
+                <li>
+                  <a href="#" class="text-dark text-decoration-none">All Products</a>
+                </li>
+                <li>
+                  <a href="#" class="text-dark text-decoration-none">My digital library</a>
+                </li>
+                <li>
+                  <a href="#" class="text-dark text-decoration-none">Contact</a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-4 mb-2">
+              <h5 class="text-uppercase mb-3">Church Locations</h5>
+              <p class="mb-2">Church 1: 147 Upper Owina Street by Evbuotubu Police Station, Benin City.</p>
+              <p>Church 2: 64 Boundary Road, Off Airport Road, GRA, Benin City.</p>
+            </div>
+            <div id="contact" class="col-md-3 mb-2">
+              <h5 class="text-uppercase mb-3">Contact Us</h5>
+              <p>contact@jeffreyiyonawan.com</p>
+
+              <p>
+                &copy; <span id="year"></span> <a class="text-dark" href="tel:+234802354-1175 ">+234 (802) 354-1175 (9am - 5pm EST, Monday - Friday)</a>
+              </p>
+            </div>
+          </div>
+          <div class="text-center mt-2">
+            <p class="mb-0">Follow us on:</p>
+            <a href="#" class="text-dark me-3"><i class="fab fa-facebook-f"></i> Facebook</a>
+            <a href="#" class="text-dark me-3"><i class="fab fa-twitter"></i> Twitter</a>
+            <a href="#" class="text-dark me-3"><i class="fab fa-instagram"></i> Instagram</a>
+          </div>
+          <div class="container mt-2">
+            <img style="height: 100px; width: 200px;" src="{% static 'img/logo-dark.png' %}" alt="Logo" /><p class="text-dark">Home of life changing messages.....</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script>
+      document.getElementById('LoginForm').addEventListener('submit', function () {
+        var submitBtn = document.getElementById('submitBtn')
+        submitBtn.classList.add('loading') // Add loading class
+        submitBtn.innerHTML = 'Logging in...' // Change button text
+      })
+    </script>
+    <script>
+      // Auto-dismiss alerts after 3 seconds
+      setTimeout(() => {
+        const alerts = document.querySelectorAll('.alert')
+        alerts.forEach((alert) => {
+          alert.classList.remove('show')
+          alert.classList.add('fade')
+          setTimeout(() => alert.remove(), 300) // Delay removal for fade-out effect
+        })
+      }, 3000)
+    </script>
+
+    <style>
+      /* Alert container */
+      .alert-container {
+        width: 300px;
+      }
+      
+      /* Custom alert box */
+      .custom-alert {
+        background-color: white;
+        color: #333;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+        position: relative;
+        margin-bottom: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+      
+      /* Success and Error Styling */
+      .custom-alert.success::before,
+      .custom-alert.error::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 5px;
+        width: 100%;
+        animation: loading 3s linear forwards;
+      }
+      
+      /* Green bottom border for success */
+      .custom-alert.success::before {
+        background-color: #28a745; /* Bootstrap success green */
+      }
+      
+      /* Red bottom border for error */
+      .custom-alert.error::before {
+        background-color: #dc3545; /* Bootstrap danger red */
+      }
+      
+      /* Loading animation for bottom border */
+      @keyframes loading {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+    </style>
+  </body>
+</html>

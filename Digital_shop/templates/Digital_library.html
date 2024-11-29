@@ -1,0 +1,169 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block contents %}
+  {% load custom_filters %}
+  <style>
+    .card-img-top {
+      height: 150px;
+      width: 150px;
+      margin-bottom: 30px;
+    }
+    .card-body h6.card-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: black;
+      font-size: smaller;
+    }
+    .hover-grow {
+      transition: transform 0.3s ease-in-out; /* Smooth transition for scaling */
+    }
+    
+    .hover-grow:hover {
+      transform: scale(1.1); /* Slightly increase size on hover */
+    }
+    .animated-btn {
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      transition: color 0.3s ease-in-out; /* Smooth text color transition */
+    }
+    
+    .animated-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%; /* Start off-screen to the left */
+      width: 100%;
+      height: 100%;
+      background-color: black; /* Background color for hover effect */
+      z-index: -1; /* Behind the text */
+      transition: left 0.4s ease-in-out; /* Smooth slide animation */
+    }
+    
+    .animated-btn:hover {
+      color: white; /* Change text color on hover */
+    }
+    
+    .animated-btn:hover::before {
+      left: 0; /* Slide in the background */
+    }
+  </style>
+
+  <!-- Disclaimer Section -->
+  <div class="alert alert-info text-center mb-4 shadow" role="alert" style="font-size: 14px;">
+    <p style="font-size: smaller;">
+      <strong class="text-danger">Important Notice:</strong> Purchased products are accessible in your digital library only while they remain available in our store. We recommend downloading and storing the products on your device after purchase to ensure uninterrupted access and avoid potential loss.
+    </p>
+  </div>
+  <!-- My Digital Library Section -->
+  <section class="container mt-4 pt-4 mb-5" id="my-digital-library">
+    <div class="text-center">
+      <h5 style="font-weight:700;  border-bottom:4px solid #E67E22; display: inline-block;" class="text-center mb-5 py-3">My Digital Library</h5>
+    </div>
+
+    <!-- Tabs for Product Categories -->
+    <ul class="nav nav-tabs justify-content-center mb-5 shadow" id="libraryTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="books-tab" data-bs-toggle="tab" href="#books" role="tab" aria-controls="books" aria-selected="true">Books</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="videos-tab" data-bs-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false">Videos</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="audios-tab" data-bs-toggle="tab" href="#audios" role="tab" aria-controls="audios" aria-selected="false">Audios</a>
+      </li>
+    </ul>
+
+    <!-- Library Tab Content -->
+    <div class="tab-content mt-3">
+      <!-- Books Tab -->
+      <div class="tab-pane fade show active" id="books" role="tabpanel" aria-labelledby="books-tab">
+        <div class="row g-4">
+          {% with books=purchased_products|filter_by_type:'book' %}
+            {% if books|length == 0 %}
+              <div class="alert alert-light text-center text-dark mt-2" role="alert">
+                <h6 class="fw-bold">No books available in your library.</h6>
+              </div>
+            {% else %}
+              {% for product in books %}
+                <div class="container col-lg-4 col-md-6 col-sm-12">
+                  <div class="card border-transparent bg-transparent d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-center">
+                      <img src="{{ product.image.url }}" class="card-img-top img-fluid shadow hover-grow" alt="{{ product.name }}" />
+                    </div>
+                    <div class="card-body text-center">
+                      <h6 class="card-title">{{ product.name }}</h6>
+                    </div>
+                    <div class="card-footer text-center bg-transparent">
+                      <a href="{{ product.product_file.url }}" class="active fw-bold btn border animated-btn w-100 btn-sm mb-2" download>Download Book</a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+        </div>
+      </div>
+
+      <!-- Videos Tab -->
+      <div class="tab-pane fade" id="videos" role="tabpanel" aria-labelledby="videos-tab">
+        <div class="row g-4">
+          {% with videos=purchased_products|filter_by_type:'video' %}
+            {% if videos|length == 0 %}
+              <div class="alert alert-light text-center text-dark mt-2" role="alert">
+                <h6 class="fw-bold">No videos available in your library.</h6>
+              </div>
+            {% else %}
+              {% for product in videos %}
+                <div class="container col-lg-4 col-md-6 col-sm-12">
+                  <div class="card border-transparent bg-transparent d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-center">
+                      <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}" style="height: 200px; object-fit: cover;" />
+                    </div>
+                    <div class="card-body text-center">
+                      <h5 class="card-title">{{ product.name }}</h5>
+                    </div>
+                    <div class="card-footer text-center bg-transparent">
+                      <a href="{{ product.product_file.url }}" class="btn active fw-bold border animated-btn w-100 btn-sm mb-2">Watch Video</a>
+                      <a href="{{ product.product_file.url }}" class="btn active fw-bold border animated-btn w-100 btn-sm mb-2" download>Download Video</a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+        </div>
+      </div>
+
+      <!-- Audios Tab -->
+      <div class="tab-pane fade" id="audios" role="tabpanel" aria-labelledby="audios-tab">
+        <div class="row g-4">
+          {% with audios=purchased_products|filter_by_type:'audio' %}
+            {% if audios|length == 0 %}
+              <div class="alert alert-light text-center text-dark mt-2" role="alert">
+                <h6 class="fw-bold">No audios available in your library.</h6>
+              </div>
+            {% else %}
+              {% for product in audios %}
+                <div class="container col-lg-4 col-md-6 col-sm-12">
+                  <div class="card border-transparent bg-transparent d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-center">
+                      <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}" style="height: 200px; object-fit: cover;" />
+                    </div>
+                    <div class="card-body text-center">
+                      <h5 class="card-title">{{ product.name }}</h5>
+                    </div>
+                    <div class="card-footer text-center bg-transparent">
+                      <a href="{{ product.product_file.url }}" class="btn fw-bold border active animated-btn w-100 btn-sm mb-2">Listen to Audio</a>
+                      <a href="{{ product.product_file.url }}" class="btn fw-bold border active animated-btn w-100 btn-sm mb-2" download>Download Audio</a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

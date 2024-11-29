@@ -1,0 +1,248 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jeffreyiyonawan-Digital-Store</title>
+    <!-- Custom CSS for Underline Effect -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://kit.fontawesome.com/58f7fb8902.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+    <style>
+      .navbar-nav .nav-link {
+        padding: 0.5rem 1rem; /* Adjust padding to make the button smaller */
+        border: none;
+      }
+      html.sr .load-hidden {
+        visibility: hidden;
+      }
+      
+      .navbar-nav .nav-link:focus {
+        outline: none; /* Remove the focus outline */
+      }
+      
+      .navbar-nav .nav-link {
+        transition: border-bottom 0.5s ease;
+        display: inline-block;
+        font-stretch: expanded;
+        gap: 30px;
+      }
+      
+      .navbar-nav .nav-link.active {
+        text-decoration: none;
+        transition: border-bottom 0.3s ease;
+        border-bottom: 2px solid white;
+      }
+      
+      .navbar-nav .nav-link:hover,
+      .navbar-nav .nav-link:active {
+        text-decoration: none;
+        border-bottom: 2px solid white;
+      }
+      
+      .navbar-toggler {
+        border: none; /* Remove the border of the toggler button */
+        outline: none; /* Remove the outline when focused */
+        box-shadow: none;
+      }
+      
+      .navbar-toggler:focus {
+        outline: none; /* Remove the focus outline from toggler button */
+      }
+      
+      .carousel-item {
+        width: 100%; /* Adjust based on your needs */
+        height: 500px;
+      }
+      
+      .carousel-item img {
+        width: 100%;
+        object-fit: cover; /* Ensures the image covers the whole area */
+      }
+      
+      body {
+        padding: 0;
+        margin: 0;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 900;
+        color: black;
+      }
+      /* Style for tabs */
+      .nav-tabs .nav-link {
+        color: black; /* Dark text color for inactive tabs */
+        border: none;
+        padding: 10px 20px;
+        font-weight: bold;
+        transition: color 0.3s, background-color 0.3s;
+      }
+      
+      .nav-tabs {
+        border-bottom: none;
+      }
+      
+      /* Remove border from individual nav-links */
+      .nav-tabs .nav-link {
+        border: none;
+      }
+      
+      .nav-tabs .nav-link.active {
+        color: white;
+        background-color: #e67e22;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body class="bg-ligt text-dark">
+    {% include 'sections/nav.html' %}
+    {% block contents %}
+
+    {% endblock %}
+
+    {% include 'sections/footer.html' %}
+
+    <script>
+      const apiKey = '3d5eeb185c2d6cae6b985e03' // Your ExchangeRate-API key
+      const exchangeUrl = `https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD` // ExchangeRate-API URL
+      
+      let exchangeRates = {}
+      let selectedCurrency = localStorage.getItem('selectedCurrency') || 'ngn' // Default to 'ngn' if not set
+      
+      // Check if the user is online
+      function checkInternetConnection() {
+        return navigator.onLine // Returns true if the user is online, false if offline
+      }
+      
+      // Fetch exchange rates from ExchangeRate-API
+      async function fetchExchangeRates() {
+        if (!checkInternetConnection()) {
+          disableCurrencyDropdown() // Disable currency dropdown if offline
+          return // Exit if there's no internet connection
+        }
+      
+        try {
+          const response = await fetch(exchangeUrl)
+          const data = await response.json()
+          console.log('API Response:', data) // Log the entire API response
+      
+          // Extract exchange rates for NGN
+          const usdToNgn = data.conversion_rates.NGN // Get the USD to NGN rate
+      
+          // Calculate conversion rates
+          exchangeRates = {
+            ngn_to_usd: 1 / usdToNgn, // NGN to USD
+            usd_to_ngn: usdToNgn // USD to NGN
+          }
+      
+          console.log('Exchange Rates:', exchangeRates) // Log the exchange rates
+      
+          // Update prices based on the selected currency
+          updatePrices(selectedCurrency)
+        } catch (error) {
+          console.error('Error fetching exchange rates:', error)
+        }
+      }
+      
+      // Convert the price based on the selected currency
+      function convertCurrency(amount, fromCurrency, toCurrency) {
+        if (fromCurrency === 'usd' && toCurrency === 'ngn') {
+          return (amount * exchangeRates.usd_to_ngn).toFixed(2) // USD to NGN
+        } else if (fromCurrency === 'ngn' && toCurrency === 'usd') {
+          return (amount * exchangeRates.ngn_to_usd).toFixed(2) // NGN to USD
+        }
+        return amount // If no conversion, return the original amount
+      }
+      
+      // Format the currency with commas and decimal points
+      function formatCurrency(amount, currency) {
+        const formatter = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: currency.toUpperCase(),
+          minimumFractionDigits: 2
+        })
+        return formatter.format(amount).replace(currency.toUpperCase() === 'NGN' ? 'NGN' : '$', currency === 'ngn' ? '₦' : '$')
+      }
+      
+      // Update all displayed prices based on selected currency
+      function updatePrices(currency) {
+        const prices = document.querySelectorAll('.price')
+        prices.forEach((priceElement) => {
+          const originalAmount = parseFloat(priceElement.getAttribute('data-price')) // Original price in NGN
+          const newAmount = convertCurrency(originalAmount, 'ngn', currency) // Convert from original NGN to selected currency
+      
+          // Format the converted amount
+          const formattedAmount = formatCurrency(newAmount, currency)
+      
+          // Update the displayed price
+          priceElement.textContent = formattedAmount
+      
+          // Update data attributes to track the new currency
+          priceElement.setAttribute('data-currency', currency)
+        })
+      }
+      
+      // Disable the currency dropdown if offline
+      function disableCurrencyDropdown() {
+        document.querySelectorAll('.dropdown-item').forEach((item) => {
+          item.classList.add('disabled') // Visually disable the dropdown item
+        })
+      }
+      
+      // Enable the currency dropdown if online
+      function enableCurrencyDropdown() {
+        document.querySelectorAll('.dropdown-item').forEach((item) => {
+          item.classList.remove('disabled') // Enable the dropdown items
+        })
+      }
+      
+      // Event Listener for Currency Dropdown
+      document.querySelectorAll('.dropdown-item').forEach((item) => {
+        item.addEventListener('click', function (e) {
+          e.preventDefault()
+      
+          // Only allow switching currencies if the user has an internet connection
+          if (!checkInternetConnection()) {
+            return // Prevent switching if offline
+          }
+      
+          // Get selected currency from data attribute
+          const selectedCurrency = this.getAttribute('data-currency')
+      
+          // Update all prices with the new currency
+          updatePrices(selectedCurrency)
+      
+          // Store the selected currency in localStorage
+          localStorage.setItem('selectedCurrency', selectedCurrency)
+        })
+      })
+      
+      // Fetch exchange rates when the page loads and check internet connection
+      window.onload = () => {
+        if (!checkInternetConnection()) {
+          disableCurrencyDropdown()
+        } else {
+          fetchExchangeRates()
+        }
+      }
+      
+      // Listen for online and offline events to detect internet connection status
+      window.addEventListener('offline', () => {
+        disableCurrencyDropdown()
+      })
+      
+      window.addEventListener('online', () => {
+        enableCurrencyDropdown()
+        fetchExchangeRates() // Re-fetch exchange rates when back online
+      })
+    </script>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  </body>
+</html>

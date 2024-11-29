@@ -1,0 +1,203 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block contents %}
+{% load humanize %}
+  <style>
+    th {
+      height: 150px;
+    }
+    
+    .table {
+      border-collapse: collapse; /* Make sure the borders collapse together */
+    }
+    
+    .table th {
+      background-color: white; /* Slightly lighter background for headers */
+    }
+    
+    .table td {
+      background-color: white; /* Keeping the row background the same */
+    }
+    .small-text {
+      font-size: xx-small;  /* Make the text very tiny */
+      padding: 5px 10px;    /* Adjust padding to make it compact */
+    }
+    @media (max-width: 800px) {
+         .card-text{
+          font-size: smaller;
+         }
+         .card-title{
+          font-size: small;
+         }
+    }
+    
+    .animated-btn {
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      transition: color 0.3s ease-in-out; /* Smooth text color transition */
+    }
+    
+    .animated-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%; /* Start off-screen to the left */
+      width: 100%;
+      height: 100%;
+      background-color: black; /* Background color for hover effect */
+      z-index: -1; /* Behind the text */
+      transition: left 0.4s ease-in-out; /* Smooth slide animation */
+    }
+    
+    .animated-btn:hover {
+      color: white; /* Change text color on hover */
+    }
+    
+    .animated-btn:hover::before {
+      left: 0; /* Slide in the background */
+    }
+
+    .card-img-top {
+      max-height: 150px;
+      object-fit: contain; /* Ensures the logo fits well without distortion */
+    }
+    .card-img-top{
+      height: 100px;
+      width: 100px;
+    }
+    .card {
+      border: none;
+      overflow: hidden;
+      background-color: transparent;
+      color: black;
+    }
+
+  </style>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="container">
+
+     
+      <section>
+        <div class="container-fluid mt-5 pt-5 mb-2">
+          <div class="container-fluid d-flex justify-content-center mb-5">
+            <h3 class="fw-bolder text-dark text-center py-3r" style=" display: inline-block;">Masterclass Courses</h3>
+          </div>
+
+          <!-- Membership Table (Visible on Large Screens) -->
+          <table class="table py-5 bg-light shadow membership-table text-dark d-sm-non mt-4">
+            <thead>
+                <tr>
+                    <th></th>
+                    {% for membership in memberships %}
+                        <th>
+                            <h5 class="text-center fw-bold">
+                                <p>{{ membership.get_course_name_display }}</p>
+                            </h5>
+                            <p class="text-center">Level 1 -- {{ membership.level_1 }}   ₦{{ membership.level_1_price|intcomma }}</p>
+                            <p class="text-center">Level 2 -- {{ membership.level_2 }}   ₦{{ membership.level_2_price|intcomma }}</p>
+                        </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Number of Levels</td>
+                    {% for membership in memberships %}
+                        <td class="text-center">
+                            <h6 class="fw-bold">2</h6>
+                        </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Training sections</td>
+                    {% for membership in memberships %}
+                        <td class="text-center">
+                            <h6 class="fw-bold">{{ membership.training_sections }}</h6>
+                        </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    {% for membership in memberships %}
+                        <td class="text-center">
+                          <form action="{% url 'pay_master' %}" method="post">
+                             {% csrf_token %} 
+                            <input type="hidden" name="membership_id" value="{{ membership.id }}">
+                            <button type="submit" class="btn animated-btn btn-sm border border-1 border-dark w-50">Start Now</button>
+                          </form>
+                        </td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        
+
+        <!-- Membership Cards (Visible on Small Screens) -->
+        <div class="membership-card row text-dark mt-4">
+          {% for membership in memberships %}
+              <div class="col-12 col-md-12 mb-5">
+                  <div class="card mb-3 shadow">
+                      <div class="container-fluid d-flex justify-content-center">
+                          <img src="{% static 'img/training_icon.png' %}" class="card-img-top" alt="{{ membership.get_course_name_display }} Logo">
+                      </div>
+                      <h6 class="card-title mb-3 fw-bold text-center">{{ membership.get_course_name_display }}</h6>
+                      <div class="card-body">
+                          <table class="table table-borderless">
+                              <tbody>
+                                  <tr>
+                                      <td class="small-text"><strong>Level 1:</strong></td>
+                                      <td class="small-text">{{ membership.level_1 }}  ₦{{ membership.level_1_price|intcomma  }}</td>
+                                  </tr>
+                                  <tr>
+                                      <td class="small-text"><strong>Level 2:</strong></td>
+                                      <td class="small-text">{{ membership.level_2 }} ₦{{ membership.level_2_price|intcomma  }}</td>
+                                  </tr>
+                                  <tr>
+                                      <td class="small-text"><strong>Training Sections:</strong></td>
+                                      <td class="small-text">{{ membership.training_sections }}</td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                          {% for membership in memberships %}
+                          <p class="text-center">
+                            <form action="{% url 'pay_master' %}" method="post">
+                              {% csrf_token %}
+                              <input type="hidden" name="membership_id" value="{{ membership.id }}">
+                              <button type="submit" class="btn animated-btn border btn-sm border-1 border-dark w-100">Start Now</button>
+                            </form>
+                          </p>
+                          {% endfor %}
+                     
+                      </div>
+                  </div>
+              </div>
+          {% endfor %}
+      </div>
+        </div>
+      </section>
+    </div>
+    </div>
+  </div>
+
+  <style>
+    /* Responsive styling for table and card views */
+    .membership-table {
+      display: none;
+    }
+    
+    .membership-card {
+      display: block;
+    }
+    
+    @media (min-width:850px) {
+      .membership-table {
+        display: table;
+      }
+      .membership-card {
+        display: none;
+      }
+    }
+  </style>
+{% endblock %}

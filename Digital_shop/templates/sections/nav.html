@@ -1,0 +1,391 @@
+{% load static %}
+<style>
+  /* Custom styles */
+  button:focus,
+  button:active,
+  button:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  .img-fluid {
+    background-size: cover;
+    height: 200px;
+    width: 200px;
+  }
+  
+  .card {
+    border: none;
+    background-color: none;
+    padding: 50px;
+  }
+  
+  /* Custom styles to resemble nav-link without using the nav-link class */
+  .account-dropdown-item {
+    font-size: small; /* Bootstrap's default nav-link font size */
+    padding: 8px 16px; /* Padding similar to nav-link */
+    text-decoration: none; /* Ensures no underlines on links */
+    display: block; /* Makes the link block-level for full clickable area */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition on hover */
+    border-radius: 5px; /* Rounded corners */
+  }
+  
+  /* Hover effect */
+  .account-dropdown-item:hover {
+    background-color: none; /* Light background on hover */
+    color: black; /* Change text color on hover */
+  }
+  
+  /* Active state: when the link is selected or clicked */
+  .account-dropdown-item.active,
+  .account-dropdown-item:focus {
+    background-color: none; /* Darker background when active or focused */
+    color: black; /* Ensure text remains white in the active state */
+  }
+  
+  /* Optional: Add a focus effect (for keyboard navigation) */
+  .account-dropdown-item:focus {
+    outline: none; /* Remove default outline */
+    /* Blue focus ring (similar to Bootstrap) */
+  }
+  
+  .navbar-brand {
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+  
+  input:focus,
+  input:active,
+  textarea:focus,
+  textarea:active,
+  select:focus,
+  select:active {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  .nav-link {
+    font-size: small;
+    display: inline-block; /* Ensures inline display */
+  }
+  
+  /* Ensure flex layout for navbar-nav */
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Improved styling for the currency dropdown */
+  .dropdown-menu {
+    min-width: 200px;
+    padding: 10px 0;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px;
+    font-size: 14px;
+    opacity: 0; /* Initially hide dropdown with opacity */
+    transition: opacity 0.5s ease, transform 0.3s ease; /* Smooth transition for opacity and scaling */
+    transform: translateY(-10px); /* Start with dropdown slightly above */
+  }
+  
+  .dropdown-item {
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .dropdown-item img {
+    vertical-align: middle;
+  }
+  
+  .dropdown-toggle::after {
+    content: none; /* Remove the default arrow icon */
+  }
+  
+  /* Spacing for navbar items */
+  .navbar-nav .nav-item {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  
+  /* Customize the dropdown toggle button */
+  .dropdown-toggle {
+    font-size: 14px;
+    padding-right: 20px;
+    padding-left: 10px;
+  }
+  
+  /* Navbar Toggler Button Custom Styles */
+  .navbar-toggler {
+    background-color: none; /* Dark orange color */
+    border: none; /* Border color same as the button background */
+    color: #fff; /* Text color inside the button */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for background and scale */
+  }
+  
+  /* Toggler Button Hover Effect */
+  .navbar-toggler:hover {
+    background-color: none; /* Slightly lighter orange on hover */
+    transform: scale(1.05); /* Slight scaling effect on hover */
+  }
+  
+  /* Toggler Button Active (Clicked) Effect */
+  .navbar-toggler:active {
+    background-color: none; /* Even darker orange when clicked */
+    transform: scale(0.98); /* Slight scale down effect when clicked */
+  }
+  
+  /* Toggler Button Focus Effect */
+  .navbar-toggler:focus {
+    background-color: none; /* Same color as hover when focused */
+  }
+  
+  /* Transition for the dropdown toggle (opening/closing) */
+  .dropdown-menu.show {
+    opacity: 1; /* Fully visible when shown */
+    transform: translateY(0); /* Drop down to its original position */
+    transition: opacity 0.5s ease, transform 0.3s ease;
+  }
+  
+  .dropdown-menu.hide {
+    opacity: 0; /* Fade out when hiding */
+    transform: translateY(-10px); /* Slightly move it upwards to give it a closing animation */
+  }
+  
+  /* Add transition for collapsing menu */
+  .navbar-collapse {
+    transition: max-height 0.3s ease; /* Apply transition to collapse */
+  }
+  
+  /* Initially hide the collapsed menu */
+  .navbar-collapse.collapse {
+    max-height: 0;
+  }
+  
+  /* Expand menu when toggled */
+  .navbar-collapse.show {
+    max-height: 500px; /* This should be enough to display the navbar */
+  }
+  .navbar-brand {
+    height: 90px;
+    width: 150px;
+  }
+  .nav-img {
+    height: 100px;
+    width: 200px;
+  }
+  
+  .navbar-toggler-icon {
+    background-image: none; /* Remove the default background */
+    background-color: #fff; /* Set the icon color to white */
+    width: 30px; /* Adjust the width if needed */
+    height: 3px; /* Adjust the height for the bars */
+    position: relative;
+  }
+  
+  .navbar-toggler-icon::before,
+  .navbar-toggler-icon::after {
+    content: '';
+    display: block;
+    background-color: #fff;
+    width: 30px;
+    height: 3px;
+    position: absolute;
+    left: 0;
+    transition: all 0.3s;
+  }
+  
+  .navbar-toggler-icon::before {
+    top: -8px; /* Position for the top bar */
+  }
+  
+  .navbar-toggler-icon::after {
+    top: 8px; /* Position for the bottom bar */
+  }
+  
+  /* Sidebar styling for mobile */
+  .mobile-sidebar {
+    position: fixed;
+    top: 0;
+    right: -250px; /* Open from the right */
+    width: 250px;
+    height: 100%;
+    background-color: #353a98;
+    transition: all 0.3s ease;
+    z-index: 1050;
+    padding-top: 60px;
+  }
+  
+  .mobile-sidebar a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 12px 16px;
+    display: block;
+    transition: background-color 0.3s;
+  }
+  
+  .mobile-sidebar a:hover {
+    background-color: lightslategrey;
+  }
+  
+  .mobile-sidebar .close-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px; /* Adjusted for right side */
+    font-size: 30px;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .mobile-sidebar.show {
+    right: 0; /* Open from the right */
+  }
+  
+  /* Hide mobile navbar on larger screens */
+  @media (min-width: 992px) {
+    .mobile-sidebar {
+      display: none;
+    }
+  }
+</style>
+
+<!-- Navbar -->
+<nav style="background-color:#353A98;" class="navbar navbar-expand-lg sticky-top text-white shadow">
+  <div class="container nav-big py-2">
+    <!-- Centered Logo -->
+    <a class="navbar-brand text-light" href="{% url 'home' %}"><img class="nav-img" src="{% static 'img/logo-white.png' %}" alt="Logo" /></a>
+
+    <!-- Navbar Toggler for Mobile View -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation" onclick="toggleSidebar()"><span style="color:#fff;" class="navbar-toggler-icon"></span></button>
+
+    <!-- Navbar Links -->
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item mx-3">
+          <a class="nav-link text-white link-underline {% if request.path == '/' or request.path == '/home/' %}active{% endif %}" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link text-white link-underline {% if request.path == '#all-products' %}active{% endif %}" href="{% url 'home' %}#all-products">All Products</a>
+        </li>
+
+        <!-- Grouping "My Digital Library" and "Leadership Training" under a dropdown -->
+        {% if user.is_authenticated %}
+          <li class="nav-item mx-3 dropdown">
+            <a class="nav-link text-white dropdown-toggle link-underline {% if request.path == '/training' or request.path == '/library' %}active{% endif %}" href="#" id="userLinksDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">My Account <i class="bi bi-chevron-down ms-2"></i></a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userLinksDropdown">
+              <li>
+                <a class="text-dark account-dropdown-item" href="{% url 'training' %}">Leadership Training</a>
+              </li>
+              <li>
+                <a class="text-dark account-dropdown-item" href="{% url 'library' %}">My Digital Library</a>
+              </li>
+            </ul>
+          </li>
+        {% endif %}
+
+        <li class="nav-item mx-3">
+          <a class="nav-link text-white link-underline {% if request.path == '#contact' %}active{% endif %}" href="#contact">Contact</a>
+        </li>
+      </ul>
+
+      <!-- Language Selection Dropdown -->
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item mx-3 dropdown">
+          <a class="nav-link text-white dropdown-toggle link-underline" href="#" id="currencyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Currency <i class="bi bi-chevron-down ms-2"></i></a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="currencyDropdown">
+            <li>
+              <a class="dropdown-item" href="#" data-currency="usd"><img src="https://flagcdn.com/us.svg" alt="USD Flag" width="20" height="15" style="margin-right: 5px;" /> USD</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" data-currency="ngn"><img src="https://flagcdn.com/ng.svg" alt="NGN Flag" width="20" height="15" style="margin-right: 5px;" /> NGN</a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Shopping Cart Icon -->
+        {% if user.is_authenticated %}
+          <li class="nav-item mx-3 position-relative">
+            <a class="nav-link text-white text-light link-underline {% if request.path == '/cart/' %}active{% endif %}" href="{% url 'cart' %}"><i class="fa-solid fa-cart-shopping fa-sm"><span id="cart-badge" class="badge badge-light">{{ user.cart.cart_items.count }}</span></i></a>
+          </li>
+        {% endif %}
+
+        <!-- Authentication Links -->
+        {% if user.is_authenticated %}
+          <li class="nav-item mx-3">
+            <a class="nav-link text-white rounded me-3" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </li>
+        {% else %}
+          <li class="nav-item mx-3">
+            <a class="nav-link text-white rounded me-2" href="{% url 'login' %}" style="text-decoration: none;"><i class="fas fa-sign-in-alt"></i> Login</a>
+          </li>
+          <li class="nav-item mx-3">
+            <a class="nav-link text-white rounded" href="{% url 'signup' %}" style="text-decoration: none;"><i class="fas fa-user-plus"></i> Register</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Sidebar (Left side) -->
+<div id="mobileSidebar" class="mobile-sidebar">
+  <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+  <div class="container mt-3">
+    <!-- Home Link -->
+    <a href="{% url 'home' %}" class="nav-link text-white">Home</a>
+    <a href="{% url 'home' %}#all-products" class="nav-link text-white">All Products</a>
+
+    <!-- My Account Dropdown -->
+    {% if user.is_authenticated %}
+      <div class="dropdown">
+        <a href="#" class="nav-link text-white dropdown-toggle" id="accountDropdown" role="button" data-bs-toggle="collapse" data-bs-target="#accountMenu" aria-expanded="false">My Account <i class="bi bi-chevron-down ms-2"></i></a>
+        <div id="accountMenu" class="collapse">
+          <a href="{% url 'training' %}" class="nav-link text-white ps-3">Leadership Training</a>
+          <a href="{% url 'library' %}" class="nav-link text-white ps-3">My Digital Library</a>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Contact Link -->
+    <a href="#contact" class="nav-link text-white">Contact</a>
+
+    <!-- Currency Dropdown -->
+    <div class="dropdown">
+      <a href="#" class="nav-link text-white dropdown-toggle" id="currencyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Currency <i class="bi bi-chevron-down ms-2"></i></a>
+      <ul class="dropdown-menu bg-dark" aria-labelledby="currencyDropdown">
+        <li>
+          <a class="dropdown-item text-white" href="#" data-currency="usd">
+            <img src="https://flagcdn.com/us.svg" alt="USD Flag" width="20" height="15" style="margin-right: 5px;" />
+            USD
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item text-white" href="#" data-currency="ngn">
+            <img src="https://flagcdn.com/ng.svg" alt="NGN Flag" width="20" height="15" style="margin-right: 5px;" />
+            NGN
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Authentication Links -->
+    {% if user.is_authenticated %}
+      <a href="{% url 'cart' %}" class="nav-link text-white">Cart</a>
+      <a href="{% url 'logout' %}" class="nav-link text-white">Logout</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="nav-link text-white">Login</a>
+      <a href="{% url 'signup' %}" class="nav-link text-white">Register</a>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  function toggleSidebar() {
+    const sidebar = document.getElementById('mobileSidebar')
+    sidebar.classList.toggle('show')
+  }
+</script>

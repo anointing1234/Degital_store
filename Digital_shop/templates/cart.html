@@ -1,0 +1,164 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% load humanize %}
+{% block contents %}
+  <style>
+    /* Base styling for the table */
+    .table {
+      border-collapse: separate;
+      border-spacing: 0;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .table th,
+    .table td {
+      vertical-align: middle;
+      text-align: center;
+      padding: 1.25rem;
+    }
+    
+    .table th {
+      background-color: #343a40;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    
+    .table td {
+      color: #212529;
+    }
+    
+    .table img {
+      border-radius: 5px;
+      object-fit: cover;
+    }
+    
+    /* Button styling */
+    .btn-danger {
+      background-color: #dc3545;
+      border: none;
+      color: #fff;
+      transition: background-color 0.3s ease;
+    }
+    
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+    
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    
+    /* Card for total amount */
+    .total-amount {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #212529;
+      background-color: #e9ecef;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 800px) {
+      .table th,
+      .table td {
+        font-size: smaller;
+        padding: 0.5rem;
+      }
+      .btn {
+        font-size: 0.8rem;
+      }
+      .table img {
+        height: 100px;
+        width: 100px;
+      }
+      .total-amount {
+        font-size: smaller;
+        font-weight: 600;
+        color: #212529;
+        background-color: #e9ecef;
+        padding: 10px;
+        border-radius: 5px;
+      }
+    }
+  </style>
+
+  <section class="container mt-4 pt-4 mb-4" id="my-cart">
+    <div class="text-center">
+      <h5 style="font-weight:700;  border-bottom:4px solid #E67E22; display: inline-block;" class="text-center mb-5 py-3">My Cart</h5>
+    </div>
+
+    {% if cart_items %}
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Product Image</th>
+              <th>Product Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Total Amount</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart_items %}
+              <tr>
+                <td>
+                  <img src="{{ item.product.image.url }}" class="img-fluid" alt="{{ item.product.name }}" style="height: 80px; width: 80px;" />
+                </td>
+                <td>{{ item.product.name }}</td>
+                <td class="price" data-price="{{ item.product.price }}" data-currency="ngn">{{ item.product.price|intcomma }}</td>
+                <td>{{ item.quantity }}</td>
+                <td class="price" data-price="{{ item.get_total_price }}" data-currency="ngn">{{ item.get_total_price|intcomma }}</td>
+                <td>
+                  <a href="{% url 'remove_cart_item' item.id %}" class="btn btn-danger btn-sm">Remove</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row mt-4 justify-content-end">
+        <div class="col-auto text-end">
+          <span>Sum Total:</span> <div class="total-amount price" data-price="{{ total_amount }}" data-currency="ngn">{{ total_amount|intcomma }}</div>
+        </div>
+      </div>
+
+      <div class="row mt-3 justify-content-end">
+        <form action="{% url 'handle-item-payment' %}" method="POST" onsubmit="return checkLogin();" class="d-flex align-items-center gap-3">
+          {% csrf_token %}
+          <input type="hidden"
+            name="cart_item_ids"
+            value="{% for item in cart_items %}
+              {{ item.id }}{% if not forloop.last %},{% endif %}
+            {% endfor %}" />
+
+          <!-- Set a custom width for the select input -->
+          <select class="form-select form-select-sm" name="payment_method" id="paymentMethod" required style="width: 150px;">
+            <option value="" disabled selected>Choose payment method</option>
+            <option value="stripe">Pay with USD</option>
+            <option value="paystack">Pay with NGN</option>
+          </select>
+
+          <button class="btn btn-primary btn-sm" type="submit">Proceed</button>
+        </form>
+      </div>
+    {% else %}
+      <div class="container d-flex justify-content-center">
+        <img class="img-fluid" src="{% static 'img/empty.png' %}" alt="" />
+      </div>
+      <div class="alert alert-light text-center text-dark mt-3" role="alert">Your cart is empty.</div>
+    {% endif %}
+  </section>
+{% endblock %}

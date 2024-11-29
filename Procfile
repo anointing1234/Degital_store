@@ -1,0 +1,1 @@
+web: gunicorn Miracle_Assembly.wsgi --log-file -

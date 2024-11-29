@@ -1,0 +1,686 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block contents %}
+  {% load humanize %}
+  <style>
+    input:focus,
+    input:active,
+    textarea:focus,
+    textarea:active,
+    select:focus,
+    select:active {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+    .custom-hover {
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+    .custom-hover:hover {
+      background-color: #343a40;
+      color: #ffffff;
+    }
+    .form-select {
+      font-size: smaller;
+    }
+    .faq-header {
+      cursor: pointer;
+    }
+    .faq-header i {
+      transition: transform 0.2s ease;
+    }
+    .faq-header.collapsed i {
+      transform: rotate(0deg);
+    }
+    .faq-header:not(.collapsed) i {
+      transform: rotate(45deg);
+    }
+    .card-title {
+      font-size: medium;
+      color: black;
+    }
+    .card-img-top {
+      height: 300px;
+      width: 200px;
+    }
+    p {
+      font-size: small;
+    }
+    
+    /* Style for tabs */
+    .nav-tabs .nav-link {
+      color: black; /* Dark text color for inactive tabs */
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      transition: color 0.3s, background-color 0.3s;
+    }
+    
+    .nav-tabs {
+      border-bottom: none;
+    }
+    
+    /* Remove border from individual nav-links */
+    .nav-tabs .nav-link {
+      border: none;
+    }
+    
+    .head {
+      background-color: #f8f8f8;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    /* Style for cards */
+    
+    .card {
+      border: none;
+      overflow: hidden;
+      background-color: transparent;
+      color: black;
+    }
+    
+    .card-body h6.card-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: black;
+      font-size: smaller;
+    }
+    
+    .card-text.price {
+      font-size: 1.1rem;
+      color: black;
+    }
+    
+    /* Buttons */
+    .btn-outline-dark.custom-hover {
+      transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .btn-outline-dark.custom-hover:hover {
+      background-color: #343a40;
+      color: #ffffff;
+    }
+    
+    .btn-outline-primary {
+      border-color: #007bff;
+      color: white;
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: #007bff;
+      color: #ffffff;
+    }
+    @media (max-width: 576px) {
+      .carousel img {
+        height: auto; /* Makes the height responsive */
+      }
+    }
+    h6 {
+      font-size: small;
+    }
+    
+    @media (max-width: 800px) {
+      .card-img-top {
+        height: 200px;
+        width: 150px;
+      }
+      p {
+        font-size: x-small;
+      }
+    }
+    
+    @media (min-width: 577px) {
+      .carousel img {
+        max-width: 80%;
+        border-radius: 20px; /* Keeps the image width smaller on larger screens */
+      }
+    }
+    .hover-grow {
+      transition: transform 0.3s ease-in-out; /* Smooth transition for scaling */
+    }
+    
+    .hover-grow:hover {
+      transform: scale(1.1); /* Slightly increase size on hover */
+    }
+    .animated-btn {
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      transition: color 0.3s ease-in-out; /* Smooth text color transition */
+    }
+    
+    .animated-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%; /* Start off-screen to the left */
+      width: 100%;
+      height: 100%;
+      background-color: black; /* Background color for hover effect */
+      z-index: -1; /* Behind the text */
+      transition: left 0.4s ease-in-out; /* Smooth slide animation */
+    }
+    
+    .animated-btn:hover {
+      color: white; /* Change text color on hover */
+    }
+    
+    .animated-btn:hover::before {
+      left: 0; /* Slide in the background */
+    }
+  </style>
+  <div class="container-fluid mx-auto p-0 mt-2 mb-2">
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        {% for slide in slides %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <div class="position-relative">
+              <!-- Image Section -->
+              <img src="{{ slide.image.url }}" class="d-block w-100" style=" height: 500px; object-fit: cover; margin: 0 auto;" alt="{{ slide.heading }}" />
+              <div class="position-absolute top-0 start-0 w-100 h-100"></div>
+
+              <!-- Text and Video Sections -->
+              <div class="carousel-caption position-absolute top-50 mt-5 pt-3 start-50 translate-middle w-100" style="z-index: 10;">
+                <div class="container-fluid d-flex align-items-center justify-content-center h-100">
+                  <!-- Flex container to hold text side by side -->
+                  <div class="d-flex w-100">
+                    <!-- Text Section (col-12) -->
+                    <div class="col-12 nav-big text-white text-middle mt-5 pt-5">
+                      <h2 class="fw-bolder" style="font-weight:700;color: rgb(255, 255, 255);">The Majesty of God</h2>
+                      <p style="font-size: small;">
+                        God is the creator of all life and the guiding force behind everything.
+                        <br />
+                        His wisdom is beyond human comprehension, and His presence is felt in every part of creation,
+                        <br />
+                        from the vast cosmos to the smallest living being.
+                        <br />
+                        God is love, mercy, and justice. He offers grace to the broken-hearted, strength to the weak,
+                        <br />
+                        and hope to the hopeless.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid py-5">
+    <section class="container mb-3" id="featured-collection mt-5">
+      <div class="text-center mb-2">
+        <h5 style="font-weight:700; border-bottom:4px solid #E67E22; display: inline-block;" class="mx-5 mb-3 py-3 text-dark">Featured Collection</h5>
+      </div>
+
+      <!-- Tabs for Product Categories -->
+      <ul class="nav nav-tabs shadow justify-content-center mb-3 border-none" id="featuredProductTabs" role="tablist">
+        <li class="nav-item" role="presentation mb-2">
+          <a class="nav-link active" id="featured-books-tab" data-bs-toggle="tab" href="#featured-books" role="tab" aria-controls="featured-books" aria-selected="true">Books</a>
+        </li>
+        <li class="nav-item" role="presentation mb-2">
+          <a class="nav-link" id="featured-videos-tab" data-bs-toggle="tab" href="#featured-videos" role="tab" aria-controls="featured-videos" aria-selected="false">Videos</a>
+        </li>
+        <li class="nav-item" role="presentation mb-2">
+          <a class="nav-link" id="featured-audios-tab" data-bs-toggle="tab" href="#featured-audios" role="tab" aria-controls="featured-audios" aria-selected="false">Audios</a>
+        </li>
+      </ul>
+
+      <!-- Featured Tab Content -->
+      <div class="tab-content mt-2 d-block" id="featuredProductTabsContent">
+        <!-- Featured Books Tab -->
+        <div class="tab-pane fade show active" id="featured-books" role="tabpanel" aria-labelledby="featured-books-tab">
+          <div class="row g-4">
+            {% for book in featured_books %}
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card h-100 border-transparent d-flex flex-column flex-sm-row">
+                  <!-- Image Section (col-12 on small screens, col-6 on large screens) -->
+                  <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center">
+                    <img src="{{ book.image.url }}" class="card-img-top img-fluid shadow hover-grow" alt="{{ book.name }}" />
+                  </div>
+
+                  <!-- Product Info Section (col-12 on small screens, col-6 on large screens) -->
+                  <div class="col-12 col-sm-12 card-body d-flex flex-column justify-content-between">
+                    <!-- Book Title -->
+                    <h4 class="card-title text-center fw-bolder">{{ book.name }}</h4>
+
+                    <!-- Book Description -->
+                    <div class="container-fluid col-12 col-sm-12">
+                      <p class="card-text text-muted fw-bolder">{{ book.desc|linebreaks }}</p>
+                      <!-- Book Price -->
+                      <h6 class="price fs-5 fw-bolder" data-price="{{ book.price }}" data-currency="ngn">{{ book.price|intcomma }}</h6>
+                    </div>
+
+                    <!-- Buttons and Payment Form -->
+                    <div class="card-footer text-center bg-transparent">
+                      <!-- Add to Cart Button -->
+                      <button class="btn btn-warning custom-hover btn-sm add-to-cart-btn mb-2" id="add-to-cart-{{ book.id }}">
+                        <i class="fa-solid fa-plus fa-sm"></i>
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                      </button>
+
+                      <!-- Payment Form -->
+                      <form action="{% url 'handle-payment' book.id %}" method="POST" onsubmit="return checkLogin();">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ book.id }}" />
+
+                        <!-- Payment Dropdown -->
+                        <div class="mb-3">
+                          <select class="form-select" name="payment_method" id="paymentMethod" required>
+                            <option value="" disabled selected>Choose payment method</option>
+                            <option value="stripe">Pay with USD</option>
+                            <option value="paystack">Pay with NGN</option>
+                          </select>
+                        </div>
+
+                        <!-- Buy Now Button -->
+                        <button class="btn active btn-sm fw-bold w-100 animated-btn border" type="submit">Buy Now</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <p class="text-center">No featured books available.</p>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Featured Videos Tab -->
+        <div class="tab-pane fade" id="featured-videos" role="tabpanel" aria-labelledby="featured-videos-tab">
+          <div class="row g-4">
+            {% for video in featured_videos %}
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card h-100 border-transparent d-flex flex-column flex-sm-row">
+                  <!-- Image Section (col-12 on small screens, col-6 on large screens) -->
+                  <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center">
+                    <img src="{{ video.image.url }}" class="card-img-top img-fluid shadow hover-grow" alt="{{ video.name }}" />
+                  </div>
+
+                  <!-- Product Info Section (col-12 on small screens, col-6 on large screens) -->
+                  <div class="col-12 col-sm-12 card-body d-flex flex-column justify-content-between">
+                    <!-- Video Title -->
+                    <h4 class="card-title text-center fw-bolder">{{ video.name }}</h4>
+
+                    <!-- Video Description -->
+                    <div class="container-fluid col-12 col-sm-12">
+                      <p class="card-text text-muted fw-bolder">{{ video.desc|linebreaks }}</p>
+                      <!-- Video Price -->
+                      <h6 class="price fs-5 fw-bolder" data-price="{{ video.price }}" data-currency="ngn">{{ video.price|intcomma }}</h6>
+                    </div>
+
+                    <!-- Buttons and Payment Form -->
+                    <div class="card-footer text-center bg-transparent">
+                      <!-- Add to Cart Button -->
+                      <button class="btn btn-warning custom-hover btn-sm add-to-cart-btn mb-2" id="add-to-cart-{{ video.id }}">
+                        <i class="fa-solid fa-plus fa-sm"></i>
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                      </button>
+
+                      <!-- Payment Form -->
+                      <form action="{% url 'handle-payment' video.id %}" method="POST" onsubmit="return checkLogin();">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ video.id }}" />
+
+                        <!-- Payment Dropdown -->
+                        <div class="mb-3">
+                          <select class="form-select" name="payment_method" id="paymentMethod" required>
+                            <option value="" disabled selected>Choose payment method</option>
+                            <option value="stripe">Pay with USD</option>
+                            <option value="paystack">Pay with NGN</option>
+                          </select>
+                        </div>
+
+                        <!-- Buy Now Button -->
+                        <button class="btn active btn-sm fw-bold w-100 animated-btn border" type="submit">Buy Now</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <p class="text-center">No featured videos available.</p>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Featured Audios Tab -->
+        <div class="tab-pane fade" id="featured-audios" role="tabpanel" aria-labelledby="featured-audios-tab">
+          <div class="row g-4">
+            {% for audio in featured_audios %}
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card h-100 border-transparent d-flex flex-column flex-sm-row">
+                  <!-- Image Section (col-12 on small screens, col-6 on large screens) -->
+                  <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center">
+                    <img src="{{ audio.image.url }}" class="card-img-top img-fluid shadow hover-grow" alt="{{ audio.name }}" />
+                  </div>
+
+                  <!-- Product Info Section (col-12 on small screens, col-6 on large screens) -->
+                  <div class="col-12 col-sm-12 card-body d-flex flex-column justify-content-between">
+                    <!-- Audio Title -->
+                    <h4 class="card-title text-center fw-bolder">{{ audio.name }}</h4>
+
+                    <!-- Audio Description -->
+                    <div class="container-fluid col-12 col-sm-12">
+                      <p class="card-text text-muted fw-bolder">{{ audio.desc|linebreaks }}</p>
+                      <!-- Audio Price -->
+                      <h6 class="price fs-5 fw-bolder" data-price="{{ audio.price }}" data-currency="ngn">{{ audio.price|intcomma }}</h6>
+                    </div>
+
+                    <!-- Buttons and Payment Form -->
+                    <div class="card-footer text-center bg-transparent">
+                      <!-- Add to Cart Button -->
+                      <button class="btn btn-warning custom-hover btn-sm add-to-cart-btn mb-2" id="add-to-cart-{{ audio.id }}">
+                        <i class="fa-solid fa-plus fa-sm"></i>
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                      </button>
+
+                      <!-- Payment Form -->
+                      <form action="{% url 'handle-payment' audio.id %}" method="POST" onsubmit="return checkLogin();">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ audio.id }}" />
+
+                        <!-- Payment Dropdown -->
+                        <div class="mb-3">
+                          <select class="form-select" name="payment_method" id="paymentMethod" required>
+                            <option value="" disabled selected>Choose payment method</option>
+                            <option value="stripe">Pay with USD</option>
+                            <option value="paystack">Pay with NGN</option>
+                          </select>
+                        </div>
+
+                        <!-- Buy Now Button -->
+                        <button class="btn active btn-sm fw-bold w-100 animated-btn border" type="submit">Buy Now</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <p class="text-center">No featured audios available.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div> <!-- Closing the tab-content div -->
+    </section>
+  </div>
+
+  <!-- All Products Section -->
+  <section class="container-fluid mb-5 pb-5 bg-light mt-5 pt-3" id="all-products">
+    <div class="text-center mb-2">
+      <h5 style="font-weight:700; border-bottom:4px solid #E67E22; display: inline-block;" class="text-center mx-5 mb-3 py-3 text-dark">All Products</h5>
+    </div>
+
+    <!-- Tabs for Product Categories -->
+    <ul class="nav nav-tabs justify-content-center mb-5 shadow" id="allProductTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="all-books-tab" data-bs-toggle="tab" href="#all-books" role="tab" aria-controls="all-books" aria-selected="true">Books</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="all-videos-tab" data-bs-toggle="tab" href="#all-videos" role="tab" aria-controls="all-videos" aria-selected="false">Videos</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="all-audios-tab" data-bs-toggle="tab" href="#all-audios" role="tab" aria-controls="all-audios" aria-selected="false">Audios</a>
+      </li>
+    </ul>
+
+    <!-- All Products Tab Content -->
+    <div class="tab-content d-block">
+      <!-- All Books Tab -->
+      <div class="tab-pane fade show active" id="all-books" role="tabpanel" aria-labelledby="all-books-tab">
+        <div class="row g-4">
+          {% for book in books %}
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="card h-100 border-transparent d-flex flex-column flex-sm-row">
+                <!-- Image Section (col-12 on small screens, col-6 on large screens) -->
+                <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center">
+                  <img src="{{ book.image.url }}" class="card-img-top rounded shadow hover-grow" alt="{{ book.name }}" />
+                </div>
+
+                <!-- Product Info Section (col-12 on small screens, col-6 on large screens) -->
+                <div class="col-12 col-sm-12 card-body d-flex flex-column justify-content-between">
+                  <h4 class="card-title text-center fw-bolder">{{ book.name }}</h4>
+                  <!-- Render Description as Text with Line Breaks -->
+                  <div class="container-fluid">
+                    <p class="card-text text-muted fw-bolder">{{ book.desc|linebreaks }}</p>
+                    <h6 class="price fs-5 fw-bolder" data-price="{{ book.price }}" data-currency="ngn">{{ book.price|intcomma }}</h6>
+                  </div>
+
+                  <!-- Buttons and Payment Form -->
+                  <div class="card-footer text-center bg-transparent">
+                    <button class="btn btn-warning custom-hover btn-sm add-to-cart-btn mb-2" id="add-to-cart-{{ book.id }}"><i class="fa-solid fa-plus fa-sm"></i><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+
+                    <!-- Payment Dropdown -->
+                    <form action="{% url 'handle-payment' book.id %}" method="POST" onsubmit="return checkLogin();">
+                      {% csrf_token %}
+                      <input type="hidden" name="product_id" value="{{ book.id }}" />
+
+                      <div class="mb-3">
+                        <select class="form-select" name="payment_method" id="paymentMethod" required>
+                          <option value="" disabled selected>Choose payment method</option>
+                          <option value="stripe">Pay with USD</option>
+                          <option value="paystack">Pay with NGN</option>
+                        </select>
+                      </div>
+
+                      <button class="btn active btn-sm fw-bold w-100 animated-btn border" type="submit">Buy Now</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-center">No books available.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Videos Tab -->
+      <div class="tab-pane fade" id="all-videos" role="tabpanel" aria-labelledby="all-videos-tab">
+        <div class="row g-4">
+          {% for video in videos %}
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="card h-100 border-transparent d-flex flex-column flex-sm-row">
+                <!-- Image Section (col-12 on small screens, col-6 on large screens) -->
+                <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center">
+                  <img src="{{ video.image.url }}" class="card-img-top img-fluid shadow hover-grow" alt="{{ video.name }}" />
+                </div>
+
+                <!-- Product Info Section (col-12 on small screens, col-6 on large screens) -->
+                <div class="col-12 col-sm-12 card-body d-flex flex-column justify-content-between">
+                  <!-- Video Title -->
+                  <h4 class="card-title text-center fw-bolder">{{ video.name }}</h4>
+
+                  <!-- Video Description -->
+                  <div class="container-fluid col-12 col-sm-12">
+                    <p class="card-text text-muted fw-bolder">{{ video.desc|linebreaks }}</p>
+                    <!-- Video Price -->
+                    <h6 class="price fs-5 fw-bolder" data-price="{{ video.price }}" data-currency="ngn">{{ video.price|intcomma }}</h6>
+                  </div>
+
+                  <!-- Buttons and Payment Form -->
+                  <div class="card-footer text-center bg-transparent">
+                    <!-- Add to Cart Button -->
+                    <button class="btn btn-warning custom-hover btn-sm add-to-cart-btn mb-2" id="add-to-cart-{{ video.id }}">
+                      <i class="fa-solid fa-plus fa-sm"></i>
+                      <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
+
+                    <!-- Payment Form -->
+                    <form action="{% url 'handle-payment' video.id %}" method="POST" onsubmit="return checkLogin();">
+                      {% csrf_token %}
+                      <input type="hidden" name="product_id" value="{{ video.id }}" />
+
+                      <!-- Payment Dropdown -->
+                      <div class="mb-3">
+                        <select class="form-select" name="payment_method" id="paymentMethod" required>
+                          <option value="" disabled selected>Choose payment method</option>
+                          <option value="stripe">Pay with USD</option>
+                          <option value="paystack">Pay with NGN</option>
+                        </select>
+                      </div>
+
+                      <!-- Buy Now Button -->
+                      <button class="btn active btn-sm fw-bold w-100 animated-btn border" type="submit">Buy Now</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-center">No videos available.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Audios Tab -->
+      <div class="tab-pane fade" id="all-audios" role="tabpanel" aria-labelledby="all-audios-tab">
+        <div class="row g-4">
+          {% for audio in audios %}
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="card h-100 border-transparent d-flex flex-column flex-sm-row">
+                <!-- Image Section (col-12 on small screens, col-6 on large screens) -->
+                <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center">
+                  <img src="{{ audio.image.url }}" class="card-img-top img-fluid shadow hover-grow" alt="{{ audio.name }}" />
+                </div>
+
+                <!-- Product Info Section (col-12 on small screens, col-6 on large screens) -->
+                <div class="col-12 col-sm-12 card-body d-flex flex-column justify-content-between">
+                  <!-- Audio Title -->
+                  <h4 class="card-title text-center fw-bolder">{{ audio.name }}</h4>
+
+                  <!-- Audio Description -->
+                  <div class="container-fluid col-12 col-sm-12">
+                    <p class="card-text text-muted fw-bolder">{{ audio.desc|linebreaks }}</p>
+                    <!-- Audio Price -->
+                    <h6 class="price fs-5 fw-bolder" data-price="{{ audio.price }}" data-currency="ngn">{{ audio.price|intcomma }}</h6>
+                  </div>
+
+                  <!-- Buttons and Payment Form -->
+                  <div class="card-footer text-center bg-transparent">
+                    <!-- Add to Cart Button -->
+                    <button class="btn btn-warning custom-hover btn-sm add-to-cart-btn mb-2" id="add-to-cart-{{ audio.id }}">
+                      <i class="fa-solid fa-plus fa-sm"></i>
+                      <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
+
+                    <!-- Payment Form -->
+                    <form action="{% url 'handle-payment' audio.id %}" method="POST" onsubmit="return checkLogin();">
+                      {% csrf_token %}
+                      <input type="hidden" name="product_id" value="{{ audio.id }}" />
+
+                      <!-- Payment Dropdown -->
+                      <div class="mb-3">
+                        <select class="form-select" name="payment_method" id="paymentMethod" required>
+                          <option value="" disabled selected>Choose payment method</option>
+                          <option value="stripe">Pay with Stripe</option>
+                          <option value="paystack">Pay with Paystack</option>
+                        </select>
+                      </div>
+
+                      <!-- Buy Now Button -->
+                      <button class="btn active btn-sm fw-bold w-100 animated-btn border" type="submit">Buy Now</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-center">No audios available.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function checkLogin() {
+      // Use a data attribute to check if the user is authenticated
+      var isAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}" // This outputs 'true' or 'false'
+    
+      if (isAuthenticated === 'true') {
+        return true // Allow the form to be submitted
+      } else {
+        alert('You must be logged in to make a Buy Now.')
+        window.location.href = "{% url 'login' %}" // Redirect to login page
+        return false // Prevent form submission
+      }
+    }
+  </script>
+
+  <script>
+    const csrfToken = '{{ csrf_token }}' // Ensure this is rendered correctly
+  </script>
+  {% if user.is_authenticated %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Get all 'Add to Cart' buttons
+        const addToCartButtons = document.querySelectorAll('.add-to-cart-btn')
+      
+        addToCartButtons.forEach((button) => {
+          button.addEventListener('click', function () {
+            // Extract product ID from the button's id attribute
+            const parts = this.id.split('-')
+            const productId = parts[3] // Assuming the ID format is something like "add-to-cart-123"
+            const url = `/add-to-cart/${productId}/` // URL for the add-to-cart API endpoint
+      
+            // Send a POST request to add the product to the cart
+            fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token for Django
+              }
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok')
+                }
+                return response.json() // Parse the response as JSON
+              })
+              .then((data) => {
+                if (data.success) {
+                  // Display a success message using SweetAlert
+                  swal('Added to Cart!', 'Your product has been added to the cart.', 'success')
+      
+                  // Dynamically update cart count in the navbar
+                  const cartCountElement = document.getElementById('cart-badge') // Cart count element in the navbar
+                  const cartTotalElement = document.getElementById('cart-total') // Optional: Cart total element (if you are showing it)
+      
+                  if (cartCountElement) {
+                    cartCountElement.textContent = data.cart_count // Update the cart item count
+                  }
+      
+                  if (cartTotalElement) {
+                    // Update the total price of items in the cart (if applicable)
+                    cartTotalElement.textContent = `$${data.cart_total.toFixed(2)}` // Format to two decimal places
+                  }
+                } else {
+                  // Show an error message if adding to the cart fails
+                  swal('Error!', data.message || 'There was an issue adding the product to the cart.', 'error')
+                }
+              })
+              .catch((error) => {
+                console.error('Error:', error)
+                swal('Error!', 'There was an issue adding the product to the cart.', 'error')
+              })
+          })
+        })
+      })
+    </script>
+  {% else %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const addToCartButtons = document.querySelectorAll('.add-to-cart-btn')
+      
+        addToCartButtons.forEach((button) => {
+          button.addEventListener('click', function () {
+            swal('Login Required!', 'You need to log in to add items to your cart.', 'warning')
+            window.location.href = "{% url 'login' %}"
+          })
+        })
+      })
+    </script>
+  {% endif %}
+{% endblock %}
