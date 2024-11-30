@@ -278,7 +278,8 @@
             <a class="nav-link text-white dropdown-toggle link-underline {% if request.path == '/training' or request.path == '/library' %}active{% endif %}" href="#" id="userLinksDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">My Account <i class="bi bi-chevron-down ms-2"></i></a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userLinksDropdown">
               <li>
-                <a class="text-dark account-dropdown-item" href="{% url 'training' %}">Leadership Training</a>
+                <!--{% url 'training' %}-->
+                <a class="text-dark account-dropdown-item" href="#">Membership-Training coming..soon</a>
               </li>
               <li>
                 <a class="text-dark account-dropdown-item" href="{% url 'library' %}">My Digital Library</a>
