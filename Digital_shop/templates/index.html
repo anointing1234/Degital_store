@@ -215,48 +215,42 @@
         <div class="tab-pane fade show active" id="featured-books" role="tabpanel" aria-labelledby="featured-books-tab">
           <div class="row g-4">
             {% for book in featured_books %}
-              <div class="col-lg-12 col-md-12 col-sm-12">
-                <div class="card h-100 border-transparent d-flex flex-column flex-sm-row">
-                  <!-- Image Section (col-12 on small screens, col-6 on large screens) -->
-                  <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center">
+              <div class="col-12">
+                <!-- Book Container -->
+                <div class="d-flex flex-column flex-sm-row p-3 ">
+                  <!-- Image Section -->
+                  <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center mb-3 mb-sm-0">
                     <img src="{{ book.image.url }}" loading="lazy" class="card-img-top img-fluid shadow hover-grow" alt="{{ book.name }}" />
                   </div>
-
-                  <!-- Product Info Section (col-12 on small screens, col-6 on large screens) -->
-                  <div class="col-12 col-sm-12 card-body d-flex flex-column justify-content-between">
+        
+                  <!-- Book Info Section -->
+                  <div class="col-12 col-sm-6">
                     <!-- Book Title -->
-                    <h4 class="card-title text-center fw-bolder">{{ book.name }}</h4>
-
+                    <h4 class="fw-bolder text-center mb-3">{{ book.name }}</h4>
+        
                     <!-- Book Description -->
-                    <div class="container-fluid col-12 col-sm-12">
-                      <p class="card-text text-muted fw-bolder">{{ book.desc|linebreaks }}</p>
-                      <!-- Book Price -->
-                      <h6 class="price fs-5 fw-bolder" data-price="{{ book.price }}" data-currency="ngn">{{ book.price|intcomma }}</h6>
-                    </div>
-
+                    <p class="text-muted">{{ book.desc|linebreaks }}</p>
+        
+                    <!-- Book Price -->
+                    <h6 class="price fs-5 fw-bolder" data-price="{{ book.price }}" data-currency="ngn">{{ book.price|intcomma }}</h6>
+        
                     <!-- Buttons and Payment Form -->
-                    <div class="card-footer text-center bg-transparent">
-                      <!-- Add to Cart Button -->
-                      <button class="btn btn-warning custom-hover btn-sm add-to-cart-btn mb-2" id="add-to-cart-{{ book.id }}">
+                    <div class="mt-4">
+                      <button class="btn btn-warning custom-hover btn-sm mb-2" id="add-to-cart-{{ book.id }}">
                         <i class="fa-solid fa-plus fa-sm"></i>
                         <i class="fas fa-shopping-cart"></i> Add to Cart
                       </button>
-
-                      <!-- Payment Form -->
-                      <form action="{% url 'handle-payment' book.id %}" method="POST" onsubmit="return checkLogin();">
+        
+                      <form action="{% url 'handle-payment' book.id %}" method="POST" onsubmit="return checkLogin();" class="mt-2">
                         {% csrf_token %}
                         <input type="hidden" name="product_id" value="{{ book.id }}" />
-
-                        <!-- Payment Dropdown -->
-                        <div class="mb-3">
-                          <select class="form-select" name="payment_method" id="paymentMethod" required>
-                            <option value="" disabled selected>Choose payment method</option>
-                            <option value="stripe">Pay with USD</option>
-                            <option value="paystack">Pay with NGN</option>
-                          </select>
-                        </div>
-
-                        <!-- Buy Now Button -->
+        
+                        <select class="form-select mb-3" name="payment_method" id="paymentMethod" required>
+                          <option value="" disabled selected>Choose payment method</option>
+                          <option value="stripe">Pay with USD</option>
+                          <option value="paystack">Pay with NGN</option>
+                        </select>
+        
                         <button class="btn active btn-sm fw-bold w-100 animated-btn border" type="submit">Buy Now</button>
                       </form>
                     </div>
@@ -268,7 +262,7 @@
             {% endfor %}
           </div>
         </div>
-
+        
         <!-- Featured Videos Tab -->
         <div class="tab-pane fade" id="featured-videos" role="tabpanel" aria-labelledby="featured-videos-tab">
           <div class="row g-4">
@@ -410,53 +404,56 @@
     <!-- All Products Tab Content -->
     <div class="tab-content d-block">
       <!-- All Books Tab -->
-      <div class="tab-pane fade show active" id="all-books" role="tabpanel" aria-labelledby="all-books-tab">
-        <div class="row g-4">
-          {% for book in books %}
-            <div class="col-lg-12 col-md-12 col-sm-12">
-              <div class="card h-100 border-transparent d-flex flex-column flex-sm-row">
-                <!-- Image Section (col-12 on small screens, col-6 on large screens) -->
-                <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center">
-                  <img src="{{ book.image.url }}" loading="lazy" class="card-img-top rounded shadow hover-grow" alt="{{ book.name }}" />
-                </div>
+<div class="tab-pane fade show active" id="all-books" role="tabpanel" aria-labelledby="all-books-tab">
+  <div class="row g-4">
+    {% for book in books %}
+      <div class="col-12">
+        <!-- Book Container -->
+        <div class="d-flex flex-column flex-sm-row p-3">
+          <!-- Image Section -->
+          <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center mb-3 mb-sm-0">
+            <img src="{{ book.image.url }}" loading="lazy" class="card-img-top img-fluid shadow hover-grow" alt="{{ book.name }}" />
+          </div>
 
-                <!-- Product Info Section (col-12 on small screens, col-6 on large screens) -->
-                <div class="col-12 col-sm-12 card-body d-flex flex-column justify-content-between">
-                  <h4 class="card-title text-center fw-bolder">{{ book.name }}</h4>
-                  <!-- Render Description as Text with Line Breaks -->
-                  <div class="container-fluid">
-                    <p class="card-text text-muted fw-bolder">{{ book.desc|linebreaks }}</p>
-                    <h6 class="price fs-5 fw-bolder" data-price="{{ book.price }}" data-currency="ngn">{{ book.price|intcomma }}</h6>
-                  </div>
+          <!-- Book Info Section -->
+          <div class="col-12 col-sm-6">
+            <!-- Book Title -->
+            <h4 class="fw-bolder text-center mb-3">{{ book.name }}</h4>
 
-                  <!-- Buttons and Payment Form -->
-                  <div class="card-footer text-center bg-transparent">
-                    <button class="btn btn-warning custom-hover btn-sm add-to-cart-btn mb-2" id="add-to-cart-{{ book.id }}"><i class="fa-solid fa-plus fa-sm"></i><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+            <!-- Book Description -->
+            <p class="text-muted">{{ book.desc|linebreaks }}</p>
 
-                    <!-- Payment Dropdown -->
-                    <form action="{% url 'handle-payment' book.id %}" method="POST" onsubmit="return checkLogin();">
-                      {% csrf_token %}
-                      <input type="hidden" name="product_id" value="{{ book.id }}" />
+            <!-- Book Price -->
+            <h6 class="price fs-5 fw-bolder" data-price="{{ book.price }}" data-currency="ngn">{{ book.price|intcomma }}</h6>
 
-                      <div class="mb-3">
-                        <select class="form-select" name="payment_method" id="paymentMethod" required>
-                          <option value="" disabled selected>Choose payment method</option>
-                          <option value="stripe">Pay with USD</option>
-                          <option value="paystack">Pay with NGN</option>
-                        </select>
-                      </div>
+            <!-- Buttons and Payment Form -->
+            <div class="mt-4">
+              <button class="btn btn-warning custom-hover btn-sm mb-2" id="add-to-cart-{{ book.id }}">
+                <i class="fa-solid fa-plus fa-sm"></i>
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+              </button>
 
-                      <button class="btn active btn-sm fw-bold w-100 animated-btn border" type="submit">Buy Now</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
+              <form action="{% url 'handle-payment' book.id %}" method="POST" onsubmit="return checkLogin();" class="mt-2">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ book.id }}" />
+
+                <select class="form-select mb-3" name="payment_method" id="paymentMethod" required>
+                  <option value="" disabled selected>Choose payment method</option>
+                  <option value="stripe">Pay with USD</option>
+                  <option value="paystack">Pay with NGN</option>
+                </select>
+
+                <button class="btn active btn-sm fw-bold w-100 animated-btn border" type="submit">Buy Now</button>
+              </form>
             </div>
-          {% empty %}
-            <p class="text-center">No books available.</p>
-          {% endfor %}
+          </div>
         </div>
       </div>
+    {% empty %}
+      <p class="text-center">No books available.</p>
+    {% endfor %}
+  </div>
+</div>
 
       <!-- Videos Tab -->
       <div class="tab-pane fade" id="all-videos" role="tabpanel" aria-labelledby="all-videos-tab">
