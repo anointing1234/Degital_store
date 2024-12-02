@@ -120,6 +120,7 @@
                 </tr>
                 <tr>
                     <td class="text-center"></td>
+                    {% for membership in memberships %}
                       <td class="text-center">
                           <form action="{% url 'pay_master' %}" method="post">
                              {% csrf_token %} 
@@ -127,6 +128,7 @@
                             <button type="submit" class="btn animated-btn btn-sm border border-1 border-dark w-50">Start Now</button>
                           </form>
                         </td>
+                        {% endfor %}
                 </tr>
             </tbody>
         </table>
