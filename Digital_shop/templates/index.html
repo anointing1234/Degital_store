@@ -109,11 +109,7 @@
       background-color: #007bff;
       color: #ffffff;
     }
-    @media (max-width: 576px) {
-      .carousel img {
-        height: auto; /* Makes the height responsive */
-      }
-    }
+
     h6 {
       font-size: small;
     }
@@ -128,12 +124,7 @@
       }
     }
     
-    @media (min-width: 577px) {
-      .carousel img {
-        max-width: 80%;
-        border-radius: 20px; /* Keeps the image width smaller on larger screens */
-      }
-    }
+ 
     .hover-grow {
       transition: transform 0.3s ease-in-out; /* Smooth transition for scaling */
     }
@@ -168,38 +159,27 @@
       left: 0; /* Slide in the background */
     }
   </style>
-  <div class="container-fluid mx-auto p-0 mt-2 mb-2">
+  <div class="container-fluid mx-auto p-0 mb-2">
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         {% for slide in slides %}
           <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <div class="position-relative">
+            <div class="position-relative" style="height: 100vh; overflow: hidden;">
               <!-- Image Section -->
-              <img src="{{ slide.image.url }}" class="d-block w-100" style=" height: 500px; object-fit: cover; margin: 0 auto;" alt="{{ slide.heading }}" />
-              <div class="position-absolute top-0 start-0 w-100 h-100"></div>
-
-              <!-- Text and Video Sections -->
-              <div class="carousel-caption position-absolute top-50 mt-5 pt-3 start-50 translate-middle w-100" style="z-index: 10;">
-                <div class="container-fluid d-flex align-items-center justify-content-center h-100">
-                  <!-- Flex container to hold text side by side -->
-                  <div class="d-flex w-100">
-                    <!-- Text Section (col-12) -->
-                    <div class="col-12 nav-big text-white text-middle mt-5 pt-5">
-                      <h2 class="fw-bolder" style="font-weight:700;color: rgb(255, 255, 255);">The Majesty of God</h2>
-                      <p style="font-size: small;">
-                        God is the creator of all life and the guiding force behind everything.
-                        <br />
-                        His wisdom is beyond human comprehension, and His presence is felt in every part of creation,
-                        <br />
-                        from the vast cosmos to the smallest living being.
-                        <br />
-                        God is love, mercy, and justice. He offers grace to the broken-hearted, strength to the weak,
-                        <br />
-                        and hope to the hopeless.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+              <img src="{{ slide.image.url }}" 
+                   class="d-block w-100 h-100" 
+                   style="object-fit: cover;" 
+                   alt="{{ slide.heading }}" />
+              <!-- Text Section -->
+              <div class="carousel-caption position-absolute mt-5 pt-5  top-50 start-50 translate-middle text-center text-white w-100" style="z-index: 10;">
+                <h2 class="fw-bold mb-4" style="font-size: 2.5rem;">The Majesty of God</h2>
+                <p class="lead ">
+                  God is the creator of all life and the guiding force behind everything.<br>
+                  His wisdom is beyond human comprehension, and His presence is felt in every part of creation,<br>
+                  from the vast cosmos to the smallest living being.<br>
+                  God is love, mercy, and justice. He offers grace to the broken-hearted, strength to the weak,<br>
+                  and hope to the hopeless.
+                </p>
               </div>
             </div>
           </div>
@@ -207,6 +187,7 @@
       </div>
     </div>
   </div>
+  
 
   <div class="container-fluid py-5">
     <section class="container mb-3" id="featured-collection mt-5">
