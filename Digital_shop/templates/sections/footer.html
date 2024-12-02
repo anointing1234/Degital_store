@@ -1,12 +1,12 @@
 {% load static %}
 
-<footer style="font-size: small;" class="text-dark pt-5 mt-5">
+<footer class="text-dark pt-5 mt-5">
   <div class="container-fluid shadow p-0 bg-light mt-1 pt-1">
     <div class="container py-5">
       <div class="row">
         <div class="col-md-4 mb-2">
           <h5 class="text-uppercase mb-1">Main Menu</h5>
-          <ul class="list-unstyled">
+          <ul class="list-unstyled fs-6">
             <li>
               <a href="#" class="text-dark text-decoration-none">Home</a>
             </li>
@@ -26,29 +26,31 @@
         </div>
         <div class="col-md-4 mb-2">
           <h5 class="text-uppercase mb-3">Corporate Headquarters</h5>
-          <p>64 Boundary Road, Off Airport Road, GRA, Benin City, Edo State Nigeria</p>
+          <p class="fs-6">64 Boundary Road, Off Airport Road, GRA, Benin City, Edo State Nigeria</p>
         </div>
         <div id="contact" class="col-md-3 mb-2">
           <h5 class="text-uppercase mb-3">Contact Us</h5>
-          <p>Info@jeffreyiyonawan.com</p>
+          <p class="fs-6">Info@jeffreyiyonawan.com</p>
 
-          <p>
+          <p class="fs-6">
             &copy; <span id="year"></span> <a class="text-dark" href="tel:+234802354-1175 ">+234 (802) 354-1175 (9am - 5pm EST, Monday - Friday)</a>
           </p>
         </div>
       </div>
       <div class="text-center mt-2">
-        <p class="mb-0">Follow us on:</p>
-        <a href="#" class="text-dark me-3"><i class="fab fa-facebook-f"></i> Facebook</a>
-        <a href="#" class="text-dark me-3"><i class="fab fa-twitter"></i> Twitter</a>
-        <a href="#" class="text-dark me-3"><i class="fab fa-instagram"></i> Instagram</a>
+        <p class="mb-0 fs-6">Follow us on:</p>
+        <a href="#" class="text-dark me-3 fs-6"><i class="fab fa-facebook-f"></i> Facebook</a>
+        <a href="#" class="text-dark me-3 fs-6"><i class="fab fa-twitter"></i> Twitter</a>
+        <a href="#" class="text-dark me-3 fs-6"><i class="fab fa-instagram"></i> Instagram</a>
       </div>
       <div class="container mt-2">
-        <img style="height: 100px; width: 200px;" src="{% static 'img/logo-dark.png' %}" alt="Logo" /><p class="text-dark">Librating People for Quality Living.....</p>
+        <img style="height: 100px; width: 200px;" src="{% static 'img/logo-dark.png' %}" alt="Logo" />
+        <p class="text-dark fs-6">Librating People for Quality Living.....</p>
       </div>
     </div>
   </div>
 </footer>
+
 
 <script>
   ScrollReveal({
