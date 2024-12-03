@@ -5,6 +5,9 @@ from django.db.models.signals import post_save
 import os
 from django.contrib.auth.models import User
 from django.utils import timezone
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
 
 
 
@@ -35,7 +38,6 @@ def upload_to_based_on_type(instance, filename):
 
 
 
-
 class Products(models.Model):
     PRODUCT_TYPES = [
         ('book', 'Book'),
@@ -45,25 +47,42 @@ class Products(models.Model):
     
     name = models.CharField(max_length=200)
     desc = models.TextField(blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)  # Price of the product
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     product_type = models.CharField(max_length=10, choices=PRODUCT_TYPES)
-    product_file = models.FileField(upload_to='uploads/')  # The file to download (e.g., PDF, MP3, MP4)
+    product_file = models.FileField(upload_to='uploads/')  
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    
-    # Track users who have purchased the product
     purchased_by = models.ManyToManyField(User, related_name='purchased_products', blank=True)
-
-    # New is_featured column to mark a product as featured
     is_featured = models.BooleanField(default=False)
     
+    def save(self, *args, **kwargs):
+        # Check if an image is uploaded
+        if self.image:
+            # Open the image using Pillow
+            img = Image.open(self.image)
+            
+            # Resize image for optimization (optional)
+            max_size = (800, 800)  # Maximum width and height
+            img.thumbnail(max_size, Image.ANTIALIAS)
+            
+            # Convert to WebP with optimized settings
+            img_io = BytesIO()
+            img = img.convert('RGB')  # Ensure compatibility with WebP format
+            img.save(img_io, format='WEBP', quality=90, method=6)  # High quality, efficient compression
+            
+            # Replace the original image with the WebP version
+            webp_image_name = os.path.splitext(self.image.name)[0] + '.webp'
+            self.image.save(webp_image_name, ContentFile(img_io.getvalue()), save=False)
+        
+        # Call the parent save method
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
-
         
         
         
