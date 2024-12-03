@@ -766,7 +766,6 @@ def pay_master(request):
     return render(request,'pay_master.html',{'membership': membership})
 
 
-
 def membership_payment(request):
     if request.method == 'POST':
         membership_id = request.POST.get('membership_id')
@@ -776,27 +775,39 @@ def membership_payment(request):
         # Get the Membership object using the membership_id
         membership = get_object_or_404(Membership, id=membership_id)
 
-        # Extract course_name and level_2 to check if the user is purchasing Level 2
+        # Extract the levels for this membership
         level_1, level_2 = membership.level_1, membership.level_2
+
+        # Check if the user has already purchased the level
+        existing_membership = UserMembershipLevel.objects.filter(
+            user=request.user,
+            membership=membership,  # Compare using the actual Membership object
+            level=level
+        ).exists()
+
+        if existing_membership:
+            # If the user has already purchased this level, return an error message
+            error_message = f"You have already purchased {membership.course_name} - {level}."
+            return render(request, 'pay_master.html', {'membership': membership, 'error_message': error_message})
 
         # Check if the user is attempting to purchase Level 2
         if level == level_2:  # This is a Level 2 course
-            # Check if the user has already purchased Level 1 for the same course
+            # Check if the user has already purchased Level 1 for the same course (membership)
             level_1_membership = UserMembershipLevel.objects.filter(
                 user=request.user,
-                membership=membership,
+                membership=membership,  # Compare using the actual Membership object
                 level=level_1
             ).exists()
 
             if not level_1_membership:
-                # If Level 1 has not been completed, return a JSON error
+                # If Level 1 has not been completed, return an error message
                 error_message = (
                     f"You need to complete {membership.course_name} - {level_1} "
-                    f"   before purchasing {membership.course_name} - {level_2}."
+                    f"before purchasing {membership.course_name} - {level_2}."
                 )
                 return render(request, 'pay_master.html', {'membership': membership, 'error_message': error_message})
-        
-        # Proceed to payment if Level 1 is completed or if the user is buying Level 1
+
+        # Proceed to payment if the user is eligible to purchase the level
         if payment_method == 'stripe':
             return redirect('stripe_membership_payment', pk=membership_id, level=level)
         elif payment_method == 'paystack':
@@ -804,6 +815,7 @@ def membership_payment(request):
     
     # If method is not POST, redirect to the payment master page
     return redirect('pay_master')
+
 
 
 class StripeMembershipCheckoutSession(View):
@@ -1063,7 +1075,7 @@ def paystack_membership(request):
                     user=user,
                     membership=course_name_full,
                     level=level,
-                    training_sections=membership.training_sections,
+                    training_sections=3,
                 )
                 user_membership_level.save()
 
