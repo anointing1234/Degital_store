@@ -955,9 +955,79 @@ class PaystackMembershipcheckoutSession(View):
             return render(request, "error.html", {"message": str(e)})
 
 
-
 def success_stripe_membership(request):
-    pass   
+    session_id = request.GET.get('session_id')
+
+    if not session_id:
+        # Redirect if no session ID is provided
+        return redirect('pay_master')
+
+    try:
+        # Retrieve the session object from Stripe using the session_id
+        session = stripe.checkout.Session.retrieve(session_id)
+
+        # Check if the payment was successful
+        if session.payment_status == 'paid':
+            # Extract metadata from the session
+            membership_id = session.metadata['membership_id']
+            level = session.metadata['level']
+
+            # Get the Membership object based on the membership ID
+            membership = get_object_or_404(Membership, id=membership_id)
+
+            # Get the current user
+            user = request.user
+
+            # Get the full name of the course based on the `course_name` short code
+            course_name_full = dict(Membership.COURSE_CHOICES).get(membership.course_name, membership.course_name)
+
+            # Check if the user already has this membership level
+            if not UserMembershipLevel.objects.filter(user=user, membership=course_name_full, level=level).exists():
+                # Create a new UserMembershipLevel record
+                user_membership_level = UserMembershipLevel(
+                    user=user,
+                    membership=course_name_full,
+                    level=level,
+                    training_sections=3,  # Adjust this based on your actual needs
+                )
+                user_membership_level.save()
+
+                # Add the user to the purchased_by field of the membership
+                membership.purchased_by.add(user)
+                membership.save()
+
+                # Log the successful addition
+                logger.info(f"User {user.username} successfully purchased {course_name_full} - {level}.")
+
+                # Show success message
+                messages.success(request, f"Congratulations! You have successfully purchased {course_name_full} - {level}.")
+
+                # Pass the course full name and level to the template
+                return render(request, 'membership_success.html', {
+                    'course_name': course_name_full,
+                    'level': level,
+                })
+
+            else:
+                # If user already has the membership level, show a message
+                messages.warning(request, f"You have already purchased {course_name_full} - {level}.")
+                return render(request, 'already_purchased.html')
+
+        else:
+            # If payment is not successful
+            messages.error(request, "Payment failed. Please try again.")
+            return redirect('home')
+
+    except stripe.error.StripeError as e:
+        # Log the error and show a message if any Stripe error occurs
+        logger.error(f"Error verifying Stripe transaction: {e}")
+        messages.error(request, "There was an error verifying your payment. Please try again.")
+        return redirect('home')
+    except Exception as e:
+        # Log any other exception
+        logger.error(f"Error processing Stripe payment: {e}")
+        messages.error(request, "There was an unexpected error. Please try again.")
+        return redirect('home')  
 
 
 
