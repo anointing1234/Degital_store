@@ -1,70 +1,82 @@
 {% load static %}
 
 <style>
-  a{
-    font-size: small;
+  footer {
+    font-size: 0.875rem; /* Small font size for all footer text */
+  }
+  footer a {
+    font-size: inherit; /* Use inherited font size for links */
+  }
+  footer p {
+    margin-bottom: 0.5rem; /* Consistent spacing for paragraphs */
+  }
+  footer .small-text {
+    font-size: inherit; /* Ensure all elements with small-text use the same size */
+  }
+  footer img {
+    max-height: 80px; /* Ensure logo image size consistency */
+    width: auto;
   }
 </style>
 
-<footer class="text-dark pt-5 mt-5">
-  <div class="container-fluid shadow p-0 bg-light mt-1 pt-1">
-    <div class="container py-5">
+<footer class="text-dark pt-4 mt-5">
+  <div class="container-fluid shadow bg-light py-4">
+    <div class="container">
       <div class="row">
-        <div class="col-md-4 mb-2">
-          <h6 class="text-uppercase mb-1">Main Menu</h6>
-          <ul style="font-size: small;" class="list-unstyled ">
-            <li>
-              <a href="#" class="text-dark text-decoration-none">Home</a>
-            </li>
-
-            <li>
-              <a href="#" class="text-dark text-decoration-none">All Products</a>
-            </li>
-          
-            <li>
-              <a href="#" class="text-dark text-decoration-none">My Digital Library</a>
-            </li>
-           
-            <li>
-              <a href="#" class="text-dark text-decoration-none">Contact</a>
-            </li>
+        <!-- Main Menu -->
+        <div class="col-md-4 mb-4">
+          <h6 class="text-uppercase mb-2">Main Menu</h6>
+          <ul class="list-unstyled mb-0">
+            <li><a href="#" class="text-dark text-decoration-none">Home</a></li>
+            <li><a href="#" class="text-dark text-decoration-none">All Products</a></li>
+            <li><a href="#" class="text-dark text-decoration-none">My Digital Library</a></li>
+            <li><a href="#" class="text-dark text-decoration-none">Contact</a></li>
           </ul>
         </div>
-        <div class="col-md-4 mb-2">
-          <h6 class="text-uppercase mb-3">Corporate Headquarters</h6>
-          <p class="">64 Boundary Road, Off Airport Road, GRA, Benin City, Edo State Nigeria</p>
-        </div>
-        <div id="contact" class="col-md-3 mb-2">
-          <h6 class="text-uppercase mb-3">Contact Us</h6>
-          <p class="">Info@jeffreyiyonawan.com</p>
 
-          <p class="">
-            &copy; <span id="year"></span> <a class="text-dark" href="tel:+234802354-1175 ">+234 (802) 354-1175 (9am - 5pm EST, Monday - Friday)</a>
+        <!-- Corporate Headquarters -->
+        <div class="col-md-4 mb-4">
+          <h6 class="text-uppercase mb-2">Corporate Headquarters</h6>
+          <p>64 Boundary Road, Off Airport Road, GRA, Benin City, Edo State Nigeria</p>
+        </div>
+
+        <!-- Contact Us -->
+        <div id="contact" class="col-md-4 mb-4">
+          <h6 class="text-uppercase mb-2">Contact Us</h6>
+          <p>Info@jeffreyiyonawan.com</p>
+          <p>
+            &copy; <span id="year"></span> 
+            <a href="tel:+2348023541175" class="text-dark">+234 (802) 354-1175</a> 
+            (9am - 5pm EST, Monday - Friday)
           </p>
         </div>
       </div>
-      <div style="font-size: small;" class="text-center mt-2">
-        <p class="mb-0 ">Follow us on:</p>
-        <a href="#" class="text-dark me-3 "><i class="fab fa-facebook-f"></i> Facebook</a>
-        <a href="#" class="text-dark me-3 "><i class="fab fa-twitter"></i> Twitter</a>
-        <a href="#" class="text-dark me-3 "><i class="fab fa-instagram"></i> Instagram</a>
+
+      <!-- Social Media Links -->
+      <div class="text-center mt-3">
+        <p class="mb-2">Follow us on:</p>
+        <a href="#" class="text-dark me-3"><i class="fab fa-facebook-f"></i> Facebook</a>
+        <a href="#" class="text-dark me-3"><i class="fab fa-twitter"></i> Twitter</a>
+        <a href="#" class="text-dark"><i class="fab fa-instagram"></i> Instagram</a>
       </div>
-      <div class="container mt-2">
-        <img style="height: 100px; width: 200px;" src="{% static 'img/logo-dark.png' %}" alt="Logo" />
-        <p class="text-dark ">Librating People for Quality Living.....</p>
+
+      <!-- Logo and Tagline -->
+      <div class="text-center mt-3">
+        <img src="{% static 'img/logo-dark.png' %}" alt="Logo" />
+        <p class="mt-2">Liberating People for Quality Living...</p>
       </div>
     </div>
   </div>
 </footer>
 
-
 <script>
+  // ScrollReveal Configuration
   ScrollReveal({
     reset: false,
     distance: '60px',
     duration: 2500,
     delay: 400
-  })
-  ScrollReveal().reveal('.nav-big', { delay: 500, origin: 'left' })
-  ScrollReveal().reveal('.punchline', { delay: 2000 })
+  });
+  ScrollReveal().reveal('.nav-big', { delay: 500, origin: 'left' });
+  ScrollReveal().reveal('.punchline', { delay: 2000 });
 </script>
