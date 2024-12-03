@@ -769,26 +769,30 @@ def membership_payment(request):
     if request.method == 'POST':
         membership_id = request.POST.get('membership_id')
         level = request.POST.get('level')
-        payment_method = request.POST.get('payment_method') 
+        payment_method = request.POST.get('payment_method')
         
+        logger.info(f"Received payment request. Membership ID: {membership_id}, Level: {level}, Payment Method: {payment_method}")
+
         # Get the Membership object using the membership_id
         membership = get_object_or_404(Membership, id=membership_id)
+        course_name_full = membership.get_course_name_display()  # Get the full name of the course
+        logger.info(f"Membership found. Course: {course_name_full}, Level 1: {membership.level_1}, Level 2: {membership.level_2}")
 
         # Extract the levels for this membership
         level_1 = membership.level_1
         level_2 = membership.level_2
-        course_name = membership.course_name
 
         # Check if the user has already purchased the level
         existing_membership = UserMembershipLevel.objects.filter(
             user=request.user,
-            membership=course_name,  # Compare using the course name string
+            membership=course_name_full,  # Use full course name
             level=level
         ).exists()
 
         if existing_membership:
             # If the user has already purchased this level, return an error message
-            error_message = f"You have already purchased {course_name} - {level}."
+            error_message = f"You have already purchased {course_name_full} - {level}."
+            logger.warning(f"User {request.user} already purchased {course_name_full} - {level}. Error: {error_message}")
             return render(request, 'pay_master.html', {'membership': membership, 'error_message': error_message})
 
         # Check if the user is attempting to purchase Level 2
@@ -796,24 +800,31 @@ def membership_payment(request):
             # Check if the user has already purchased Level 1 for the same course (membership)
             level_1_membership = UserMembershipLevel.objects.filter(
                 user=request.user,
-                membership=course_name,  # Compare using the course name string
+                membership=course_name_full,  # Use full course name
                 level=level_1
             ).exists()
             if not level_1_membership:
                 # If Level 1 has not been completed, return an error message
                 error_message = (
-                    f"You need to complete {course_name} - {level_1} "
-                    f"before purchasing {course_name} - {level_2}."
+                    f"You need to complete {course_name_full} - {level_1} "
+                    f"before purchasing {course_name_full} - {level_2}."
                 )
-                return render(request, 'pay_master.html', {'membership':membership, 'error_message': error_message})
+                logger.warning(f"User {request.user} attempted to purchase {course_name_full} - {level_2} without completing Level 1. Error: {error_message}")
+                return render(request, 'pay_master.html', {'membership': membership, 'error_message': error_message})
 
         # If the user is eligible to purchase the level, proceed to payment
         if payment_method == 'stripe':
+            logger.info(f"User {request.user} selected Stripe for payment. Redirecting to Stripe payment page.")
             return redirect('stripe_membership_payment', pk=membership_id, level=level)
         elif payment_method == 'paystack':
+            logger.info(f"User {request.user} selected Paystack for payment. Redirecting to Paystack payment page.")
             return redirect('paystack_membership_payment', pk=membership_id, level=level)
+
     # If method is not POST, redirect to the payment master page
+    logger.info(f"Non-POST request received. Redirecting to payment master page.")
     return redirect('pay_master')
+
+
 
 class StripeMembershipCheckoutSession(View):
     def get(self, request, *args, **kwargs):
