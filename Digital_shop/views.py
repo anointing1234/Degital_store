@@ -1031,74 +1031,65 @@ def success_stripe_membership(request):
 
 
 
-
-
-
 def paystack_membership(request):
     reference = request.GET.get('reference')
 
     if not reference:
-        # Redirect if no reference is provided
         return redirect('pay_master')
 
     try:
         # Verify the transaction with Paystack
         response = paystack.transaction.verify(reference)
-        
-        # Check if the transaction was successful
-        if response['data']['status'] == 'success':
-            # Extract data from Paystack's response
-            membership_id = response['data']['metadata']['membership_id']
-            level = response['data']['metadata']['level']  # Extract the level from metadata
 
-            # Get the Membership object based on the membership ID
+        if response['data']['status'] == 'success':
+            membership_id = response['data']['metadata']['membership_id']
+            level = response['data']['metadata']['level']
+
+            # Fetch the Membership object
             membership = get_object_or_404(Membership, id=membership_id)
-            
-            # Get the current user
             user = request.user
-            
-            # Get the full name of the course based on the `course_name` short code
+
+            # Map course_name to full name using COURSE_CHOICES
             course_name_full = dict(Membership.COURSE_CHOICES).get(membership.course_name, membership.course_name)
-            
+
+            # Debugging to ensure correct mapping
+            logger.info(f"Membership course_name: {membership.course_name}")
+            logger.info(f"Resolved full course name: {course_name_full}")
+
             # Check if the user already has this membership level
             if not UserMembershipLevel.objects.filter(user=user, membership=course_name_full, level=level).exists():
-                # Create a new UserMembershipLevel record, using only the course name
+                # Create UserMembershipLevel record
                 user_membership_level = UserMembershipLevel(
                     user=user,
-                    membership=course_name_full,  # Store the full course name here
+                    membership=course_name_full,
                     level=level,
-                    training_sections=3,
+                    training_sections=membership.training_sections,
                 )
                 user_membership_level.save()
 
-                # Add the user to the purchased_by field of the membership
+                # Add user to membership's purchased_by
                 membership.purchased_by.add(user)
                 membership.save()
 
-                # Log the successful addition
                 logger.info(f"User {user.username} successfully purchased {course_name_full} - {level}.")
-
-                # Show success message
                 messages.success(request, f"Congratulations! You have successfully purchased {course_name_full} - {level}.")
-                
-                # Pass the course full name and level to the template
-                return render(request, 'membership_success.html', {
-                    'course_name': course_name_full,  # Full course name
-                    'level': level,  # Level purchased
-                })
 
+                return render(request, 'membership_success.html', {
+                    'course_name': course_name_full,
+                    'level': level,
+                })
             else:
-                # If user already has the membership level, show a message
                 messages.warning(request, f"You have already purchased {course_name_full} - {level}.")
                 return render(request, 'already_purchased.html')
 
         else:
-            # If transaction is not successful
             messages.error(request, "Payment failed. Please try again.")
             return redirect('home')
 
     except Exception as e:
-        # Log the error and redirect to home if any exception occurs
         logger.error(f"Error verifying Paystack transaction: {e}")
         messages.error(request, "There was an error verifying your payment. Please try again.")
         return redirect('home')
+
+
+
