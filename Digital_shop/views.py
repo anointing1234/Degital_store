@@ -791,7 +791,7 @@ def membership_payment(request):
             return render(request, 'pay_master.html', {'membership': membership, 'error_message': error_message})
 
         # Check if the user is attempting to purchase Level 2
-        if level == level_2:  # This is a Level 2 course
+        elif level == level_2:  # This is a Level 2 course
             # Check if the user has already purchased Level 1 for the same course (membership)
             level_1_membership = UserMembershipLevel.objects.filter(
                 user=request.user,
