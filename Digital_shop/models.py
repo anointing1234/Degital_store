@@ -204,4 +204,4 @@ class UserMembershipLevel(models.Model):
         unique_together = ('user', 'membership', 'level', 'training_sections')  # Ensure a user cannot have the same level multiple times for the same membership
 
     def __str__(self):
-        return f"{self.user.username} - {self.membership.course_name} - {self.level}"
+        return f"{self.user.username} - {self.membership} - {self.level}"
