@@ -51,25 +51,29 @@
                 {% csrf_token %}
                 <input type="hidden" name="membership_id" value="{{ membership.id }}">
                 <!-- Select Level -->
-                <div class="mb-3">
-                    <label for="level" class="form-label fw-bold" style="font-size: 0.85rem;">Select Level:</label>
-                    <select class="form-select form-select-sm border-dark" id="level" name="level" style="border-radius: 5px; width: 200px;">
-                        <option value="{{ membership.level_1 }}">
-                            Level 1 - ₦{{ membership.level_1_price|intcomma }}
-                        </option>
-                        <option value="{{ membership.level_2 }}">
-                            Level 2 - ₦{{ membership.level_2_price|intcomma }}
-                        </option>
-                    </select>
-                </div>
-                <!-- Select Payment Method -->
-                <div class="mb-3">
-                    <label for="payment_method" class="form-label fw-bold" style="font-size: 0.85rem;">Select Payment Method:</label>
-                    <select class="form-select form-select-sm border-dark" id="payment_method" name="payment_method" style="border-radius: 5px; width: 200px;">
-                        <option value="paystack">Paystack</option>
-                        <option value="stripe">Stripe</option>
-                    </select>
-                </div>
+              <!-- Select Level -->
+<div class="mb-3">
+    <label for="level" class="form-label fw-bold" style="font-size: 0.85rem;">Select Level:</label>
+    <select class="form-select form-select-sm border-dark" id="level" name="level" style="border-radius: 5px; width: 200px;" required>
+        <option value="" disabled selected>Select a level</option>
+        <option value="{{ membership.level_1 }}">
+            Level 1 - ₦{{ membership.level_1_price|intcomma }}
+        </option>
+        <option value="{{ membership.level_2 }}">
+            Level 2 - ₦{{ membership.level_2_price|intcomma }}
+        </option>
+    </select>
+</div>
+
+<!-- Select Payment Method -->
+<div class="mb-3">
+    <label for="payment_method" class="form-label fw-bold" style="font-size: 0.85rem;">Select Payment Method:</label>
+    <select class="form-select form-select-sm border-dark" id="payment_method" name="payment_method" style="border-radius: 5px; width: 200px;" required>
+        <option value="" disabled selected>Select a payment method</option>
+        <option value="paystack">Paystack</option>
+        <option value="stripe">Stripe</option>
+    </select>
+</div>
                 <!-- Proceed Button -->
                 <div class="text-center">
                     <button type="submit" class="btn btn-dark btn-sm px-3 py-1">
