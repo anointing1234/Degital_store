@@ -5,13 +5,11 @@ from django.db.models.signals import post_save
 import os
 from django.contrib.auth.models import User
 from django.utils import timezone
-from PIL import Image
+from PIL import Image,UnidentifiedImageError
 from io import BytesIO
 from django.core.files.base import ContentFile
 
 
-
-# Create your models here.
 class background_slider_images(models.Model):  # Follow naming conventions: class names should be CamelCase
     image = models.ImageField(upload_to='carousel_images/')  # Store images in a specific folder
     order = models.PositiveIntegerField(default=0)  # Order of the carousel items
@@ -22,8 +20,25 @@ class background_slider_images(models.Model):  # Follow naming conventions: clas
         verbose_name_plural = 'Background Slider Images'
 
     def __str__(self):
-        return f"Slide {self.order}" 
+        return f"Slide {self.order}"
 
+    def save(self, *args, **kwargs):
+        if self.image:
+            try:
+                # Open the uploaded image
+                img = Image.open(self.image)
+                img.thumbnail((1920, 1080),Image.Resampling.LANCZOS)  # Resize for large background images
+                img = img.convert('RGB')  # Ensure compatibility for WebP
+                
+                # Convert and save as WebP
+                img_io = BytesIO()
+                img.save(img_io, format='WEBP', quality=90, method=6)  # High quality WebP
+                webp_image_name = os.path.splitext(self.image.name)[0] + '.webp'
+                self.image.save(webp_image_name, ContentFile(img_io.getvalue()), save=False)
+            except UnidentifiedImageError:
+                raise ValueError("The uploaded file is not a valid image.")
+        
+        super().save(*args, **kwargs)
 
 
 # Utility function to handle file uploads based on product type
@@ -63,7 +78,7 @@ class Products(models.Model):
             
             # Resize image for optimization (optional)
             max_size = (800, 800)  # Maximum width and height
-            img.thumbnail(max_size, Image.ANTIALIAS)
+            img.thumbnail(max_size,Image.Resampling.LANCZOS)
             
             # Convert to WebP with optimized settings
             img_io = BytesIO()
