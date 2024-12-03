@@ -765,7 +765,6 @@ def pay_master(request):
             
     return render(request,'pay_master.html',{'membership': membership})
 
-
 def membership_payment(request):
     if request.method == 'POST':
         membership_id = request.POST.get('membership_id')
@@ -776,12 +775,14 @@ def membership_payment(request):
         membership = get_object_or_404(Membership, id=membership_id)
 
         # Extract the levels for this membership
-        level_1, level_2 = membership.level_1, membership.level_2
+        level_1 = membership.level_1
+        level_2 = membership.level_2
         course_name = membership.course_name
+
         # Check if the user has already purchased the level
         existing_membership = UserMembershipLevel.objects.filter(
             user=request.user,
-            membership=course_name,  # Compare using the actual Membership object
+            membership=course_name,  # Compare using the course name string
             level=level
         ).exists()
 
@@ -795,7 +796,7 @@ def membership_payment(request):
             # Check if the user has already purchased Level 1 for the same course (membership)
             level_1_membership = UserMembershipLevel.objects.filter(
                 user=request.user,
-                membership=course_name,  # Compare using the actual Membership object
+                membership=course_name,  # Compare using the course name string
                 level=level_1
             ).exists()
 
@@ -805,18 +806,16 @@ def membership_payment(request):
                     f"You need to complete {course_name} - {level_1} "
                     f"before purchasing {course_name} - {level_2}."
                 )
-                return render(request, 'pay_master.html', {'membership':course_name, 'error_message': error_message})
-        else: 
-            # Proceed to payment if the user is eligible to purchase the level
-            if payment_method == 'stripe':
-                return redirect('stripe_membership_payment', pk=membership_id, level=level)
-            elif payment_method == 'paystack':
-                return redirect('paystack_membership_payment', pk=membership_id, level=level)
-        
+                return render(request, 'pay_master.html', {'membership': course_name, 'error_message': error_message})
+
+        # If the user is eligible to purchase the level, proceed to payment
+        if payment_method == 'stripe':
+            return redirect('stripe_membership_payment', pk=membership_id, level=level)
+        elif payment_method == 'paystack':
+            return redirect('paystack_membership_payment', pk=membership_id, level=level)
+
     # If method is not POST, redirect to the payment master page
     return redirect('pay_master')
-
-
 
 class StripeMembershipCheckoutSession(View):
     def get(self, request, *args, **kwargs):
