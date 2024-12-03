@@ -791,8 +791,8 @@ def membership_payment(request):
             if not level_1_membership:
                 # If Level 1 has not been completed, return a JSON error
                 error_message = (
-                    f"You need to complete {membership.course_name} - {level_1} "
-                    f"before purchasing {membership.course_name} - {level_2}."
+                    f"You need to complete {level_1} - {membership.course_name}"
+                    f"before purchasing {level_2} - {membership.course_name} ."
                 )
                 return render(request, 'pay_master.html', {'membership': membership, 'error_message': error_message})
         
