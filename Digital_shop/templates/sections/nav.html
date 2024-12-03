@@ -386,8 +386,27 @@
 </div>
 
 <script>
+  // Toggle Sidebar
   function toggleSidebar() {
-    const sidebar = document.getElementById('mobileSidebar')
-    sidebar.classList.toggle('show')
+    var sidebar = document.querySelector('.mobile-sidebar');
+    sidebar.classList.toggle('show');
   }
+
+  // Close Navbar when clicked outside
+  document.addEventListener('click', function (e) {
+    var navbar = document.querySelector('.navbar-collapse');
+    var toggler = document.querySelector('.navbar-toggler');
+    
+    // Check if the click was outside the navbar and toggler
+    if (!navbar.contains(e.target) && !toggler.contains(e.target)) {
+      navbar.classList.remove('show');  // Close the navbar
+    }
+  });
+
+  // Prevent clicks inside the navbar from closing it
+  document.querySelector('.navbar-collapse').addEventListener('click', function (e) {
+    e.stopPropagation();
+  });
 </script>
+
+

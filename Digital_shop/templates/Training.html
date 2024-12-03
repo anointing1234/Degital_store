@@ -73,6 +73,13 @@
       color: black;
     }
 
+    .logo-img {
+      max-width: 100px; /* Set maximum width for the logo */
+      height: auto; /* Maintain aspect ratio */
+      display: block; /* Ensures proper alignment in the center */
+      margin: 0 auto;
+      border-radius: 10px; /* Center horizontally */
+    }
   </style>
   <div class="container-fluid">
     <div class="row">
@@ -93,6 +100,7 @@
                     {% for membership in memberships %}
                         <th>
                             <h5 class="text-center fw-bold">
+                              <img class="img-fluid logo-img mb-2" src="{% static "img/Masterclass_logo.png" %}" alt="Logo">
                                 <p>{{ membership.get_course_name_display }}</p>
                             </h5>
                             <p class="text-center">Level 1 -- {{ membership.level_1 }}   ₦{{ membership.level_1_price|intcomma }}</p>
@@ -140,7 +148,7 @@
               <div class="col-12 col-md-12 mb-5">
                   <div class="card mb-3 shadow">
                       <div class="container-fluid d-flex justify-content-center">
-                          <img src="{% static 'img/training_icon.png' %}" class="card-img-top" alt="{{ membership.get_course_name_display }} Logo">
+                          <img src="{% static 'img/Masterclass_logo.png' %}" class="card-img-top mb-3" alt="{{ membership.get_course_name_display }} Logo">
                       </div>
                       <h6 class="card-title mb-3 fw-bold text-center">{{ membership.get_course_name_display }}</h6>
                       <div class="card-body">
