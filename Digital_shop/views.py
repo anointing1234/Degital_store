@@ -777,42 +777,42 @@ def membership_payment(request):
 
         # Extract the levels for this membership
         level_1, level_2 = membership.level_1, membership.level_2
-
+        course_name = membership.course_name
         # Check if the user has already purchased the level
         existing_membership = UserMembershipLevel.objects.filter(
             user=request.user,
-            membership=membership,  # Compare using the actual Membership object
+            membership=course_name,  # Compare using the actual Membership object
             level=level
         ).exists()
 
         if existing_membership:
             # If the user has already purchased this level, return an error message
-            error_message = f"You have already purchased {membership.course_name} - {level}."
-            return render(request, 'pay_master.html', {'membership': membership, 'error_message': error_message})
+            error_message = f"You have already purchased {course_name} - {level}."
+            return render(request, 'pay_master.html', {'membership': course_name, 'error_message': error_message})
 
         # Check if the user is attempting to purchase Level 2
         elif level == level_2:  # This is a Level 2 course
             # Check if the user has already purchased Level 1 for the same course (membership)
             level_1_membership = UserMembershipLevel.objects.filter(
                 user=request.user,
-                membership=membership,  # Compare using the actual Membership object
+                membership=course_name,  # Compare using the actual Membership object
                 level=level_1
             ).exists()
 
             if not level_1_membership:
                 # If Level 1 has not been completed, return an error message
                 error_message = (
-                    f"You need to complete {membership.course_name} - {level_1} "
-                    f"before purchasing {membership.course_name} - {level_2}."
+                    f"You need to complete {course_name} - {level_1} "
+                    f"before purchasing {course_name} - {level_2}."
                 )
-                return render(request, 'pay_master.html', {'membership': membership, 'error_message': error_message})
-
-        # Proceed to payment if the user is eligible to purchase the level
-        if payment_method == 'stripe':
-            return redirect('stripe_membership_payment', pk=membership_id, level=level)
-        elif payment_method == 'paystack':
-            return redirect('paystack_membership_payment', pk=membership_id, level=level)
-    
+                return render(request, 'pay_master.html', {'membership':course_name, 'error_message': error_message})
+        else: 
+            # Proceed to payment if the user is eligible to purchase the level
+            if payment_method == 'stripe':
+                return redirect('stripe_membership_payment', pk=membership_id, level=level)
+            elif payment_method == 'paystack':
+                return redirect('paystack_membership_payment', pk=membership_id, level=level)
+        
     # If method is not POST, redirect to the payment master page
     return redirect('pay_master')
 
