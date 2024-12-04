@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Dashboad</title>
+  <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+  <link rel="icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
+  <!-- Fonts and icons -->
+  <script src="assets/js/plugin/webfont/webfont.min.js"></script>
+
+
+  <script>
+    WebFont.load({
+      google: { families: ["Public Sans:300,400,500,600,700"] },
+      custom: {
+        families: [
+          "Font Awesome 5 Solid",
+          "Font Awesome 5 Regular",
+          "Font Awesome 5 Brands",
+          "simple-line-icons",
+        ],
+        urls: ["assets/css/fonts.min.css"],
+      },
+      active: function () {
+        sessionStorage.fonts = true;
+      },
+    });
+  </script>
+
+  <style>
+    .btn-transparent {
+      background: none;
+      border: none;
+      color: #007bff;
+  }
+
+  .btn-transparent:hover {
+      color: #0056b3;
+  }
+
+  .dropdown-menu {
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid #ddd;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .dropdown-item:hover {
+      background-color: #f0f8ff;
+      color: #007bff;
+  }
+
+  .selected-course {
+      font-size: 1rem;
+  }
+     /* Container Styles */
+     .course-overview {
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+  }
+
+  /* Progress Bar Container */
+  .progress-container p {
+      font-weight: bold;
+      margin-bottom: 8px;
+  }
+
+  /* Progress Bar Styles */
+  .progress {
+      background-color: #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 25px;
+      margin-top: 5px;
+  }
+
+  .progress-bar {
+      height: 100%;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+      line-height: 25px;
+      transition: width 0.5s ease-in-out;
+  }
+
+  /* Example Dynamic Color Styling */
+  .progress-bar[style*="width: 0%"] {
+    background-color: #f85f44; /* Orange for 50% */
+}
+
+  .progress-bar[style*="width: 50%"] {
+      background-color: #ffa726; /* Orange for 50% */
+  }
+
+  .progress-bar[style*="width: 80%"] {
+      background-color: #4caf50; /* Green for 80% */
+  }
+
+  .progress-bar[style*="width: 30%"] {
+      background-color: #f44336; /* Red for 30% */
+  }
+    .card {
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .card-img {
+      height: 150px; /* Set fixed height for images */
+      object-fit:contain; /* Ensure the image covers the available space */
+      border-radius: 0.25rem;
+      transition: transform 0.3s ease;
+    }
+    .card:hover .card-img {
+        transform: scale(1.1);
+    }
+    .card-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        text-align: center;
+        padding: 15px;
+    }
+    .card:hover .card-overlay {
+        opacity: 1;
+    }
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+    .card-text {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+      /* General Styling */
+  .responsive-img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+/* Adjustments for Small Screens */
+@media (max-width: 768px) {
+    .responsive-img {
+        height: 250px; /* Scale down the height */
+        object-fit: contain; /* Show the entire image */
+    }
+}
+
+@media (max-width: 576px) {
+    .responsive-img {
+        height: 200px; /* Further scale down for very small screens */
+        object-fit: contain; /* Ensure all image details are visible */
+    }
+}
+</style>
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="assets/css/plugins.min.css" />
+  <link rel="stylesheet" href="assets/css/kaiadmin.min.css" />
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <div class="sidebar" data-background-color="dark">
+      <div class="sidebar-logo">
+          <!-- Logo Header -->
+          <div class="logo-header" data-background-color="dark">
+              <a href="index.html" class="logo">
+                  <img src="assets/img/kaiadmin/Master_logo.png" alt="navbar brand" class="navbar-brand" height="20" />
+              </a>
+              <div class="nav-toggle">
+                  <button class="btn btn-toggle toggle-sidebar">
+                      <i class="gg-menu-right"></i>
+                  </button>
+                  <button class="btn btn-toggle sidenav-toggler">
+                      <i class="gg-menu-left"></i>
+                  </button>
+              </div>
+              <button class="topbar-toggler more">
+                  <i class="gg-more-vertical-alt"></i>
+              </button>
+          </div>
+          <!-- End Logo Header -->
+      </div>
+      <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+              <ul class="nav nav-secondary">
+                  <li class="nav-item active">
+                      <a data-bs-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
+                          <i class="fas fa-home"></i>
+                          <p>Dashboard</p>
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="my_courses.html">
+                          <i class="fas fa-layer-group"></i>
+                          <p>My Courses</p>
+                      </a>
+                  </li>
+                  
+                  <!-- Logout Link -->
+                  <li class="nav-item mt-auto"> <!-- Ensures it is pushed to the bottom -->
+                      <a href="logout.html" class="btn  btn-block text-white fw-bold mt-4">
+                          <i class="fas fa-sign-out-alt"></i> Logout
+                      </a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </div>
+  
+    <!-- End Sidebar -->
+
+    <div class="main-panel">
+      <div class="main-header">
+        <div class="main-header-logo">
+          <!-- Logo Header -->
+          <div class="logo-header" data-background-color="dark">
+            <a href="index.html" class="logo">
+              <img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20" />
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+          <!-- End Logo Header -->
+        </div>
+        <!-- Navbar Header -->
+        <nav class="navbar navbar-header bg-dark navbar-header-transparent navbar-expand-lg border-bottom">
+          <div class="container-fluid">
+            <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <button type="submit" class="btn btn-search pe-1">
+                    <i class="fa fa-search search-icon"></i>
+                  </button>
+                </div>
+                <input type="text" placeholder="Search ..." class="form-control" />
+              </div>
+            </nav>
+
+            <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+              <li class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                  aria-expanded="false" aria-haspopup="true">
+                  <i class="fa fa-search"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-search animated fadeIn">
+                  <form class="navbar-left navbar-form nav-search">
+                    <div class="input-group">
+                      <input type="text" placeholder="Search ..." class="form-control" />
+                    </div>
+                  </form>
+                </ul>
+              </li>
+        
+            
+
+              <li class="nav-item topbar-user dropdown hidden-caret">
+                <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
+                  <div class="avatar-sm">
+                    <img src="assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle" />
+                  </div>
+                  <span class="profile-username">
+                    <span class="op-7 text-light">Hi,</span>
+                    <span class="fw-bold text-light">Hizrian</span>
+                  </span>
+                </a>
+
+
+
+
+                <ul class="dropdown-menu dropdown-user animated fadeIn">
+                  <div class="dropdown-user-scroll scrollbar-outer">
+                    <li>
+                      <div class="user-box">
+                        <div class="avatar-lg">
+                          <img src="assets/img/profile.jpg" alt="image profile" class="avatar-img rounded" />
+                        </div>
+                        <div class="u-text">
+                          <h4>Hizrian</h4>
+                          <p class="text-muted">hello@example.com</p>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">My Profile</a>
+                      <a class="dropdown-item" href="#">Logout</a>
+                    </li>
+                  </div>
+                </ul>
+
+
+
+
+
+                
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <!-- End Navbar -->
+      </div>
+
+      <div class="container">
+        <div class="page-inner">
+          <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+            <div>
+              <h4 class=" text-dark mb-3">Masterclass</h4>
+              <p>Dashboard / Courses</p>
+            </div>
+            <div class="ms-md-auto py-2 py-md-0">
+            </div>
+          </div>
+          <div class="row">
+          <div class="container-fluid">
+           <div class="container">
+            <div class="container-fluid">
+              <p class="text-start mb-4"> Courses 3</p>
+              <div class="row justify-content-center">
+                  <!-- Card 1 -->
+                  <div class="col-md-4 col-sm-6 mb-3">
+                      <div class="card position-relative">
+                          <img src="assets/img/online-education-concept-icon_24877-3779.jpg" class="card-img" alt="Course 1">
+                          <div class="card-overlay">
+                              <p class="card-text">A brief description of the course content goes here.</p>
+                              <a href="#" class="btn btn-light btn-sm">Resume Training</a>
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Card 2 -->
+                  <div class="col-md-4 col-sm-6 mb-3">
+                      <div class="card position-relative">
+                          <img src="assets/img/online-education-concept-icon_24877-3779.jpg" class="card-img" alt="Course 2">
+                          <div class="card-overlay">
+                              <p class="card-text">A brief description of the course content goes here.</p>
+                              <a href="#" class="btn btn-light btn-sm">Resume Training</a>
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Card 3 -->
+                  <div class="col-md-4 col-sm-6 mb-3">
+                      <div class="card position-relative">
+                          <img src="assets/img/online-education-concept-icon_24877-3779.jpg" class="card-img" alt="Course 3">
+                          <div class="card-overlay">
+                              <p class="card-text">A brief description of the course content goes here.</p>
+                              <a href="#" class="btn btn-light btn-sm">Resume Training</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div  class="container-fluid py-3 bg-white text-dark">
+          <div class="container">
+            <p class="text-start mb-4 fs-5 fw-bold">Current Course Overview</p>
+        
+            <div class="row g-4 align-items-center">
+                <!-- Course Details Section -->
+                <div class="col-lg-6">
+                    <div class="course-details p-3 border rounded h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <p class="me-3 mb-0">Current Course:</p>
+                            <!-- Display Selected Course -->
+                            <span class="fw-bold text-primary selected-course">Select a Course</span>
+                            <!-- Dropdown for Courses -->
+                            <div class="dropdown ms-3">
+                                <button class="btn btn-transparent dropdown-toggle p-1 text-primary" type="button" id="courseDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="courseDropdown">
+                                    <li><a class="dropdown-item" href="#" data-course="OGS">Organization Growth Strategies</a></li>
+                                    <li><a class="dropdown-item" href="#" data-course="LS">Leadership</a></li>
+                                    <li><a class="dropdown-item" href="#" data-course="PM">Principles of Ministry</a></li>
+                                </ul>
+                            </div>
+                        </div>
+        
+                        <!-- Levels Dropdown -->
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <p class="me-3 mb-0">Select Level:</p>
+                            <div class="dropdown">
+                                <button class="btn btn-transparent dropdown-toggle p-1 text-primary" type="button" id="levelDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Select Level
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" id="levelDropdownMenu"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Progress Bar Section -->
+                <div class="col-lg-6">
+                    <div class="progress-container p-3 border rounded h-100">
+                        <p class="mb-2">Course Status:</p>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar" style="width: 50%; background-color: #4caf50;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
+                                30% Complete
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mt-5 pt-2">
+          <p class="text-start mb-4 fs-5 fw-bold">Course Analytics</p>
+      
+          <div class="row g-4">
+              <!-- Highest Score -->
+              <div class="col-lg-4 col-md-6">
+                  <div class="analytics-card p-3 border rounded">
+                      <p class="mb-2">Highest Score</p>
+                      <h5 class="text-success">0</h5>
+                  </div>
+              </div>
+      
+              <!-- Lowest Score -->
+              <div class="col-lg-4 col-md-6">
+                  <div class="analytics-card p-3 border rounded">
+                      <p class="mb-2">Lowest Score</p>
+                      <h5 class="text-danger">0</h5>
+                  </div>
+              </div>
+      
+              <!-- Average Score -->
+              <div class="col-lg-4 col-md-6">
+                  <div class="analytics-card p-3 border rounded">
+                      <p class="mb-2">Average Score</p>
+                      <h5 class="text-primary">0</h5>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+            </div>
+        </div> 
+          </div>
+        </div>
+        <footer class="footer bg-dark">
+          <div class="container-fluid d-flex justify-content-between"> 
+            <div>
+              <a class="text-light" target="_blank" href="https://themewagon.com/">You are logged in </a>.
+            </div>
+          </div>
+        </footer>
+      </div>
+
+
+      
+    </div>
+
+ 
+  </div>
+  <!--   Core JS Files   -->
+  <script src="assets/js/core/jquery-3.7.1.min.js"></script>
+  <script src="assets/js/core/popper.min.js"></script>
+  <script src="assets/js/core/bootstrap.min.js"></script>
+
+  <!-- jQuery Scrollbar -->
+  <script src="assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+  <!-- Chart JS -->
+  <script src="assets/js/plugin/chart.js/chart.min.js"></script>
+
+  <!-- jQuery Sparkline -->
+  <script src="assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+  <!-- Chart Circle -->
+  <script src="assets/js/plugin/chart-circle/circles.min.js"></script>
+
+  <!-- Datatables -->
+  <script src="assets/js/plugin/datatables/datatables.min.js"></script>
+
+  <!-- Bootstrap Notify -->
+  <script src="assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+  <!-- jQuery Vector Maps -->
+  <script src="assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+  <script src="assets/js/plugin/jsvectormap/world.js"></script>
+
+  <!-- Sweet Alert -->
+  <script src="assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+  <!-- Kaiadmin JS -->
+  <script src="assets/js/kaiadmin.min.js"></script>
+ <script>
+  document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', function () {
+        const courseName = this.textContent;
+        document.querySelector('.selected-course').textContent = courseName;
+    });
+});
+
+
+
+
+const COURSE_CHOICES = {
+  'OGS': 'Organization Growth Strategies',
+  'LS': 'Leadership',
+  'PM': 'Principles of Ministry'
+};
+
+const LEVEL_CHOICES = {
+  'OGS': [
+      { code: 'OGS501', label: 'Level 1 - OGS501' },
+      { code: 'OGS502', label: 'Level 2 - OGS502' }
+  ],
+  'LS': [
+      { code: 'LS501', label: 'Level 1 - LS501' },
+      { code: 'LS502', label: 'Level 2 - LS502' }
+  ],
+  'PM': [
+      { code: 'PM501', label: 'Level 1 - PM501' },
+      { code: 'PM502', label: 'Level 2 - PM502' }
+  ]
+};
+
+const courseDropdownItems = document.querySelectorAll('#courseDropdown + .dropdown-menu .dropdown-item');
+const selectedCourseElement = document.querySelector('.selected-course');
+const levelDropdownMenu = document.getElementById('levelDropdownMenu');
+const levelDropdownButton = document.getElementById('levelDropdown');
+
+courseDropdownItems.forEach(item => {
+  item.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      // Get selected course
+      const courseKey = e.target.getAttribute('data-course');
+      const courseName = COURSE_CHOICES[courseKey];
+
+      // Update selected course display
+      selectedCourseElement.textContent = courseName;
+
+      // Update levels dropdown
+      const levels = LEVEL_CHOICES[courseKey];
+      levelDropdownMenu.innerHTML = ''; // Clear previous levels
+      levels.forEach(level => {
+          const levelItem = document.createElement('li');
+          const levelLink = document.createElement('a');
+          levelLink.className = 'dropdown-item';
+          levelLink.href = '#';
+          levelLink.textContent = level.label;
+          levelLink.setAttribute('data-level', level.code);
+          levelItem.appendChild(levelLink);
+          levelDropdownMenu.appendChild(levelItem);
+
+          // Handle level selection
+          levelLink.addEventListener('click', (e) => {
+              e.preventDefault();
+              levelDropdownButton.textContent = e.target.textContent; // Update button text
+          });
+      });
+  });
+});
+ </script>
+
+</body>
+
+</html>

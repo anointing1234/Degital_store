@@ -1112,4 +1112,5 @@ def paystack_membership(request):
         return redirect('home')
 
 
-
+def dashboard(request):
+    return render(request,"dashboard/index.html")

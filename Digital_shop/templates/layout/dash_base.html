@@ -1,0 +1,228 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Dashboad</title>
+  <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+  <link rel="icon" href="{% static 'img/kaiadmin/favicon.ico' %}" type="image/x-icon" />
+  <script src="https://kit.fontawesome.com/58f7fb8902.js" crossorigin="anonymous"></script>
+<!-- Fonts and icons -->
+  <script src="{% static 'js/plugin/webfont/webfont.minjs' %}"></script>
+  <script>
+    WebFont.load({
+      google: { families: ["Public Sans:300,400,500,600,700"] },
+      custom: {
+        families: [
+          "Font Awesome 5 Solid",
+          "Font Awesome 5 Regular",
+          "Font Awesome 5 Brands",
+          "simple-line-icons",
+        ],
+        urls: ["{% static 'css/fonts.min.css' %}"],
+      },
+      active: function () {
+        sessionStorage.fonts = true;
+      },
+    });
+  </script>
+
+
+  <style>
+
+    .btn-transparent {
+      background: none;
+      border: none;
+      color: #007bff;
+  }
+
+
+  .btn-transparent:hover {
+      color: #0056b3;
+  }
+
+
+
+  .dropdown-menu {
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid #ddd;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+
+  .dropdown-item:hover {
+      background-color: #f0f8ff;
+      color: #007bff;
+  }
+
+
+
+  .selected-course {
+      font-size: 1rem;
+  }
+     /* Container Styles */
+     .course-overview {
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+  }
+
+
+  /* Progress Bar Container */
+  .progress-container p {
+      font-weight: bold;
+      margin-bottom: 8px;
+  }
+
+
+  /* Progress Bar Styles */
+  .progress {
+      background-color: #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 25px;
+      margin-top: 5px;
+  }
+
+  .progress-bar {
+      height: 100%;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+      line-height: 25px;
+      transition: width 0.5s ease-in-out;
+  }
+
+  /* Example Dynamic Color Styling */
+  .progress-bar[style*="width: 0%"] {
+    background-color: #f85f44; /* Orange for 50% */
+}
+
+  .progress-bar[style*="width: 50%"] {
+      background-color: #ffa726; /* Orange for 50% */
+  }
+
+  .progress-bar[style*="width: 80%"] {
+      background-color: #4caf50; /* Green for 80% */
+  }
+
+  .progress-bar[style*="width: 30%"] {
+      background-color: #f44336; /* Red for 30% */
+  }
+    .card {
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .card-img {
+      height: 150px; /* Set fixed height for images */
+      object-fit:contain; /* Ensure the image covers the available space */
+      border-radius: 0.25rem;
+      transition: transform 0.3s ease;
+    }
+    .card:hover .card-img {
+        transform: scale(1.1);
+    }
+    .card-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        text-align: center;
+        padding: 15px;
+    }
+    .card:hover .card-overlay {
+        opacity: 1;
+    }
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+    .card-text {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+      /* General Styling */
+  .responsive-img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+/* Adjustments for Small Screens */
+@media (max-width: 768px) {
+    .responsive-img {
+        height: 250px; /* Scale down the height */
+        object-fit: contain; /* Show the entire image */
+    }
+}
+
+@media (max-width: 576px) {
+    .responsive-img {
+        height: 200px; /* Further scale down for very small screens */
+        object-fit: contain; /* Ensure all image details are visible */
+    }
+}
+</style>
+
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/plugins.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/kaiadmin.min.css' %}" />
+
+</head>
+
+<body>
+    {% include 'sections/dash_nav.html' %}
+    {% block contents %}
+    <div class="wrapper">
+    
+    
+    </div>
+    {% endblock %}
+       
+  <!--   Core JS Files   -->
+  <script src="{% static 'js/core/jquery-3.7.1.minjs' %}"></script>
+  <script src="{% static 'js/core/popper.minjs' %}"></script>
+  <script src="{% static 'js/core/bootstrap.minjs' %}"></script>
+
+  <!-- jQuery Scrollbar -->
+  <script src="{% static 'js/plugin/jquery-scrollbar/jquery.scrollbar.minjs' %}"></script>
+
+  <!-- Chart JS -->
+  <script src="{% static 'js/plugin/chartjs' %}/chart.minjs' %}"></script>
+
+  <!-- jQuery Sparkline -->
+  <script src="{% static 'js/plugin/jquery.sparkline/jquery.sparkline.minjs' %}"></script>
+
+  <!-- Chart Circle -->
+  <script src="{% static 'js/plugin/chart-circle/circles.minjs' %}"></script>
+
+  <!-- Datatables -->
+  <script src="{% static 'js/plugin/datatables/datatables.minjs' %}"></script>
+
+  <!-- Bootstrap Notify -->
+  <script src="{% static 'js/plugin/bootstrap-notify/bootstrap-notify.minjs' %}"></script>
+
+  <!-- jQuery Vector Maps -->
+  <script src="{% static 'js/plugin/jsvectormap/jsvectormap.minjs' %}"></script>
+  <script src="{% static 'js/plugin/jsvectormap/worldjs' %}"></script>
+
+  <!-- Sweet Alert -->
+  <script src="{% static 'js/plugin/sweetalert/sweetalert.minjs' %}"></script>
+
+<!-- Kaiadmin JS -->
+<script src="{% static 'js/kaiadmin.minjs' %}"></script>
+
+
+</body>
+</html>
