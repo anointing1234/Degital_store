@@ -66,12 +66,11 @@ class MembershipAdmin(admin.ModelAdmin):
 
 
 class UserMembershipLevelAdmin(admin.ModelAdmin):
-    list_display = ('user', 'membership', 'level', 'training_sections', 'purchased_at')
-    search_fields = ('user__username', 'membership__course_name', 'level')
-    list_filter = ('membership', 'level', 'user')
+    list_display = ('user', 'membership', 'level', 'training_sections', 'status', 'purchased_at')
+    search_fields = ('user__username', 'membership', 'level')
+    list_filter = ('membership', 'level', 'user', 'status')  # Add filter for status
     ordering = ('-purchased_at',)
-    list_editable = ('training_sections',)
-
+    list_editable = ('training_sections', 'status')  # Make status editable in the list view
 
 
 

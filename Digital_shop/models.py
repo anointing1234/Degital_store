@@ -197,6 +197,7 @@ class UserMembershipLevel(models.Model):
     level = models.CharField(max_length=20)
     training_sections = models.IntegerField(default=3)
     purchased_at = models.DateTimeField(auto_now_add=True)  # Timestamp for when the purchase was made
+    status = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(101)])  # Completion status (1 to 100)
 
     class Meta:
         verbose_name = "User Membership Level"
@@ -204,4 +205,4 @@ class UserMembershipLevel(models.Model):
         unique_together = ('user', 'membership', 'level', 'training_sections')  # Ensure a user cannot have the same level multiple times for the same membership
 
     def __str__(self):
-        return f"{self.user.username} - {self.membership} - {self.level}"
+        return f"{self.user.username} - {self.membership} - {self.level} - {self.status}%"

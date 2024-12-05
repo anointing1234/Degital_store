@@ -1113,4 +1113,25 @@ def paystack_membership(request):
 
 
 def dashboard(request):
-    return render(request,"dashboard/index.html")
+    if request.user.is_authenticated:
+        user_memberships = UserMembershipLevel.objects.filter(user=request.user)
+    else:
+        user_memberships = []
+
+    context = {
+        'user_memberships': user_memberships,
+    }
+    return render(request,"dashboard/index.html",context)
+
+
+
+def Mycourses(request):
+    if request.user.is_authenticated:
+        user_memberships = UserMembershipLevel.objects.filter(user=request.user)
+    else:
+        user_memberships = []
+
+    context = {
+        'user_memberships': user_memberships,
+    }
+    return render(request,"dashboard/my_courses.html",context)

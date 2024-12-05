@@ -44,6 +44,7 @@ urlpatterns = [
     path('training/',views.training_view,name='training'),
     path('membership_payment/',views.membership_payment,name='membership_payment'),
     path('dashboard/',views.dashboard,name="dashboard"),
+    path('Mycourses/',views.Mycourses,name="Mycourses"),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     

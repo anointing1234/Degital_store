@@ -9,7 +9,7 @@
   <link rel="icon" href="{% static 'img/kaiadmin/favicon.ico' %}" type="image/x-icon" />
   <script src="https://kit.fontawesome.com/58f7fb8902.js" crossorigin="anonymous"></script>
 <!-- Fonts and icons -->
-  <script src="{% static 'js/plugin/webfont/webfont.minjs' %}"></script>
+  <script src="{% static 'js/plugin/webfont/webfont.min.js' %}"></script>
   <script>
     WebFont.load({
       google: { families: ["Public Sans:300,400,500,600,700"] },
@@ -173,6 +173,13 @@
         object-fit: contain; /* Ensure all image details are visible */
     }
 }
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  color: black;
+}
 </style>
 
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
@@ -191,37 +198,37 @@
     {% endblock %}
        
   <!--   Core JS Files   -->
-  <script src="{% static 'js/core/jquery-3.7.1.minjs' %}"></script>
-  <script src="{% static 'js/core/popper.minjs' %}"></script>
-  <script src="{% static 'js/core/bootstrap.minjs' %}"></script>
+  <script src="{% static 'js/core/jquery-3.7.1.min.js' %}"></script>
+  <script src="{% static 'js/core/popper.min.js' %}"></script>
+  <script src="{% static 'js/core/bootstrap.min.js' %}"></script>
 
   <!-- jQuery Scrollbar -->
-  <script src="{% static 'js/plugin/jquery-scrollbar/jquery.scrollbar.minjs' %}"></script>
-
-  <!-- Chart JS -->
-  <script src="{% static 'js/plugin/chartjs' %}/chart.minjs' %}"></script>
+  <script src="{% static 'js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
 
   <!-- jQuery Sparkline -->
-  <script src="{% static 'js/plugin/jquery.sparkline/jquery.sparkline.minjs' %}"></script>
+  <script src="{% static 'js/plugin/jquery.sparkline/jquery.sparkline.min.js' %}"></script>
 
   <!-- Chart Circle -->
-  <script src="{% static 'js/plugin/chart-circle/circles.minjs' %}"></script>
+  <script src="{% static 'js/plugin/chart-circle/circles.min.js' %}"></script>
 
   <!-- Datatables -->
-  <script src="{% static 'js/plugin/datatables/datatables.minjs' %}"></script>
+  <script src="{% static 'js/plugin/datatables/datatables.min.js' %}"></script>
 
   <!-- Bootstrap Notify -->
-  <script src="{% static 'js/plugin/bootstrap-notify/bootstrap-notify.minjs' %}"></script>
+  <script src="{% static 'js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
 
   <!-- jQuery Vector Maps -->
-  <script src="{% static 'js/plugin/jsvectormap/jsvectormap.minjs' %}"></script>
-  <script src="{% static 'js/plugin/jsvectormap/worldjs' %}"></script>
+  <script src="{% static 'js/plugin/jsvectormap/jsvectormap.min.js' %}"></script>
+  <script src="{% static 'js/plugin/jsvectormap/world.js' %}"></script>
 
   <!-- Sweet Alert -->
-  <script src="{% static 'js/plugin/sweetalert/sweetalert.minjs' %}"></script>
+  <script src="{% static 'js/plugin/sweetalert/sweetalert.min.js' %}"></script>
 
 <!-- Kaiadmin JS -->
-<script src="{% static 'js/kaiadmin.minjs' %}"></script>
+<script src="{% static 'js/kaiadmin.min.js' %}"></script>
+
+
+
 
 
 </body>

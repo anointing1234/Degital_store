@@ -1,225 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Dashboad</title>
-  <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-  <link rel="icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
-  <!-- Fonts and icons -->
-  <script src="assets/js/plugin/webfont/webfont.min.js"></script>
-
-
-  <script>
-    WebFont.load({
-      google: { families: ["Public Sans:300,400,500,600,700"] },
-      custom: {
-        families: [
-          "Font Awesome 5 Solid",
-          "Font Awesome 5 Regular",
-          "Font Awesome 5 Brands",
-          "simple-line-icons",
-        ],
-        urls: ["assets/css/fonts.min.css"],
-      },
-      active: function () {
-        sessionStorage.fonts = true;
-      },
-    });
-  </script>
-
-  <style>
-    .btn-transparent {
-      background: none;
-      border: none;
-      color: #007bff;
-  }
-
-  .btn-transparent:hover {
-      color: #0056b3;
-  }
-
-  .dropdown-menu {
-      background-color: rgba(255, 255, 255, 0.9);
-      border: 1px solid #ddd;
-      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  .dropdown-item:hover {
-      background-color: #f0f8ff;
-      color: #007bff;
-  }
-
-  .selected-course {
-      font-size: 1rem;
-  }
-     /* Container Styles */
-     .course-overview {
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background-color: #f9f9f9;
-  }
-
-  /* Progress Bar Container */
-  .progress-container p {
-      font-weight: bold;
-      margin-bottom: 8px;
-  }
-
-  /* Progress Bar Styles */
-  .progress {
-      background-color: #e0e0e0;
-      border-radius: 8px;
-      overflow: hidden;
-      height: 25px;
-      margin-top: 5px;
-  }
-
-  .progress-bar {
-      height: 100%;
-      color: white;
-      text-align: center;
-      font-weight: bold;
-      line-height: 25px;
-      transition: width 0.5s ease-in-out;
-  }
-
-  /* Example Dynamic Color Styling */
-  .progress-bar[style*="width: 0%"] {
-    background-color: #f85f44; /* Orange for 50% */
-}
-
-  .progress-bar[style*="width: 50%"] {
-      background-color: #ffa726; /* Orange for 50% */
-  }
-
-  .progress-bar[style*="width: 80%"] {
-      background-color: #4caf50; /* Green for 80% */
-  }
-
-  .progress-bar[style*="width: 30%"] {
-      background-color: #f44336; /* Red for 30% */
-  }
-    .card {
-        overflow: hidden;
-        cursor: pointer;
-    }
-    .card-img {
-      height: 150px; /* Set fixed height for images */
-      object-fit:contain; /* Ensure the image covers the available space */
-      border-radius: 0.25rem;
-      transition: transform 0.3s ease;
-    }
-    .card:hover .card-img {
-        transform: scale(1.1);
-    }
-    .card-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        text-align: center;
-        padding: 15px;
-    }
-    .card:hover .card-overlay {
-        opacity: 1;
-    }
-    .card-title {
-        font-size: 1.25rem;
-        margin-bottom: 0.5rem;
-    }
-    .card-text {
-        font-size: 1rem;
-        margin-bottom: 1rem;
-    }
-      /* General Styling */
-  .responsive-img {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-}
-
-/* Adjustments for Small Screens */
-@media (max-width: 768px) {
-    .responsive-img {
-        height: 250px; /* Scale down the height */
-        object-fit: contain; /* Show the entire image */
-    }
-}
-
-@media (max-width: 576px) {
-    .responsive-img {
-        height: 200px; /* Further scale down for very small screens */
-        object-fit: contain; /* Ensure all image details are visible */
-    }
-}
-</style>
-  <!-- CSS Files -->
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="assets/css/plugins.min.css" />
-  <link rel="stylesheet" href="assets/css/kaiadmin.min.css" />
-</head>
-
-<body>
-  <div class="wrapper">
-    <!-- Sidebar -->
-    <div class="sidebar" data-background-color="dark">
-      <div class="sidebar-logo">
-          <!-- Logo Header -->
-          <div class="logo-header" data-background-color="dark">
-              <a href="index.html" class="logo">
-                  <img src="assets/img/kaiadmin/Master_logo.png" alt="navbar brand" class="navbar-brand" height="20" />
-              </a>
-              <div class="nav-toggle">
-                  <button class="btn btn-toggle toggle-sidebar">
-                      <i class="gg-menu-right"></i>
-                  </button>
-                  <button class="btn btn-toggle sidenav-toggler">
-                      <i class="gg-menu-left"></i>
-                  </button>
-              </div>
-              <button class="topbar-toggler more">
-                  <i class="gg-more-vertical-alt"></i>
-              </button>
-          </div>
-          <!-- End Logo Header -->
-      </div>
-      <div class="sidebar-wrapper scrollbar scrollbar-inner">
-          <div class="sidebar-content">
-              <ul class="nav nav-secondary">
-                  <li class="nav-item active">
-                      <a data-bs-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
-                          <i class="fas fa-home"></i>
-                          <p>Dashboard</p>
-                      </a>
-                  </li>
-                  <li class="nav-item">
-                      <a href="my_courses.html">
-                          <i class="fas fa-layer-group"></i>
-                          <p>My Courses</p>
-                      </a>
-                  </li>
-                  
-                  <!-- Logout Link -->
-                  <li class="nav-item mt-auto"> <!-- Ensures it is pushed to the bottom -->
-                      <a href="logout.html" class="btn  btn-block text-white fw-bold mt-4">
-                          <i class="fas fa-sign-out-alt"></i> Logout
-                      </a>
-                  </li>
-              </ul>
-          </div>
-      </div>
-  </div>
+{% extends 'layout/dash_base.html' %}
+{% load static %}
+{% block contents %}
   
     <!-- End Sidebar -->
 
@@ -279,43 +60,13 @@
               <li class="nav-item topbar-user dropdown hidden-caret">
                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                   <div class="avatar-sm">
-                    <img src="assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle" />
+                    <img src="{% static 'img/profile.jpg' %}" alt="..." class="avatar-img rounded-circle" />
                   </div>
                   <span class="profile-username">
                     <span class="op-7 text-light">Hi,</span>
-                    <span class="fw-bold text-light">Hizrian</span>
+                    <span class="fw-bold text-light">{{ request.user.username }}</span>
                   </span>
                 </a>
-
-
-
-
-                <ul class="dropdown-menu dropdown-user animated fadeIn">
-                  <div class="dropdown-user-scroll scrollbar-outer">
-                    <li>
-                      <div class="user-box">
-                        <div class="avatar-lg">
-                          <img src="assets/img/profile.jpg" alt="image profile" class="avatar-img rounded" />
-                        </div>
-                        <div class="u-text">
-                          <h4>Hizrian</h4>
-                          <p class="text-muted">hello@example.com</p>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">My Profile</a>
-                      <a class="dropdown-item" href="#">Logout</a>
-                    </li>
-                  </div>
-                </ul>
-
-
-
-
-
-                
               </li>
             </ul>
           </div>
@@ -333,44 +84,60 @@
             <div class="ms-md-auto py-2 py-md-0">
             </div>
           </div>
-          <div class="row">
           <div class="container-fluid">
-           <div class="container">
-            <div class="container-fluid">
-              <p class="text-start mb-4"> Courses 3</p>
-              <div class="row justify-content-center">
-                  <!-- Card 1 -->
-                  <div class="col-md-4 col-sm-6 mb-3">
-                      <div class="card position-relative">
-                          <img src="assets/img/online-education-concept-icon_24877-3779.jpg" class="card-img" alt="Course 1">
-                          <div class="card-overlay">
-                              <p class="card-text">A brief description of the course content goes here.</p>
-                              <a href="#" class="btn btn-light btn-sm">Resume Training</a>
-                          </div>
-                      </div>
-                  </div>
-                  <!-- Card 2 -->
-                  <div class="col-md-4 col-sm-6 mb-3">
-                      <div class="card position-relative">
-                          <img src="assets/img/online-education-concept-icon_24877-3779.jpg" class="card-img" alt="Course 2">
-                          <div class="card-overlay">
-                              <p class="card-text">A brief description of the course content goes here.</p>
-                              <a href="#" class="btn btn-light btn-sm">Resume Training</a>
-                          </div>
-                      </div>
-                  </div>
-                  <!-- Card 3 -->
-                  <div class="col-md-4 col-sm-6 mb-3">
-                      <div class="card position-relative">
-                          <img src="assets/img/online-education-concept-icon_24877-3779.jpg" class="card-img" alt="Course 3">
-                          <div class="card-overlay">
-                              <p class="card-text">A brief description of the course content goes here.</p>
-                              <a href="#" class="btn btn-light btn-sm">Resume Training</a>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
+            <div class="container">
+                <div class="container-fluid">
+                    <h5 class="text-center mb-5 fw-bold mb-2 border-bottom border-1 border-dark">Purchased Courses</h5>
+                    {% if user_memberships %}
+                        <div class="dropdown text-center mb-4">
+                            <button 
+                                class="btn btn-dark dropdown-toggle" 
+                                type="button" 
+                                id="courseDropdown" 
+                                data-bs-toggle="dropdown" 
+                                aria-expanded="false">
+                                Select a Course
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="courseDropdown">
+                                {% for membership in user_memberships %}
+                                    <li>
+                                        <a 
+                                            class="dropdown-item course-option" 
+                                            href="#" 
+                                            data-course="{{ membership.membership }}" 
+                                            data-level="{{ membership.level }}">
+                                            {{ membership.membership }} - {{ membership.level }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        
+                        <!-- Dynamic Course Display -->
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <div class="card position-relative">
+                                    <img src="{% static 'img/online-education-concept-icon_24877-3779.jpg' %}" 
+                                         class="card-img selected-course-img" 
+                                         alt="Selected Course">
+                                    <div class="card-overlay">
+                                        <p class="card-text"><strong>Course:</strong> <span id="selected-course-name">{{ user_memberships.0.membership }}</span></p>
+                                        <p class="card-text"><strong>Level:</strong> <span id="selected-course-level">{{ user_memberships.0.level }}</span></p>
+                                        <a href="#" class="btn btn-light btn-sm">Resume Training</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="text-center">You have not purchased any courses yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        
+
+
           <div  class="container-fluid py-3 bg-white text-dark">
           <div class="container">
             <p class="text-start mb-4 fs-5 fw-bold">Current Course Overview</p>
@@ -453,17 +220,18 @@
       </div>
     </div>
   </div>
+  <footer class="footer bg-dark">
+    <div class="container-fluid d-flex justify-content-between"> 
+      <div>
+        <a class="text-light" target="_blank" href="https://themewagon.com/">You are logged in </a>.
+      </div>
+    </div>
+  </footer>
             </div>
         </div> 
           </div>
         </div>
-        <footer class="footer bg-dark">
-          <div class="container-fluid d-flex justify-content-between"> 
-            <div>
-              <a class="text-light" target="_blank" href="https://themewagon.com/">You are logged in </a>.
-            </div>
-          </div>
-        </footer>
+     
       </div>
 
 
@@ -472,38 +240,7 @@
 
  
   </div>
-  <!--   Core JS Files   -->
-  <script src="assets/js/core/jquery-3.7.1.min.js"></script>
-  <script src="assets/js/core/popper.min.js"></script>
-  <script src="assets/js/core/bootstrap.min.js"></script>
-
-  <!-- jQuery Scrollbar -->
-  <script src="assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
-  <!-- Chart JS -->
-  <script src="assets/js/plugin/chart.js/chart.min.js"></script>
-
-  <!-- jQuery Sparkline -->
-  <script src="assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-  <!-- Chart Circle -->
-  <script src="assets/js/plugin/chart-circle/circles.min.js"></script>
-
-  <!-- Datatables -->
-  <script src="assets/js/plugin/datatables/datatables.min.js"></script>
-
-  <!-- Bootstrap Notify -->
-  <script src="assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
-  <!-- jQuery Vector Maps -->
-  <script src="assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-  <script src="assets/js/plugin/jsvectormap/world.js"></script>
-
-  <!-- Sweet Alert -->
-  <script src="assets/js/plugin/sweetalert/sweetalert.min.js"></script>
-
-  <!-- Kaiadmin JS -->
-  <script src="assets/js/kaiadmin.min.js"></script>
+  
  <script>
   document.querySelectorAll('.dropdown-item').forEach(item => {
     item.addEventListener('click', function () {
@@ -573,8 +310,31 @@ courseDropdownItems.forEach(item => {
       });
   });
 });
+
+
+// Set up the initial course and level based on the first membership in the list
+document.addEventListener("DOMContentLoaded", function() {
+  const firstMembership = "{{ user_memberships.0.membership }}";
+  const firstLevel = "{{ user_memberships.0.level }}";
+
+  // Update the course name and level in the card
+  document.getElementById("selected-course-name").textContent = firstMembership;
+  document.getElementById("selected-course-level").textContent = firstLevel;
+
+  // Update the course and level when a new option is selected from the dropdown
+  const courseOptions = document.querySelectorAll('.course-option');
+  courseOptions.forEach(option => {
+      option.addEventListener('click', function() {
+          const courseName = this.getAttribute('data-course');
+          const courseLevel = this.getAttribute('data-level');
+
+          // Update the card with the selected course and level
+          document.getElementById("selected-course-name").textContent = courseName;
+          document.getElementById("selected-course-level").textContent = courseLevel;
+      });
+  });
+});
+
  </script>
 
-</body>
-
-</html>
+ {% endblock %} 
