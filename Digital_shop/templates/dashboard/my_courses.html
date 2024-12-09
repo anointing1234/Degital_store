@@ -60,7 +60,7 @@
               <li class="nav-item topbar-user dropdown hidden-caret">
                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                   <div class="avatar-sm">
-                    <img src="{% static 'img/profile.jpg' %}" alt="..." class="avatar-img rounded-circle" />
+                    <img src="{% static 'img/profile.png' %}" alt="..." class="avatar-img rounded-circle" />
                   </div>
                   <span class="profile-username">
                     <span class="op-7 text-light">Hi,</span>
@@ -78,7 +78,13 @@
         <div class="page-inner">
           <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
             <div>
-              <h4 class=" text-dark mb-3">Masterclass</h4>
+              <a href="{% url 'dashboard' %}">
+                <button class="btn btn-outline-dark btn-sm">
+                  <i class="fas fa-arrow-left me-1"></i>
+                  Back
+              </button>
+              </a>
+              <h3 class=" text-dark mt-2">Masterclass Courses</h3>
               <p>Dashboard / Courses</p>
             </div>
             <div class="ms-md-auto py-2 py-md-0">
@@ -87,8 +93,10 @@
           <div class="container-fluid">
             <div class="container">
                 <div class="container-fluid">
-                    <h5 class="text-center mb-5 fw-bold mb-2 border-bottom border-1 border-dark">Purchased Courses</h5>
-                    {% if user_memberships %}
+                  <div class="container  d-flex justify-content-center">
+                    <h5 class="text-center mb-5 fw-bold mb-2  border-bottom border-dark" style="display: inline-block; padding-bottom: 5px; width: fit-content;">Purchased Courses</h5>
+                  </div>
+                  {% if user_memberships %}
                         <div class="dropdown text-center mb-4">
                             <button 
                                 class="btn btn-dark dropdown-toggle" 
@@ -102,10 +110,10 @@
                                 {% for membership in user_memberships %}
                                     <li>
                                         <a 
-                                            class="dropdown-item course-option" 
+                                            class="dropdown-item course-options" 
                                             href="#" 
-                                            data-course="{{ membership.membership }}" 
-                                            data-level="{{ membership.level }}">
+                                            data-cour="{{ membership.membership }}" 
+                                            data-leve="{{ membership.level }}">
                                             {{ membership.membership }} - {{ membership.level }}
                                         </a>
                                     </li>
@@ -114,116 +122,210 @@
                         </div>
                         
                         <!-- Dynamic Course Display -->
-                        <div class="row justify-content-center">
-                            <div class="col-md-6">
-                                <div class="card position-relative">
-                                    <img src="{% static 'img/online-education-concept-icon_24877-3779.jpg' %}" 
-                                         class="card-img selected-course-img" 
-                                         alt="Selected Course">
-                                    <div class="card-overlay">
-                                        <p class="card-text"><strong>Course:</strong> <span id="selected-course-name">{{ user_memberships.0.membership }}</span></p>
-                                        <p class="card-text"><strong>Level:</strong> <span id="selected-course-level">{{ user_memberships.0.level }}</span></p>
-                                        <a href="#" class="btn btn-light btn-sm">Resume Training</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                         <div class="container-fluid  py-3">
+
+                           <div class="row justify-content-center">
+                               <div class="col-md-6">
+                                   <div class="card position-relative">
+                                       <img src="{% static 'img/online-education-concept-icon_24877-3779.jpg' %}" 
+                                            class="card-img selected-course-img" 
+                                            alt="Selected Course">
+                                       <div class="card-overlay">
+                                           <p class="card-text"><strong>Course:</strong> <span id="Selected-course-name">{{ current_course }}</span></p>
+                                           <p class="card-text"><strong>Level:</strong> <span id="Selected-course-level">{{ current_level }}</span></p>
+                                           <form action="{% url 'Training_center' %}" method="POST">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="membership" id="membership-field" value="{{ current_course  }}">
+                                             <input type="hidden" name="level" id="level-field" value="{{ current_level }}">
+                                             <button type="submit" class="btn btn-light btn-sm">
+                                                view
+                                             </button>
+                                         </form>
+                                         
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                         </div>
+
                     {% else %}
                         <p class="text-center">You have not purchased any courses yet.</p>
                     {% endif %}
                 </div>
             </div>
         </div>
+
+
+
+
+
+
+
+
         
         
 
 
-          <div  class="container-fluid py-3 bg-white text-dark">
+        <div class="container-fluid py-3  text-dark">
           <div class="container">
             <p class="text-start mb-4 fs-5 fw-bold">Current Course Overview</p>
-        
-            <div class="row g-4 align-items-center">
-                <!-- Course Details Section -->
-                <div class="col-lg-6">
-                    <div class="course-details p-3 border rounded h-100">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <p class="me-3 mb-0">Current Course:</p>
-                            <!-- Display Selected Course -->
-                            <span class="fw-bold text-primary selected-course">Select a Course</span>
-                            <!-- Dropdown for Courses -->
-                            <div class="dropdown ms-3">
-                                <button class="btn btn-transparent dropdown-toggle p-1 text-primary" type="button" id="courseDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-three-dots"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="courseDropdown">
-                                    <li><a class="dropdown-item" href="#" data-course="OGS">Organization Growth Strategies</a></li>
-                                    <li><a class="dropdown-item" href="#" data-course="LS">Leadership</a></li>
-                                    <li><a class="dropdown-item" href="#" data-course="PM">Principles of Ministry</a></li>
-                                </ul>
-                            </div>
-                        </div>
-        
-                        <!-- Levels Dropdown -->
-                        <div class="d-flex justify-content-between align-items-center mt-2">
-                            <p class="me-3 mb-0">Select Level:</p>
-                            <div class="dropdown">
-                                <button class="btn btn-transparent dropdown-toggle p-1 text-primary" type="button" id="levelDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Select Level
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" id="levelDropdownMenu"></ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        
-                <!-- Progress Bar Section -->
-                <div class="col-lg-6">
-                    <div class="progress-container p-3 border rounded h-100">
-                        <p class="mb-2">Course Status:</p>
-                        <div class="progress" style="height: 20px;">
-                            <div class="progress-bar" style="width: 50%; background-color: #4caf50;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
-                                30% Complete
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container mt-5 pt-2">
-          <p class="text-start mb-4 fs-5 fw-bold">Course Analytics</p>
+    
+            <div class="card"><div class="card-body">
+
+
+              <div class="row g-4 align-items-center">
+                  <!-- Course Details Section -->
+                  <div class="col-lg-6">
+                      <div class="course-details p-3 border rounded h-100">
+                          <div class="d-flex justify-content-between align-items-center mb-3">
+                              <p class="me-3 mb-0">Current Course:</p>
+                              <!-- Display Selected Course -->
+                              <span class="fw-bold text-dark selected-course">{{ current_course }}</span>
+                              <!-- Dropdown for Courses -->
+                              <div class="dropdown ms-3">
+                                  <button class="btn btn-transparent dropdown-toggle p-1 text-primary" type="button" id="courseDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                      <i class="bi bi-three-dots"></i>
+                                  </button>
+                                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="courseDropdown">
+                                      <li><a class="dropdown-item dropdown-course" href="#" data-course="OGS">Organization Growth Strategies</a></li>
+                                      <li><a class="dropdown-item dropdown-course" href="#" data-course="LS">Leadership</a></li>
+                                      <li><a class="dropdown-item dropdown-course" href="#" data-course="PM">Principles of Ministry</a></li>
+                                  </ul>
+                              </div>
+                          </div>
       
-          <div class="row g-4">
-              <!-- Highest Score -->
-              <div class="col-lg-4 col-md-6">
-                  <div class="analytics-card p-3 border rounded">
-                      <p class="mb-2">Highest Score</p>
-                      <h5 class="text-success">0</h5>
+                          <!-- Levels Dropdown -->
+                          <div class="d-flex justify-content-between align-items-center mt-2">
+                              <p class="me-3 mb-0">Select Level:</p>
+                              <div class="dropdown">
+                                  <button class="btn btn-transparent dropdown-toggle p-1 text-dark" type="button" id="levelDropdown" data-bs-toggle="dropdown" aria-expanded="false" onclick="updateLevels()">
+                                      {{ current_level }}
+                                  </button>
+                                  <ul class="dropdown-menu dropdown-menu-end" id="levelDropdownMenu"></ul>
+                              </div>
+                          </div>
+                      </div>
                   </div>
-              </div>
       
-              <!-- Lowest Score -->
-              <div class="col-lg-4 col-md-6">
-                  <div class="analytics-card p-3 border rounded">
-                      <p class="mb-2">Lowest Score</p>
-                      <h5 class="text-danger">0</h5>
-                  </div>
-              </div>
-      
-              <!-- Average Score -->
-              <div class="col-lg-4 col-md-6">
-                  <div class="analytics-card p-3 border rounded">
-                      <p class="mb-2">Average Score</p>
-                      <h5 class="text-primary">0</h5>
+                  <!-- Progress Bar Section -->
+                  <div class="col-lg-6">
+                      <div class="progress-container p-3 border rounded h-100">
+                          <p class="mb-2">Course Status:</p>
+                          <div class="progress" style="height: 20px;">
+                              <div class="progress-bar" id="progress-bar" style="width: {{ current_progress }}%; background-color: #ccc; color: dark;" aria-valuenow="{{ current_progress }}" aria-valuemin="0" aria-valuemax="100">
+                                  {{ current_progress }}% Complete
+                              </div>
+                          </div>
+                      </div>
                   </div>
               </div>
           </div>
       </div>
+            </div></div>
+
+            <div class="container-fluid py-5 bg-light">
+              <div class="container">
+                  <div class="container d-flex justify-content-center">
+                      <h5 class="text-center mb-5 fw-bold mb-2 border-bottom border-dark" 
+                          style="display: inline-block; padding-bottom: 5px; width: fit-content;">
+                          Course Purchase History
+                      </h5>
+                  </div>
+          
+                  {% if user_memberships %}
+                      <div class="table-responsive custom-scrollbar">
+                          <table class="table table-hover table-bordered align-middle">
+                              <thead class="table-dark  sticky-top">
+                                  <tr>
+                                      <th>Course</th>
+                                      <th>Level</th>
+                                      <th>Price</th>
+                                      <th>Date Purchased</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  {% for history in user_memberships %}
+                                      <tr>
+                                          <td>{{ history.membership }}</td>
+                                          <td>{{ history.level }}</td>
+                                          <td>₦10,000</td>
+                                          <td>{{ history.purchased_at }}</td>
+                                      </tr>
+                                  {% endfor %}
+                              </tbody>
+                          </table>
+                      </div>
+                  {% else %}
+                      <p class="text-center text-warning fs-5">No purchase history available.</p>
+                  {% endif %}
+              </div>
+          </div>
+       
+          
+    <!-- Custom Styling -->
+    <style>
+         /* Custom Scrollbar Styling */
+         .custom-scrollbar {
+          max-height: 200px; /* Display only 3 rows, adjust based on row height */
+          overflow-y: auto;
+          scrollbar-color:  transparent; /* Black scrollbar with transparent track */
+          scrollbar-width: thin; /* Thin scrollbar for a sleek design */
+      }
+      
+      .custom-scrollbar::-webkit-scrollbar {
+          width: 8px; /* Width of the scrollbar */
+      }
+      
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+          background-color: transparent /* Black color for scrollbar thumb */
+          border-radius: 4px; /* Rounded scrollbar edges */
+      }
+      
+      .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent; /* Transparent scrollbar track */
+      }
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+        .table-bordered {
+            border: 2px solid #dee2e6;
+        }
+        .table-striped tbody tr:nth-child(odd) {
+            background-color: #f8f9fa;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .table-dark th {
+            background-color: #343a40;
+            color: white;
+        }
+    </style>
+    
+      
+
+
+
+
+
+
+
+
+
+      
+      
+
     </div>
   </div>
+      <!-- Go to Top Button -->
+      <button id="goToTopButton" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
   <footer class="footer bg-dark">
     <div class="container-fluid d-flex justify-content-between"> 
       <div>
-        <a class="text-light" target="_blank" href="https://themewagon.com/">You are logged in </a>.
+        <a class="text-light" target="_blank" href="">You are logged in </a>.
       </div>
     </div>
   </footer>
@@ -242,99 +344,170 @@
   </div>
   
  <script>
-  document.querySelectorAll('.dropdown-item').forEach(item => {
+  document.querySelectorAll('.dropdown-course').forEach(item => {
     item.addEventListener('click', function () {
         const courseName = this.textContent;
         document.querySelector('.selected-course').textContent = courseName;
+        console.log(`Selected course: ${courseName}`); // Log the selected course name
+        updateLevels(courseName); // Update levels dropdown based on selected course
     });
 });
 
-
-
-
 const COURSE_CHOICES = {
-  'OGS': 'Organization Growth Strategies',
-  'LS': 'Leadership',
-  'PM': 'Principles of Ministry'
+    'OGS': 'Organization Growth Strategies',
+    'LS': 'Leadership',
+    'PM': 'Principles of Ministry'
 };
 
 const LEVEL_CHOICES = {
-  'OGS': [
-      { code: 'OGS501', label: 'Level 1 - OGS501' },
-      { code: 'OGS502', label: 'Level 2 - OGS502' }
-  ],
-  'LS': [
-      { code: 'LS501', label: 'Level 1 - LS501' },
-      { code: 'LS502', label: 'Level 2 - LS502' }
-  ],
-  'PM': [
-      { code: 'PM501', label: 'Level 1 - PM501' },
-      { code: 'PM502', label: 'Level 2 - PM502' }
-  ]
+    'OGS': [
+        { code: 'OGS501', label: 'Level 1 - OGS501' },
+        { code: 'OGS502', label: 'Level 2 - OGS502' }
+    ],
+    'LS': [
+        { code: 'LS501', label: 'Level 1 - LS501' },
+        { code: 'LS502', label: 'Level 2 - LS502' }
+    ],
+    'PM': [
+        { code: 'PM501', label: 'Level 1 - PM501' },
+        { code: 'PM502', label: 'Level 2 - PM502' }
+    ]
 };
 
-const courseDropdownItems = document.querySelectorAll('#courseDropdown + .dropdown-menu .dropdown-item');
 const selectedCourseElement = document.querySelector('.selected-course');
 const levelDropdownMenu = document.getElementById('levelDropdownMenu');
 const levelDropdownButton = document.getElementById('levelDropdown');
+const progressBar = document.getElementById('progress-bar');
 
-courseDropdownItems.forEach(item => {
-  item.addEventListener('click', (e) => {
-      e.preventDefault();
 
-      // Get selected course
-      const courseKey = e.target.getAttribute('data-course');
-      const courseName = COURSE_CHOICES[courseKey];
 
-      // Update selected course display
-      selectedCourseElement.textContent = courseName;
+function updateLevels(courseName = null) {
+  // Use the current displayed course if no course is provided
+  const displayedCourse = selectedCourseElement.textContent;
+  const effectiveCourseName = courseName || displayedCourse;
 
-      // Update levels dropdown
-      const levels = LEVEL_CHOICES[courseKey];
-      levelDropdownMenu.innerHTML = ''; // Clear previous levels
-      levels.forEach(level => {
-          const levelItem = document.createElement('li');
-          const levelLink = document.createElement('a');
-          levelLink.className = 'dropdown-item';
-          levelLink.href = '#';
-          levelLink.textContent = level.label;
-          levelLink.setAttribute('data-level', level.code);
-          levelItem.appendChild(levelLink);
-          levelDropdownMenu.appendChild(levelItem);
+  // Find the course key in the COURSE_CHOICES mapping
+  const courseKey = Object.keys(COURSE_CHOICES).find(key => COURSE_CHOICES[key] === effectiveCourseName);
 
-          // Handle level selection
-          levelLink.addEventListener('click', (e) => {
-              e.preventDefault();
-              levelDropdownButton.textContent = e.target.textContent; // Update button text
-          });
+  if (!courseKey) {
+      console.error("Course key not found for the given course name.");
+      return;
+  }
+
+  const levels = LEVEL_CHOICES[courseKey];
+  levelDropdownMenu.innerHTML = ''; // Clear previous levels
+  levels.forEach(level => {
+      const levelItem = document.createElement('li');
+      const levelLink = document.createElement('a');
+      levelLink.className = 'dropdown-item';
+      levelLink.href = '#';
+      levelLink.textContent = level.label;
+      levelLink.setAttribute('data-level', level.code);
+      levelItem.appendChild(levelLink);
+      levelDropdownMenu.appendChild(levelItem);
+
+      // Handle level selection
+      levelLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          levelDropdownButton.textContent = e.target.textContent; // Update button text
+          const selectedLevel = e.target.getAttribute('data-level');
+          console.log(`Selected level: ${selectedLevel}`); // Log selected level
+
+          // Fetch course status based on selected course name and level
+          fetchCourseStatus(effectiveCourseName, selectedLevel);
       });
   });
-});
+}
 
 
-// Set up the initial course and level based on the first membership in the list
+
+
+// Fetch course status and update progress bar
+function fetchCourseStatus(courseName, level) {
+    fetch(`/get-course-status/${courseName}/${level}/`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Fetched course status:', data); // Log the response data
+            if (data.success) {
+                const status = data.status ? data.status.percentage : 0;
+                updateProgressBar(status);
+            } else {
+                // Handle error if the status is not found
+                console.error('Error:', data.message);
+                updateProgressBar(0); // Default to 0 if there's an error
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error); // Log any fetch errors
+        });
+}
+
+// Update the progress bar based on status value
+function updateProgressBar(status) {
+    console.log(`Updating progress bar: ${status}%`); // Log progress value before updating the bar
+    const progressPercentage = status;
+    progressBar.style.width = `${progressPercentage}%`;
+    progressBar.setAttribute('aria-valuenow', progressPercentage);
+    progressBar.textContent = `${progressPercentage}% Complete`;
+
+    // Change color based on the progress
+    if (status <= 25) {
+        progressBar.style.backgroundColor = '#ff4d4d'; // Red
+    } else if (status <= 50) {
+        progressBar.style.backgroundColor = '#ffbf00'; // Yellow
+    } else if (status <= 75) {
+        progressBar.style.backgroundColor = '#4caf50'; // Green
+    } else {
+        progressBar.style.backgroundColor = '#008000'; // Dark Green
+    }
+}
+
+
+
+ </script>
+
+
+ <script>
+  // Set up the initial course and level based on the first membership in the list
 document.addEventListener("DOMContentLoaded", function() {
-  const firstMembership = "{{ user_memberships.0.membership }}";
-  const firstLevel = "{{ user_memberships.0.level }}";
+  const firstMembership = "{{ current_course }}";
+  const firstLevel = "{{ current_level }}";
 
+  
   // Update the course name and level in the card
-  document.getElementById("selected-course-name").textContent = firstMembership;
-  document.getElementById("selected-course-level").textContent = firstLevel;
+  document.getElementById("Selected-course-name").textContent = firstMembership;
+  document.getElementById("Selected-course-level").textContent = firstLevel;
 
   // Update the course and level when a new option is selected from the dropdown
-  const courseOptions = document.querySelectorAll('.course-option');
+  const courseOptions = document.querySelectorAll('.course-options');
   courseOptions.forEach(option => {
       option.addEventListener('click', function() {
-          const courseName = this.getAttribute('data-course');
-          const courseLevel = this.getAttribute('data-level');
+          const courseName = this.getAttribute('data-cour');
+          const courseLevel = this.getAttribute('data-leve');
 
           // Update the card with the selected course and level
-          document.getElementById("selected-course-name").textContent = courseName;
-          document.getElementById("selected-course-level").textContent = courseLevel;
+          document.getElementById("Selected-course-name").textContent = courseName;
+          document.getElementById("Selected-course-level").textContent = courseLevel;
+
+          // Also update the hidden input fields in the form
+          document.getElementById("membership-field").value = courseName;
+          document.getElementById("level-field").value = courseLevel;
       });
   });
 });
 
  </script>
+ <script>
+  function goBack() {
+      const previousUrl = document.referrer; // Browser's referrer for the previous page
+      if (previousUrl && previousUrl !== window.location.href) {
+          // Navigate to the previous URL if available
+          window.location.href = previousUrl;
+      } else {
+          // Default to a known URL if no referrer is available
+          window.location.href = "/"; // Change "/" to your desired fallback route
+      }
+  }
+  </script>
 
  {% endblock %} 

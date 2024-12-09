@@ -180,6 +180,32 @@ body {
   font-weight: 900;
   color: black;
 }
+
+/* Go to Top Button Style */
+#goToTopButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  z-index: 1000;
+  font-size: 20px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+#goToTopButton:hover {
+  background-color: #333;
+}
+
 </style>
 
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
@@ -193,7 +219,7 @@ body {
     {% block contents %}
     <div class="wrapper">
     
-    
+      
     </div>
     {% endblock %}
        
@@ -227,7 +253,23 @@ body {
 <!-- Kaiadmin JS -->
 <script src="{% static 'js/kaiadmin.min.js' %}"></script>
 
+<script>
+  // Show the button when scrolling down
+window.onscroll = function() {
+  const button = document.getElementById("goToTopButton");
+  if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+      button.style.display = "block";
+  } else {
+      button.style.display = "none";
+  }
+};
 
+// Scroll to the top when the button is clicked
+document.getElementById("goToTopButton").onclick = function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+</script>
 
 
 

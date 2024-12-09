@@ -188,21 +188,104 @@ class Membership(models.Model):
         verbose_name = "Membership"
         verbose_name_plural = "Memberships"
         
-        
-
 
 class UserMembershipLevel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    membership = models.CharField(max_length=255)  # Store the course name as a CharField
-    level = models.CharField(max_length=20)
-    training_sections = models.IntegerField(default=3)
-    purchased_at = models.DateTimeField(auto_now_add=True)  # Timestamp for when the purchase was made
-    status = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(101)])  # Completion status (1 to 100)
+    membership = models.CharField(max_length=255)  # Course name (e.g., 'OGS', 'LS', etc.)
+    level = models.CharField(max_length=20)  # Level (e.g., 'OGS501', 'LS502', etc.)
+    # If 'training_sections' is meant to represent sublevels, you can keep it; otherwise, you may remove it
+    training_sections = models.IntegerField(default=3)  # Default sections (if applicable)
+    purchased_at = models.DateTimeField(auto_now_add=True)  # Timestamp for purchase time
+    status = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(101)])  # Completion percentage (0 to 100)
+
+    def update_progress(self, membership, level, video_id):
+        # Get the video instance by the passed-in video_id
+        video = membershipVideo.objects.get(id=video_id)
+
+        # Filter the videos using the provided membership and level
+        videos = membershipVideo.objects.filter(membership=membership, level=level)
+        
+        total_videos = videos.count()  # Total number of videos in this level
+        
+        # Count how many videos the user has completed (via UserVideoProgress)
+        completed_videos = UserVideoProgress.objects.filter(user=self.user, video__in=videos, completed=True).count()
+
+        # Calculate the progress as a percentage
+        if total_videos > 0:
+            progress = (completed_videos / total_videos) * 100
+        else:
+            progress = 0  # If there are no videos, consider 0% completion
+
+        # Update the course completion status (percentage)
+        self.status = int(progress)  # Convert to an integer percentage
+        self.save()
+
+        
 
     class Meta:
         verbose_name = "User Membership Level"
         verbose_name_plural = "User Membership Levels"
-        unique_together = ('user', 'membership', 'level', 'training_sections')  # Ensure a user cannot have the same level multiple times for the same membership
+        unique_together = ('user', 'membership', 'level', 'training_sections')  # Unique constraint to prevent duplicates
 
     def __str__(self):
         return f"{self.user.username} - {self.membership} - {self.level} - {self.status}%"
+        
+
+
+
+
+class membershipVideo(models.Model):
+    LEVEL_CHOICES = [
+        ('OGS501', 'Level 1 - OGS501'),
+        ('OGS502', 'Level 2 - OGS502'),
+        ('LS501', 'Level 1 - LS501'),
+        ('LS502', 'Level 2 - LS502'),
+        ('PM501', 'Level 1 - PM501'),
+        ('PM502', 'Level 2 - PM502'),
+    ]
+
+    COURSE_CHOICES = [
+        ('OGS', 'Organization Growth Strategies'),
+        ('LS', 'Leadership'),
+        ('PM', 'Principles of Ministry'),
+    ]
+
+    # ForeignKey to the Membership model
+    membership = models.ForeignKey(Membership, related_name='videos', on_delete=models.CASCADE)
+    
+    # Video details
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+
+    # File field for video upload
+    video_file = models.FileField(upload_to='videos/%Y/%m/%d/', blank=True, null=True)
+
+    # Level for the video (Level 1 or Level 2)
+    level = models.CharField(max_length=300, choices=LEVEL_CHOICES)
+
+    def __str__(self):
+        return f"{self.title} ({self.level})"
+
+    @property
+    def full_course_name(self):
+        """Returns the full course name without the level."""
+        # Get the full course name from COURSE_CHOICES
+        return dict(self.COURSE_CHOICES).get(self.membership.course_name, "Unknown Course")
+
+    class Meta:
+        verbose_name = "Video"
+        verbose_name_plural = "Videos"
+        
+
+
+class UserVideoProgress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to the user
+    video = models.ForeignKey(membershipVideo, on_delete=models.CASCADE)  # Link to the video
+    completed = models.BooleanField(default=False)  # Track if the user has completed the video
+
+    class Meta:
+        unique_together = ('user', 'video')  # Enforce uniqueness for user-video pairs
+
+    def __str__(self):
+        return f"{self.user.username} - {self.video.title} - {'Completed' if self.completed else 'Not Completed'}"
+

@@ -1,0 +1,194 @@
+{% extends 'layout/dash_base.html' %}
+{% load static %}
+{% block contents %}
+
+    <div class="main-panel">
+        <div class="main-header">
+            <div class="main-header-logo">
+                <!-- Logo Header -->
+                <div class="logo-header" data-background-color="dark">
+                    <a href="index.html" class="logo">
+                        <img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20" />
+                    </a>
+                    <div class="nav-toggle">
+                        <button class="btn btn-toggle toggle-sidebar">
+                            <i class="gg-menu-right"></i>
+                        </button>
+                        <button class="btn btn-toggle sidenav-toggler">
+                            <i class="gg-menu-left"></i>
+                        </button>
+                    </div>
+                    <button class="topbar-toggler more">
+                        <i class="gg-more-vertical-alt"></i>
+                    </button>
+                </div>
+                <!-- End Logo Header -->
+            </div>
+            <!-- Navbar Header -->
+            <nav class="navbar navbar-header bg-dark navbar-header-transparent navbar-expand-lg border-bottom">
+                <div class="container-fluid">
+                    <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                        <li class="nav-item topbar-user dropdown hidden-caret">
+                            <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
+                                <div class="avatar-sm">
+                                    <img src="{% static 'img/profile.png' %}" alt="..." class="avatar-img rounded-circle" />
+                                </div>
+                                <span class="profile-username">
+                                    <span class="op-7 text-light">Hi,</span>
+                                    <span class="fw-bold text-light">{{ request.user.username }}</span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- End Navbar -->
+        </div>
+
+        <div class="container">
+            <div class="page-inner">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    {% if video %}
+                    <div>
+                        <form method="POST" action="{% url 'Training_center' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="membership" value="{{ video.full_course_name|slice:':-' }}">
+                            <input type="hidden" name="level" value="{{ video.level }}">
+                            <button type="submit" class="btn btn-outline-dark btn-sm"> <!-- Replaced blue with dark button -->
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                        </form>
+                        <h3 class="mt-2">{{ video.full_course_name }}</h3>
+                        <p class="text-muted">Dashboard / My course / {{ video.full_course_name }} - Self-Paced / {{ video.level }} / {{ video.title }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Video Section -->
+            <div class="row mb-5"> <!-- Added margin to separate sections -->
+                <div class="col-12">
+                    <h3 class="text-center">{{ video.title }}</h3>
+                    <p class="text-center text-muted">{{ video.description }}</p>  
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                          
+                            <div class="video-container text-center">
+                                <video class="w-100" style="max-height: 600px; border-radius: 8px;" controls>
+                                    <source src="{{ video.video_file.url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+     <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light"> <!-- Light header for the Q&A section -->
+                        <h5 class="mb-0">Questions & Answers</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="question" class="form-label">Have a question about this class?</label>
+                                <textarea id="question" name="question" class="form-control" rows="4" placeholder="Type your question here..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-dark">Submit Question</button> <!-- Dark button for consistency -->
+                        </form>
+
+                        <hr>
+
+                        <!-- Display Questions -->
+                        <h6 class="text-muted">Recent Questions</h6>
+                        <ul class="list-group">
+                            {% for question in questions %}
+                            <li class="list-group-item">
+                                <strong>{{ question.user.username }}</strong>: {{ question.content }}
+                                <small class="text-muted float-end">{{ question.created_at|date:"F j, Y, g:i a" }}</small>
+                            </li>
+                            {% empty %}
+                            <li class="list-group-item text-center text-muted">No questions yet. Be the first to ask!</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer bg-dark">
+        <div class="container-fluid d-flex justify-content-between">
+            <div>
+                <a class="text-light" target="_blank">You are logged in </a>.
+            </div>
+        </div>
+    </footer>
+        </div>
+    </div>
+
+
+    <script>
+        // Get the video element and its duration
+        const videoElement = document.querySelector('video');
+        const videoId = '{{ video.id }}';  // Pass the video ID from the backend to JavaScript
+    
+        let isVideoCompleted = false;  // Track if the video is completed
+    
+        // Check if the video is completed
+        videoElement.addEventListener('ended', function() {
+            if (!isVideoCompleted) {
+                isVideoCompleted = true;
+                // Send AJAX request to update progress in the backend
+                updateVideoProgress(videoId);
+            }
+        });
+    
+        // AJAX function to send progress update to the server
+        function updateVideoProgress(videoId) {
+            fetch(`/video/${videoId}/update-progress/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')  // CSRF token for safety
+                },
+                body: JSON.stringify({
+                    'video_id': videoId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Video progress updated successfully.');
+                } else {
+                    console.error('Error updating video progress:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Request failed', error);
+            });
+        }
+    
+        // Utility function to get CSRF token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+    
+
+    
+{% endblock %}

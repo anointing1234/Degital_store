@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .models import Products,background_slider_images,Cart,CartItem,Membership,UserMembershipLevel
+from .models import Products,background_slider_images,Cart,CartItem,Membership,UserMembershipLevel,membershipVideo,UserVideoProgress
 import requests
 from requests.exceptions import ConnectionError, Timeout, RequestException
 import random
@@ -20,15 +20,19 @@ from datetime import timedelta
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.http import JsonResponse
+import json
 import logging
 from paystackapi.transaction import Transaction  
 import time
+from django.db.models import Case, When
+
 
 
 
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 
 
@@ -749,9 +753,18 @@ def custom_500_view(request):
     return render(request, '500.html', status=500)
 
 
+
+
 def training_view(request):
-    memberships = Membership.objects.all()
-    return render(request,'Training.html',{'memberships':memberships})
+    memberships = Membership.objects.annotate(
+        course_order=Case(
+            When(course_name='OGS', then=0),
+            When(course_name='LS', then=1),
+            When(course_name='PM', then=2),
+            default=3,
+        )
+    ).order_by('course_order')
+    return render(request, 'Training.html', {'memberships': memberships})
 
 
 
@@ -1115,23 +1128,291 @@ def paystack_membership(request):
 def dashboard(request):
     if request.user.is_authenticated:
         user_memberships = UserMembershipLevel.objects.filter(user=request.user)
+        # Assume user_memberships contains a 'course_name' and 'level' field
+        current_course = user_memberships.first().membership if user_memberships.exists() else "No Course Selected"
+        current_level = user_memberships.first().level if user_memberships.exists() else "No Level Selected"
+        current_progress = user_memberships.first().status if user_memberships.exists() else 0
     else:
         user_memberships = []
+        current_course = "No Course Selected"
+        current_level = "No Level Selected"
+        current_progress = 0
 
     context = {
         'user_memberships': user_memberships,
+        'current_course': current_course,
+        'current_level': current_level,
+        'current_progress': current_progress,
     }
     return render(request,"dashboard/index.html",context)
 
 
-
 def Mycourses(request):
     if request.user.is_authenticated:
-        user_memberships = UserMembershipLevel.objects.filter(user=request.user)
-    else:
-        user_memberships = []
+        # Fetch all memberships for the user, ordered by `purchased_at` (oldest to newest)
+        user_memberships = UserMembershipLevel.objects.filter(user=request.user).order_by('purchased_at')
 
+        if user_memberships.exists():
+            # Find the first incomplete course, ordered by purchase date
+            incomplete_membership = user_memberships.filter(status__lt=100).first()
+            # Fallback to the last purchased course if all are complete
+            current_membership = incomplete_membership if incomplete_membership else user_memberships.last()
+            current_course = current_membership.membership
+            current_level = current_membership.level
+            current_progress = current_membership.status
+        else:
+            # Defaults if no memberships exist
+            current_course = "No Course Selected"
+            current_level = "No Level Selected"
+            current_progress = 0
+    else:
+        # Defaults if the user is not authenticated
+        user_memberships = []
+        current_course = "No Course Selected"
+        current_level = "No Level Selected"
+        current_progress = 0
+
+    # Pass data to the template
     context = {
         'user_memberships': user_memberships,
+        'current_course': current_course,
+        'current_level': current_level,
+        'current_progress': current_progress,
     }
-    return render(request,"dashboard/my_courses.html",context)
+    return render(request, "dashboard/my_courses.html", context)
+
+
+
+
+def get_course_status(request, course_key, level_code):
+    # Ensure the user is logged in
+    if not request.user.is_authenticated:
+        logger.warning('User is not authenticated while attempting to access course status.')
+        return JsonResponse({'success': False, 'message': 'User must be logged in to access course status'}, status=401)
+
+    try:
+        # Log user details and input values
+        logger.info(f'Fetching course status for user: {request.user.username}, course_key: {course_key}, level_code: {level_code}')
+        
+        # Fetch the UserMembershipLevel instance based on the course and level
+        membership_level = UserMembershipLevel.objects.get(user=request.user, membership=course_key, level=level_code)
+
+        # Log the retrieved membership level details
+        logger.info(f'Found membership level: {membership_level}')
+        
+        # Fetch the completion status from the `status` field
+        completion_percentage = membership_level.status
+        logger.info(f'Completion percentage for course {course_key} and level {level_code}: {completion_percentage}')
+
+        # Return a JSON response with the completion status
+        return JsonResponse({
+            'success': True,
+            'status': {
+                'percentage': completion_percentage,
+            }
+        })
+
+    except UserMembershipLevel.DoesNotExist:
+        logger.error(f'Membership level not found for user: {request.user.username}, course_key: {course_key}, level_code: {level_code}')
+        return JsonResponse({'success': False, 'message': 'User membership level not found for the specified course and level'})
+
+    except Exception as e:
+        logger.exception('An error occurred while fetching course status: %s', e)
+        return JsonResponse({'success': False, 'message': 'An error occurred while fetching course status'})
+
+
+
+def Training_center(request):
+    videos = []
+    membership_name = ""
+    level_name = ""
+    level_2_name = ""  # Initialize level_2_name to avoid undefined errors
+    user_membership_status = None
+    user_video_progress = {}  # Dictionary to store video progress
+    level_2_purchased = False  # Initialize the variable for Level 2 purchase status
+
+    if request.method == 'POST':
+        # Retrieve membership and level from POST data
+        membership_name = request.POST.get('membership')
+        level_name = request.POST.get('level')
+
+        # Log the membership and level received from the POST request
+        logger.info(f"Received POST data: membership_name={membership_name}, level_name={level_name}")
+
+        # Map full course name to short course code in Membership.COURSE_CHOICES
+        course_code_dict = {name: code for code, name in Membership.COURSE_CHOICES}
+        course_code = course_code_dict.get(membership_name, None)
+        logger.info(f"Mapped course_name={membership_name} to course_code={course_code}")
+
+        if course_code:
+            # Fetch the membership object based on the course name
+            membership_obj = Membership.objects.filter(course_name=course_code).first()
+            if membership_obj:
+                logger.info(f"Found membership object: {membership_obj}")
+
+                # Fetch the UserMembershipLevel object related to the user, membership, and level
+                user_membership_level = UserMembershipLevel.objects.filter(
+                    user=request.user,
+                    membership=membership_name,
+                    level=level_name
+                ).first()
+
+                if user_membership_level:
+                    user_membership_status = user_membership_level.status
+                    logger.info(f"UserMembershipLevel status: {user_membership_status} for user {request.user.username}")
+                else:
+                    logger.info(f"No UserMembershipLevel found for user {request.user.username}, "
+                                f"membership: {membership_obj}, level: {level_name}")
+
+                # If the level is "Level 1", check if "Level 2" is purchased
+                if level_name == membership_obj.level_1:  # Only check if level_name is Level 1
+                    level_2_name = membership_obj.level_2  # Get Level 2 for this course
+                    logger.info(f"Expected Level 2 name: {level_2_name}")
+
+                    # Check if Level 2 is purchased for the user
+                    user_level_2_membership = UserMembershipLevel.objects.filter(
+                        user=request.user,
+                        membership=membership_name,
+                        level=level_2_name
+                    ).first()
+
+                    if user_level_2_membership:
+                        level_2_purchased = True
+                        logger.info(f"Level 2 is purchased for user {request.user.username}")
+                    else:
+                        level_2_purchased = False
+                        logger.info(f"No Level 2 membership found for user {request.user.username} and membership {membership_name}")
+
+                # Fetch videos for the current level
+                videos = membershipVideo.objects.filter(
+                    membership=membership_obj,
+                    level=level_name  # Use the level_name directly, no mapping required
+                )
+                logger.info(f"Found {len(videos)} videos for membership {membership_obj} and level {level_name}")
+
+                # Fetch user video progress for the retrieved videos
+                video_ids = videos.values_list('id', flat=True)
+                user_progress_records = UserVideoProgress.objects.filter(
+                    user=request.user,
+                    video_id__in=video_ids
+                )
+                user_video_progress = {
+                    progress.video_id: progress.completed for progress in user_progress_records
+                }
+                logger.info(f"User video progress: {user_video_progress}")
+            else:
+                logger.info(f"No membership found for course_code={course_code}")
+        else:
+            logger.info(f"Invalid membership: course_code={course_code}")
+
+    return render(request, "dashboard/Training_center.html", {
+        'videos': videos,  # Videos for the current level
+        'level_2_purchased': level_2_purchased,  # Pass the level_2_purchased variable
+        'membership_name': membership_name,
+        'level_name': level_name,
+        'level_2_name': level_2_name,  # Pass the Level 2 name
+        'user_membership_status': user_membership_status,
+        'user_video_progress': user_video_progress,  # Pass progress to template
+    })
+
+
+
+
+def video_section(request):
+    # Check if the form is submitted via POST request
+    if request.method == 'POST':
+        # Retrieve the necessary data from the POST request
+        video_id = request.POST.get('video_id')
+        course_name = request.POST.get('course_name')
+        level = request.POST.get('level')
+
+        # Log received data (Optional)
+        logger.info(f"Received POST data: video_id={video_id}, course_name={course_name}, level={level}")
+
+        # Fetch the video object using the video ID
+        video = get_object_or_404(membershipVideo, id=video_id)
+
+        # Validate if the provided course name and level match the video data
+        if video.membership.course_name != course_name or video.level != level:
+            logger.error("Invalid course or level data.")
+            # Return an error page if there is a mismatch
+            return render(request, 'dashboard/error.html', {
+                'error_message': 'Invalid video course or level. Please try again.'
+            })
+
+        # Successfully found the video and data is valid, render the video page
+        return render(request, "dashboard/video.html", {
+            'video': video,
+        })
+
+    else:
+        # If it's not a POST request, redirect or handle it accordingly
+        logger.error("Invalid request method")
+        return render(request, 'dashboard/error.html', {
+            'error_message': 'Invalid request method. Please submit the form correctly.'
+        })
+        
+
+
+def update_video_progress(request, video_id):
+    try:
+        logger.info(f"Fetching video with ID: {video_id} for user: {request.user.username}")
+        
+        # Fetch the video using the provided video_id
+        video = membershipVideo.objects.get(id=video_id)
+        logger.info(f"Video fetched successfully: {video.title}")
+        
+        # Create or get the progress for the video
+        progress, created = UserVideoProgress.objects.get_or_create(user=request.user, video=video)
+        logger.info(f"Progress {'created' if created else 'retrieved'} for video: {video.title}, User: {request.user.username}")
+        
+        # Mark as completed if not already marked
+        if not progress.completed:
+            progress.completed = True
+            progress.save()
+            logger.info(f"Video progress marked as completed for video: {video.title}, User: {request.user.username}")
+        else:
+            logger.info(f"Video progress was already marked as completed for video: {video.title}, User: {request.user.username}")
+
+        # Use the video membership and level to update UserMembershipLevel
+        membership_name = video.full_course_name  # Get full course name from membershipVideo's property
+        level = video.level  # Get the video level
+        
+        # Update the UserMembershipLevel status
+        try:
+            membership_level = UserMembershipLevel.objects.get(
+                user=request.user, 
+                membership=membership_name,  # Pass the full course name
+                level=level
+            )
+            membership_level.update_progress(membership=video.membership, level=level, video_id=video_id)
+            logger.info(f"Updated progress for membership: {membership_name}, level: {level}. New status: {membership_level.status}%")
+        except UserMembershipLevel.DoesNotExist:
+            logger.error(f"UserMembershipLevel not found for user {request.user.username}, course name {membership_name}, level {level}")
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Video progress updated.',
+            'progress_created': created  # Indicates if this is a new entry
+        })
+
+    except membershipVideo.DoesNotExist:
+        logger.error(f"Video with ID: {video_id} not found for user: {request.user.username}")
+        return JsonResponse({'status': 'error', 'message': 'Video not found.'}, status=404)
+
+    except Exception as e:
+        logger.exception(f"An unexpected error occurred while updating video progress for video ID: {video_id}")
+        return JsonResponse({'status': 'error', 'message': 'An error occurred.'}, status=500)
+
+
+def profile(request):
+    user = request.user
+    purchased_courses_count = UserMembershipLevel.objects.filter(user=user).count()
+    completed_courses_count = UserMembershipLevel.objects.filter(user=user, status=100).count()
+    memberships = UserMembershipLevel.objects.filter(user=request.user)
+    return render(request,'dashboard/profile.html',{
+    'memberships': memberships,
+    'purchased_courses_count': purchased_courses_count,
+    'completed_courses_count': completed_courses_count,
+
+    })

@@ -1,198 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Dashboad</title>
-  <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-  <link rel="icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
-
-  <!-- Fonts and icons -->
-  <script src="assets/js/plugin/webfont/webfont.min.js"></script>
-  <script>
-    WebFont.load({
-      google: { families: ["Public Sans:300,400,500,600,700"] },
-      custom: {
-        families: [
-          "Font Awesome 5 Solid",
-          "Font Awesome 5 Regular",
-          "Font Awesome 5 Brands",
-          "simple-line-icons",
-        ],
-        urls: ["assets/css/fonts.min.css"],
-      },
-      active: function () {
-        sessionStorage.fonts = true;
-      },
-    });
-
-
-  
-  </script>
-
-
-  <style>
-    
-    .certificate-section {
-      background-color: #f9f9f9;
-  }
-  .certificate-preview img {
-      max-width: 100%;
-      height: auto;
-  }
-  .btn-primary {
-      background-color: #4caf50;
-      border-color: #4caf50;
-  }
-  .btn-outline-primary {
-      border-color: #4caf50;
-      color: #4caf50;
-  }
-  .btn-outline-primary:hover {
-      background-color: #4caf50;
-      color: #fff;
-  }
-
-    
-    .list-group-item {
-      padding: 1rem 1.5rem; /* Add padding for better spacing */
-      border: 1px solid #ddd; /* Subtle border for separation */
-      border-radius: 0.5rem; /* Rounded corners */
-  }
-  
-  .list-group-item img {
-      filter: grayscale(100%); /* Optional: Desaturated icons */
-      transition: filter 0.3s ease;
-  }
-  
-  .list-group-item img:hover {
-      filter: none; /* Optional: Highlight icon on hover */
-  }
-  
-  .list-group-item span {
-      font-weight: 500; /* Slightly bold text */
-      font-size: 1rem; /* Adjust text size */
-  }
-  
-
-  
-    .card {
-        overflow: hidden;
-        cursor: pointer;
-    }
-    .card-img {
-      height: 150px; /* Set fixed height for images */
-      object-fit:contain; /* Ensure the image covers the available space */
-      border-radius: 0.25rem;
-      transition: transform 0.3s ease;
-    }
-    .card:hover .card-img {
-        transform: scale(1.1);
-    }
-    .card-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        text-align: center;
-        padding: 15px;
-    }
-    .card:hover .card-overlay {
-        opacity: 1;
-    }
-    .card-title {
-        font-size: 1.25rem;
-        margin-bottom: 0.5rem;
-    }
-    .card-text {
-        font-size: 1rem;
-        margin-bottom: 1rem;
-    }
-      /* General Styling */
-  .responsive-img {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-}
-
-/* Adjustments for Small Screens */
-@media (max-width: 768px) {
-    .responsive-img {
-        height: 250px; /* Scale down the height */
-        object-fit: contain; /* Show the entire image */
-    }
-}
-
-@media (max-width: 576px) {
-    .responsive-img {
-        height: 200px; /* Further scale down for very small screens */
-        object-fit: contain; /* Ensure all image details are visible */
-    }
-}
-</style>
-
-
-  <!-- CSS Files -->
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="assets/css/plugins.min.css" />
-  <link rel="stylesheet" href="assets/css/kaiadmin.min.css" />
-
- 
-</head>
-
-<body>
-  <div class="wrapper">
-    <!-- Sidebar -->
-    <div class="sidebar" data-background-color="dark">
-      <div class="sidebar-logo">
-        <!-- Logo Header -->
-        <div class="logo-header" data-background-color="dark">
-          <a href="index.html" class="logo">
-            <img src="assets/img/kaiadmin/Master_logo.png" alt="navbar brand" class="navbar-brand" height="20" />
-          </a>
-          <div class="nav-toggle">
-            <button class="btn btn-toggle toggle-sidebar">
-              <i class="gg-menu-right"></i>
-            </button>
-            <button class="btn btn-toggle sidenav-toggler">
-              <i class="gg-menu-left"></i>
-            </button>
-          </div>
-          <button class="topbar-toggler more">
-            <i class="gg-more-vertical-alt"></i>
-          </button>
-        </div>
-        <!-- End Logo Header -->
-      </div>
-      <div class="sidebar-wrapper scrollbar scrollbar-inner">
-        <div class="sidebar-content">
-          <ul class="nav nav-secondary">
-            <li class="nav-item active">
-              <a data-bs-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
-                <i class="fas fa-home"></i>
-                <p>Dashboard</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a  href="my_courses.html">
-                <i class="fas fa-layer-group"></i>
-                <p>My Courses</p>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <!-- End Sidebar -->
+{% extends 'layout/dash_base.html' %}
+{% load static %}
+{% block contents %}
+{% load custom_filters %}
 
     <div class="main-panel">
       <div class="main-header">
@@ -200,8 +9,7 @@
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
             <a href="index.html" class="logo">
-              <img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20" />
-            </a>
+         </a>
             <div class="nav-toggle">
               <button class="btn btn-toggle toggle-sidebar">
                 <i class="gg-menu-right"></i>
@@ -250,43 +58,13 @@
               <li class="nav-item topbar-user dropdown hidden-caret">
                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                   <div class="avatar-sm">
-                    <img src="assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle" />
+                    <img src="{% static 'img/profile.png' %}" alt="..." class="avatar-img rounded-circle" />
                   </div>
                   <span class="profile-username">
                     <span class="op-7 text-light">Hi,</span>
-                    <span class="fw-bold text-light">Hizrian</span>
+                    <span class="fw-bold text-light">{{ request.user.username }}</span>
                   </span>
                 </a>
-
-
-
-
-                <ul class="dropdown-menu dropdown-user animated fadeIn">
-                  <div class="dropdown-user-scroll scrollbar-outer">
-                    <li>
-                      <div class="user-box">
-                        <div class="avatar-lg">
-                          <img src="assets/img/profile.jpg" alt="image profile" class="avatar-img rounded" />
-                        </div>
-                        <div class="u-text">
-                          <h4>Hizrian</h4>
-                          <p class="text-muted">hello@example.com</p>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">My Profile</a>
-                      <a class="dropdown-item" href="#">Logout</a>
-                    </li>
-                  </div>
-                </ul>
-
-
-
-
-
-                
               </li>
             </ul>
           </div>
@@ -294,143 +72,156 @@
         <!-- End Navbar -->
       </div>
 
+      
       <div class="container">
         <!-- Header Section -->
         <div class="page-inner">
-            <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
-                <div>
-                    <h6 class="text-dark mb-3">Name of Course</h6>
-                    <p>Dashboard / My course / Name of Course - Self-Paced</p>
-                </div>
-            </div>
-        </div>
+          <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+              {% if membership_name and level_name %}
+                  <div>
+                    <a href="{% url 'Mycourses' %}">
+                      <button type="submit" class="btn btn-outline-dark btn-sm"> <!-- Replaced blue with dark button -->
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    </a>
+                      <h3 class="text-dark mt-2" id="Selected-course-name">{{ membership_name }}</h3>
+                      <p>Dashboard / My course / {{ membership_name }} - Self-Paced</p>
+                  </div>
+              {% endif %}
+          </div>
+      </div>
+      
     
         <!-- Image Section -->
         <div class="row mb-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <img src="assets/img/Training.jpg" class="img-fluid rounded" alt="Training">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-          <div class="body">
-              <!-- Course Analytics -->
-              <div class="container mt-5 pt-2 mb-5">
-                  <!-- Level Title -->
-                  <p class="text-start mb-4 fs-5 fw-bold">Module: Level 1</p>
-      
-                  <!-- Videos List -->
-                  <ul class="list-group">
-                      <!-- Video 1 -->
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                          <div class="d-flex align-items-center">
-                              <!-- Icon -->
-                              <img src="assets/icons/video-icon.svg" alt="Video Icon" class="me-2" style="width: 24px; height: 24px;">
-                              <!-- Video Button -->
-                              <button class="btn btn-link text-dark text-decoration-none text-start" onclick="location.href='#video1Section';">
-                                  Video 1: Introduction to Level 1
-                              </button>
-                          </div>
-                          <!-- Checkbox -->
-                          <div class="form-check form-switch">
-                              <input class="form-check-input" type="checkbox" id="video1Check">
-                          </div>
-                      </li>
-      
-                      <!-- Video 2 -->
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                          <div class="d-flex align-items-center">
-                              <!-- Icon -->
-                              <img src="assets/icons/video-icon.svg" alt="Video Icon" class="me-2" style="width: 24px; height: 24px;">
-                              <!-- Video Button -->
-                              <button class="btn btn-link text-dark text-decoration-none text-start" onclick="location.href='#video2Section';">
-                                  Video 2: Core Concepts
-                              </button>
-                          </div>
-                          <!-- Checkbox -->
-                          <div class="form-check form-switch">
-                              <input class="form-check-input" type="checkbox" id="video2Check">
-                          </div>
-                      </li>
-      
-                      <!-- Video 3 -->
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                          <div class="d-flex align-items-center">
-                              <!-- Icon -->
-                              <img src="assets/icons/video-icon.svg" alt="Video Icon" class="me-2" style="width: 24px; height: 24px;">
-                              <!-- Video Button -->
-                              <button class="btn btn-link text-dark text-decoration-none text-start" onclick="location.href='#video3Section';">
-                                  Video 3: Practical Applications
-                              </button>
-                          </div>
-                          <!-- Checkbox -->
-                          <div class="form-check form-switch">
-                              <input class="form-check-input" type="checkbox" id="video3Check">
-                          </div>
-                      </li>
-                  </ul>
-      
-                 <!-- Action Buttons -->
-<div class="d-grid gap-3 mt-4">
-  <div class="row justify-content-center">
-      <div class="col-12 col-md-6"> <!-- Ensures the buttons are centered and responsive -->
-
-          <!-- Button for Proceeding to Level 2 -->
-          <button class="btn btn-dark mb-3 btn-sm w-100" onclick="proceedToLevel2()">Proceed to Level 2</button>
-
-          <!-- Button for Printing Certificate -->
-          <button class="btn btn-dark btn-sm w-100" onclick="printCertificate()">Print Certificate for Level 1</button>
-
-      </div>
-  </div>
-</div>
-
+          <div class="col-12">
+              <div class="card">
+                  <div class="card-body position-relative text-center p-0">
+                      <!-- Full-width Image -->
+                      <img src="{% static 'img/Training_videos.webp' %}" class="img-fluid w-80 rounded" alt="Training" style="object-fit: cover;">
+                      
+                      <!-- Overlay Section -->
+                      <div class="position-absolute top-50 start-50 translate-middle text-white text-center py-3 px-4" 
+                           style="background: rgba(0, 0, 0, 0.6); border-radius: 10px; max-width: 70%; min-width: 300px;">
+                          <h4 class="fw-bold mb-2" style="font-size: 1.5rem;">{{ membership_name }}</h4>
+                          <p class="mb-0" style="font-size: 1.1rem;">Level: {{ level_name }}</p>
+                      </div>
+                  </div>
               </div>
           </div>
       </div>
       
-       
-       <div class="container mt-5">
-        <div class="certificate-section p-4 border rounded shadow-lg">
-            <div class="row align-items-center">
-                <!-- Certificate Preview -->
-                <div class="col-lg-6">
-                    <div class="certificate-preview text-center">
-                        <img src="assets/img/certificate-preview.png" alt="Certificate Preview" class="img-fluid rounded border">
-                        <p class="mt-2 text-muted">Preview of your certificate</p>
-                    </div>
-                </div>
-    
-                <!-- Certificate Details and Action -->
-                <div class="col-lg-6">
-                    <h3 class="mb-3 text-success fw-bold">Congratulations!</h3>
-                    <p class="mb-4">
-                        You've successfully completed the course <span class="fw-bold">"Name of Course"</span>.
-                        Showcase your achievement with an official certificate.
-                    </p>
-    
-                    <!-- Certificate Download/Print Buttons -->
-                    <div class="d-grid gap-3">
-                        <button class="btn btn-outline-dark " onclick="printCertificate()">Print Certificate</button>
-                        <button class="btn btn-outline-primary" onclick="downloadCertificate()">Download Certificate</button>
-                    </div>
-                </div>
+      
+
+
+
+
+        <div class="card">
+          <div class="body">
+            <!-- Course Analytics -->
+            <div class="container mt-5 pt-2 mb-5">
+              <!-- Level Title -->
+               <div class="card">
+              <div  class="card-body" >
+
+                <p class="text-start mb-4 fs-5 fw-bold">Module: <span id="Selected-course-level">{{ level_name }}</span> </p>
+            
+              </div>
+               </div>
+              <!-- Videos List -->
+               <div class="card" >
+               <div class="card-body">
+                <ul class="list-group">
+                  {% if videos %}
+                      {% for video in videos %}
+                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <div class="d-flex align-items-center">
+                                  <!-- Font Awesome Video Icon -->
+                                  <i class="fas fa-play-circle me-2 text-primary" style="font-size: 24px;"></i>
+                                  <form method="POST" action="{% url 'Video_section' %}" style="display: inline-block;">
+                                      {% csrf_token %}
+                                      <input type="hidden" name="video_id" value="{{ video.id }}">
+                                      <input type="hidden" name="course_name" value="{{ video.membership.course_name }}">
+                                      <input type="hidden" name="level" value="{{ video.level }}">
+                                      <button class="btn btn-link text-dark text-decoration-none text-start" type="submit">
+                                          {{ video.title }}
+                                      </button>
+                                  </form>
+                              </div>
+                              <div class="form-check form-switch">
+                                <!-- Check if the video is completed -->
+                                <input 
+                                    class="form-check-input checkbox-custom" 
+                                    type="checkbox" 
+                                    id="video{{ video.id }}Check"
+                                    {% if user_video_progress and user_video_progress|dict_get:video.id %} checked disabled {% endif %} 
+                                    onchange="toggleCompletedText(this, 'textCompleted{{ video.id }}')"
+                                >
+                                <!-- Text for Completed -->
+                                <span id="textCompleted{{ video.id }}" class="ms-2">
+                                    {% if user_video_progress and user_video_progress|dict_get:video.id %} Completed {% endif %}
+                                </span>
+                            </div>
+                          </li>
+                      {% endfor %}
+                  {% else %}
+                      <li class="list-group-item">No videos available for this level.</li>
+                  {% endif %}
+              </ul>
+              
+              {% if user_membership_status == 100 %}
+              <div class="d-grid gap-3 mt-4">
+                  <div class="row justify-content-center">
+                      <div class="col-12 col-md-6">
+                          {% if level_2_purchased %}
+                              <a href="{% url 'Mycourses' %}">
+                                  <button class="btn btn-dark mb-3 btn-sm w-100">Proceed to Next Level</button>
+                              </a>
+                          {% if level_2_purchased and not level_name == level_2_name    %}  
+                              <button class="btn btn-dark mb-3 btn-sm w-100" onclick="printCertificate()">Preview Certificate for Level {{ level_name }}</button>
+                          {% endif %}
+
+                          {% elif not level_2_purchased and level_2_name %}
+                              <a href="{% url 'training' %}">
+                                  <button class="btn btn-dark mb-3 btn-sm w-100">Purchase Next Level</button>
+                              </a>
+                          {% endif %}
+              
+                          {% if not level_2_name %}
+                              <button class="btn btn-dark mb-3 btn-sm w-100" onclick="printCertificate()">Preview Certificate for Level {{ level_name }}</button>
+                              <button class="btn btn-dark btn-sm w-100" onclick="printFullCourseCertificate()">Print Full Course Certificate</button>
+                          {% endif %}
+                      </div>
+                  </div>
+              </div>
+              {% endif %}
+              
+
+               </div>
+               </div>
+          
+              <!-- Action Buttons -->
             </div>
+          </div>
         </div>
+           
+       
+      
     </div>
     
         
+    <button id="goToTopButton" title="Go to top">
+      <i class="fas fa-arrow-up"></i>
+  </button>
+<footer class="footer bg-dark">
+  <div class="container-fluid d-flex justify-content-between"> 
+    <div>
+      <a class="text-light" target="_blank" >You are logged in </a>.
     </div>
-    <footer class="footer bg-dark">
-      <div class="container-fluid d-flex justify-content-between"> 
-        <div>
-          <a class="text-light" target="_blank" >You are logged in </a>.
-        </div>
-      </div>
-    </footer>    
+  </div>
+</footer>    
+    </div>
+        <!-- Go to Top Button -->
           
     </div>
             </div>
@@ -447,124 +238,28 @@
 
 
   </div>
+
+  <style>
+    /* Custom Checkbox Style */
+    .checkbox-custom:checked {
+        background-color: #28a745 !important; /* Green color for checked state */
+        border-color: #28a745 !important;
+    }
+</style>
+<script>
+  function toggleCompletedText(checkbox, textElementId) {
+      const textElement = document.getElementById(textElementId);
+      if (checkbox.checked) {
+          textElement.textContent = "Completed";
+      } else {
+          textElement.textContent = "";
+      }
+  }
+
+
   
-  <!--   Core JS Files   -->
-  <script src="assets/js/core/jquery-3.7.1.min.js"></script>
-  <script src="assets/js/core/popper.min.js"></script>
-  <script src="assets/js/core/bootstrap.min.js"></script>
-
-  <!-- jQuery Scrollbar -->
-  <script src="assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
-  <!-- Chart JS -->
-  <script src="assets/js/plugin/chart.js/chart.min.js"></script>
-
-  <!-- jQuery Sparkline -->
-  <script src="assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-  <!-- Chart Circle -->
-  <script src="assets/js/plugin/chart-circle/circles.min.js"></script>
-
-  <!-- Datatables -->
-  <script src="assets/js/plugin/datatables/datatables.min.js"></script>
-
-  <!-- Bootstrap Notify -->
-  <script src="assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
-  <!-- jQuery Vector Maps -->
-  <script src="assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-  <script src="assets/js/plugin/jsvectormap/world.js"></script>
-
-  <!-- Sweet Alert -->
-  <script src="assets/js/plugin/sweetalert/sweetalert.min.js"></script>
-
-  <!-- Kaiadmin JS -->
-  <script src="assets/js/kaiadmin.min.js"></script>
- <script>
-  document.querySelectorAll('.dropdown-item').forEach(item => {
-    item.addEventListener('click', function () {
-        const courseName = this.textContent;
-        document.querySelector('.selected-course').textContent = courseName;
-    });
-});
+</script>
 
 
-
-
-const COURSE_CHOICES = {
-  'OGS': 'Organization Growth Strategies',
-  'LS': 'Leadership',
-  'PM': 'Principles of Ministry'
-};
-
-const LEVEL_CHOICES = {
-  'OGS': [
-      { code: 'OGS501', label: 'Level 1 - OGS501' },
-      { code: 'OGS502', label: 'Level 2 - OGS502' }
-  ],
-  'LS': [
-      { code: 'LS501', label: 'Level 1 - LS501' },
-      { code: 'LS502', label: 'Level 2 - LS502' }
-  ],
-  'PM': [
-      { code: 'PM501', label: 'Level 1 - PM501' },
-      { code: 'PM502', label: 'Level 2 - PM502' }
-  ]
-};
-
-const courseDropdownItems = document.querySelectorAll('#courseDropdown + .dropdown-menu .dropdown-item');
-const selectedCourseElement = document.querySelector('.selected-course');
-const levelDropdownMenu = document.getElementById('levelDropdownMenu');
-const levelDropdownButton = document.getElementById('levelDropdown');
-
-courseDropdownItems.forEach(item => {
-  item.addEventListener('click', (e) => {
-      e.preventDefault();
-
-      // Get selected course
-      const courseKey = e.target.getAttribute('data-course');
-      const courseName = COURSE_CHOICES[courseKey];
-
-      // Update selected course display
-      selectedCourseElement.textContent = courseName;
-
-      // Update levels dropdown
-      const levels = LEVEL_CHOICES[courseKey];
-      levelDropdownMenu.innerHTML = ''; // Clear previous levels
-      levels.forEach(level => {
-          const levelItem = document.createElement('li');
-          const levelLink = document.createElement('a');
-          levelLink.className = 'dropdown-item';
-          levelLink.href = '#';
-          levelLink.textContent = level.label;
-          levelLink.setAttribute('data-level', level.code);
-          levelItem.appendChild(levelLink);
-          levelDropdownMenu.appendChild(levelItem);
-
-          // Handle level selection
-          levelLink.addEventListener('click', (e) => {
-              e.preventDefault();
-              levelDropdownButton.textContent = e.target.textContent; // Update button text
-          });
-      });
-  });
-});
-
-
-function printCertificate() {
-  // Logic to generate and print the certificate
-  alert("Printing your certificate!");
-  // You can integrate additional logic here to open the certificate in print view.
-}
-
-function downloadCertificate() {
-  // Logic to download the certificate
-  alert("Downloading your certificate!");
-  // Link this to a generated certificate PDF or image file.
-}
-
- </script>
-
-</body>
-
-</html>
+  
+   {% endblock %} 

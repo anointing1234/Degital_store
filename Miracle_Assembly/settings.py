@@ -99,6 +99,7 @@ WSGI_APPLICATION = 'Miracle_Assembly.wsgi.application'
 # }
 
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

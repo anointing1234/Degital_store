@@ -217,9 +217,9 @@
         <div class="tab-pane fade show active" id="featured-books" role="tabpanel" aria-labelledby="featured-books-tab">
           <div class="row g-4">
             {% for book in featured_books %}
-              <div class="col-12 ">
+              <div class="col-12  mb-5">
                 <!-- Book Container -->
-                <div class="d-flex flex-column mb-3 flex-sm-row p-3 ">
+                <div class="d-flex flex-column mb-5 flex-sm-row p-3 ">
                   <!-- Image Section -->
                   <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center mb-3 mb-sm-0">
                     <img src="{{ book.image.url }}" loading="lazy" class="card-img-top img-fluid shadow hover-grow" alt="{{ book.name }}" />

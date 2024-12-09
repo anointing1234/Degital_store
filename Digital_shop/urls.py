@@ -45,6 +45,11 @@ urlpatterns = [
     path('membership_payment/',views.membership_payment,name='membership_payment'),
     path('dashboard/',views.dashboard,name="dashboard"),
     path('Mycourses/',views.Mycourses,name="Mycourses"),
+    path('get-course-status/<str:course_key>/<str:level_code>/', views.get_course_status, name='get_course_status'),
+    path('Training_center/',views.Training_center,name="Training_center"),
+    path('Video_section/',views.video_section,name="Video_section"),
+    path('profile/',views.profile,name="profile"),
+    path('video/<int:video_id>/update-progress/', views.update_video_progress, name='update_video_progress'),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import background_slider_images,Products,PasswordResetCode,Cart,CartItem,Membership,UserMembershipLevel
+from .models import background_slider_images,Products,PasswordResetCode,Cart,CartItem,Membership,UserMembershipLevel,membershipVideo,UserVideoProgress
 from django.utils.html import format_html
 
 @admin.register(Products)
@@ -74,7 +74,53 @@ class UserMembershipLevelAdmin(admin.ModelAdmin):
 
 
 
-# Register UserMembershipLevel
+
+
+class MembershipVideoAdmin(admin.ModelAdmin):
+    list_display = ('title', 'get_full_course_name', 'level', 'video_file_link', 'description')
+    search_fields = ('title', 'membership__course_name', 'level', 'description')
+    list_filter = ('membership', 'level')
+
+    # Custom method to display video file link
+    def video_file_link(self, obj):
+        if obj.video_file:
+            return format_html('<a href="{}" target="_blank">View Video</a>', obj.video_file.url)
+        return 'No Video'
+    
+    video_file_link.short_description = 'Video Link'
+
+    # Custom method to display the full course name
+    def get_full_course_name(self, obj):
+        return obj.full_course_name
+
+    get_full_course_name.short_description = 'Full Course Name'
+
+
+# Create a custom admin interface for UserVideoProgress
+class UserVideoProgressAdmin(admin.ModelAdmin):
+    # Display these fields in the list view
+    list_display = ('user', 'video', 'completed', 'video_title', 'course_level')
+    
+    # Allow filtering by user, video, and completion status
+    list_filter = ('completed', 'user', 'video__membership', 'video__level')
+    
+    # Add search functionality for user and video title
+    search_fields = ('user__username', 'video__title')
+    
+    # Show the video title and course level based on the video
+    def video_title(self, obj):
+        return obj.video.title
+    video_title.short_description = 'Video Title'
+
+    def course_level(self, obj):
+        return obj.video.level
+    course_level.short_description = 'Course Level'
+    
+    
+# Register the UserVideoProgress model with the custom admin interface
+admin.site.register(UserVideoProgress, UserVideoProgressAdmin)
+# Register the model
+admin.site.register(membershipVideo, MembershipVideoAdmin)
 admin.site.register(UserMembershipLevel, UserMembershipLevelAdmin)
 admin.site.register(Cart, CartAdmin)    
 # admin.site.register(PasswordResetCode)    

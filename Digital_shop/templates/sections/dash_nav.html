@@ -43,7 +43,7 @@
     <div class="sidebar-content">
       <ul class="nav nav-secondary">
         <!-- Dashboard -->
-        <li class="nav-item active">
+        <li class="nav-item {% if request.path == '/dashboard/' %}active{% endif %}">
           <a href="{% url 'dashboard' %}">
             <i class="fas fa-home"></i> <!-- Home Icon -->
             <p>Dashboard</p>
@@ -51,7 +51,7 @@
         </li>
         
         <!-- My Courses -->
-        <li class="nav-item">
+        <li class="nav-item {% if request.path == '/Mycourses/' %}active{% endif %}">
           <a href="{% url 'Mycourses' %}">
             <i class="fas fa-book-reader"></i> <!-- Courses Icon -->
             <p>My Courses</p>
@@ -59,8 +59,8 @@
         </li>
         
         <!-- Masterclass Courses -->
-        <li class="nav-item">
-          <a href="masterclass_courses.html">
+        <li class="nav-item {% if request.path == '/training/' %}active{% endif %}">
+          <a href="{% url 'training' %}">
             <i class="fas fa-chalkboard-teacher"></i> <!-- Masterclass Icon -->
             <p>Masterclass Courses</p>
           </a>
@@ -68,15 +68,15 @@
         
         <!-- Shop -->
         <li class="nav-item">
-          <a href="shop.html">
+          <a href="{% url 'home' %}">
             <i class="fas fa-shopping-cart"></i> <!-- Shop Icon -->
             <p>Shop</p>
           </a>
         </li>
 
         <!-- Profile -->
-        <li class="nav-item">
-          <a href="">
+        <li class="nav-item {% if request.path == '/profile/' %}active{% endif %}">
+          <a href="{% url 'profile'  %}">
             <i class="fas fa-user-circle"></i> <!-- Profile Icon -->
             <p>Profile</p>
           </a>
