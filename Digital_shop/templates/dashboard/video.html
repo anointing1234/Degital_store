@@ -72,17 +72,27 @@
                     <p class="text-center text-muted">{{ video.description }}</p>  
                     <div class="card shadow-sm">
                         <div class="card-body">
-                          
                             <div class="video-container text-center">
-                                <video class="w-100" style="max-height: 600px; border-radius: 8px;" controls>
+                                <video 
+                                    id="videoPlayer" 
+                                    class="w-100" 
+                                    style="max-height: 600px; border-radius: 8px;" 
+                                    controls 
+                                    oncontextmenu="return false;" 
+                                    controlsList="nodownload noplaybackrate">
                                     <source src="{{ video.video_file.url }}" type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
+                                <div class="mt-3">
+                                    <button id="muteButton" class="btn btn-primary">Mute</button>
+                                    <button id="fullscreenButton" class="btn btn-secondary">Fullscreen</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
 
      <div class="container">
         <div class="row">
@@ -187,6 +197,35 @@
             }
             return cookieValue;
         }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const videoPlayer = document.getElementById("videoPlayer");
+            const muteButton = document.getElementById("muteButton");
+            const fullscreenButton = document.getElementById("fullscreenButton");
+    
+            // Toggle mute/unmute
+            muteButton.addEventListener("click", function() {
+                if (videoPlayer.muted) {
+                    videoPlayer.muted = false;
+                    muteButton.textContent = "Mute";
+                } else {
+                    videoPlayer.muted = true;
+                    muteButton.textContent = "Unmute";
+                }
+            });
+    
+            // Fullscreen mode
+            fullscreenButton.addEventListener("click", function() {
+                if (videoPlayer.requestFullscreen) {
+                    videoPlayer.requestFullscreen();
+                } else if (videoPlayer.webkitRequestFullscreen) { // Safari
+                    videoPlayer.webkitRequestFullscreen();
+                } else if (videoPlayer.msRequestFullscreen) { // IE/Edge
+                    videoPlayer.msRequestFullscreen();
+                }
+            });
+        });
     </script>
     
 
