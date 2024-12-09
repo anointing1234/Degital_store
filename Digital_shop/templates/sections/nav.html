@@ -350,8 +350,11 @@
       <div class="dropdown">
         <a href="#" class="nav-link text-white dropdown-toggle" id="accountDropdown" role="button" data-bs-toggle="collapse" data-bs-target="#accountMenu" aria-expanded="false">My Account <i class="bi bi-chevron-down ms-2"></i></a>
         <div id="accountMenu" class="collapse">
-          <!--{% url 'training' %}-->
+          {% if has_purchased_membership %}
+          <a href="{% url 'dashboard' %}" class="nav-link text-white ps-3">Training Dashboard</a>
+          {% else %} 
           <a href="{% url 'training' %}" class="nav-link text-white ps-3">Masterclass Courses</a>
+          {% endif %}
           <a href="{% url 'library' %}" class="nav-link text-white ps-3">My Digital Library</a>
         </div>
       </div>
