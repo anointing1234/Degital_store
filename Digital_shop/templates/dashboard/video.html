@@ -94,42 +94,6 @@
             </div>
             
 
-     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-light"> <!-- Light header for the Q&A section -->
-                        <h5 class="mb-0">Questions & Answers</h5>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST" action="">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label for="question" class="form-label">Have a question about this class?</label>
-                                <textarea id="question" name="question" class="form-control" rows="4" placeholder="Type your question here..." required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-dark">Submit Question</button> <!-- Dark button for consistency -->
-                        </form>
-
-                        <hr>
-
-                        <!-- Display Questions -->
-                        <h6 class="text-muted">Recent Questions</h6>
-                        <ul class="list-group">
-                            {% for question in questions %}
-                            <li class="list-group-item">
-                                <strong>{{ question.user.username }}</strong>: {{ question.content }}
-                                <small class="text-muted float-end">{{ question.created_at|date:"F j, Y, g:i a" }}</small>
-                            </li>
-                            {% empty %}
-                            <li class="list-group-item text-center text-muted">No questions yet. Be the first to ask!</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <footer class="footer bg-dark">
         <div class="container-fluid d-flex justify-content-between">
             <div>
