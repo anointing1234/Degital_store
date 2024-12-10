@@ -178,7 +178,9 @@
                                   <button class="btn btn-dark mb-3 btn-sm w-100">Proceed to Next Level</button>
                               </a>
                           {% if level_2_purchased and not level_name == level_2_name    %}  
-                              <button class="btn btn-dark mb-3 btn-sm w-100" onclick="printCertificate()">Preview Certificate for Level {{ level_name }}</button>
+                            <a href="{% url 'certificate' level_name %}">
+                              <button class="btn btn-dark mb-3 btn-sm w-100" >Preview Certificate for Level {{ level_name }}</button>
+                            </a>
                           {% endif %}
 
                           {% elif not level_2_purchased and level_2_name %}
@@ -188,8 +190,13 @@
                           {% endif %}
               
                           {% if not level_2_name %}
-                              <button class="btn btn-dark mb-3 btn-sm w-100" onclick="printCertificate()">Preview Certificate for Level {{ level_name }}</button>
-                              <button class="btn btn-dark btn-sm w-100" onclick="printFullCourseCertificate()">Print Full Course Certificate</button>
+                          <a href="{% url 'certificate' level_name %}">
+                            <button class="btn btn-dark mb-3 btn-sm w-100" >Preview Certificate for Level {{ level_name }}</button>
+                          </a>
+                          <a href="{% url 'certificate' membership_name %}">
+                            <button class="btn btn-dark btn-sm w-100">Print Full Course Certificate {{ membership_name }}</button>
+                        </a>
+                      
                           {% endif %}
                       </div>
                   </div>

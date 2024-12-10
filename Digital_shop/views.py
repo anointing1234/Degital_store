@@ -1416,3 +1416,21 @@ def profile(request):
     'completed_courses_count': completed_courses_count,
 
     })
+
+
+
+
+
+def certificate_view(request, level_name):
+    # Fetch user information
+    user = request.user
+    first_name = user.first_name
+    last_name = user.last_name
+
+    # Pass data to the template
+    context = {
+        'level_name': level_name,
+        'first_name': first_name,
+        'last_name': last_name,
+    }
+    return render(request, 'dashboard/certificate.html', context)

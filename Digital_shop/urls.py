@@ -49,6 +49,7 @@ urlpatterns = [
     path('Training_center/',views.Training_center,name="Training_center"),
     path('Video_section/',views.video_section,name="Video_section"),
     path('profile/',views.profile,name="profile"),
+     path('certificate/<str:level_name>/', views.certificate_view, name='certificate'),
     path('video/<int:video_id>/update-progress/', views.update_video_progress, name='update_video_progress'),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
