@@ -273,11 +273,11 @@
         </li>
 
         <!-- Grouping "My Digital Library" and "Leadership Training" under a dropdown -->
-        <!-- {% if user.is_authenticated %}
+         {% if user.is_authenticated %}
           <li class="nav-item mx-3 dropdown">
             <a class="nav-link text-white dropdown-toggle link-underline {% if request.path == '/training' or request.path == '/library' %}active{% endif %}" href="#" id="userLinksDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">My Account <i class="bi bi-chevron-down ms-2"></i></a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userLinksDropdown">
-              {% if has_purchased_membership %}
+              <!-- {% if has_purchased_membership %}
               <li>
                   <a class="text-dark account-dropdown-item" href="{% url 'dashboard' %}">Training Dashboard</a>
               </li>
@@ -285,13 +285,18 @@
               <li>
                 <a class="text-dark account-dropdown-item" href="{% url 'training' %}">Masterclass Courses</a>
               </li>
-              {% endif %}
+              {% endif %} -->
+          <li>
+          <a class="text-muted account-dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">
+            Masterclass Courses <span class="badge bg-secondary ms-2">Coming Soon</span>
+          </a>
+        </li>
               <li>
                 <a class="text-dark account-dropdown-item" href="{% url 'library' %}">My Digital Library</a>
               </li>
             </ul>
           </li>
-        {% endif %} -->
+        {% endif %} 
 
            <li>
           <a class="text-muted account-dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">
@@ -352,19 +357,24 @@
     <a href="{% url 'home' %}#all-products" class="nav-link text-white">All Products</a>
 
     <!-- My Account Dropdown -->
-    <!-- {% if user.is_authenticated %}
+     {% if user.is_authenticated %}
       <div class="dropdown">
         <a href="#" class="nav-link text-white dropdown-toggle" id="accountDropdown" role="button" data-bs-toggle="collapse" data-bs-target="#accountMenu" aria-expanded="false">My Account <i class="bi bi-chevron-down ms-2"></i></a>
         <div id="accountMenu" class="collapse">
-          {% if has_purchased_membership %}
+          <!-- {% if has_purchased_membership %}
           <a href="{% url 'dashboard' %}" class="nav-link text-white ps-3">Training Dashboard</a>
           {% else %} 
           <a href="{% url 'training' %}" class="nav-link text-white ps-3">Masterclass Courses</a>
-          {% endif %}
+          {% endif %} -->
+          <li>
+          <a class="text-muted account-dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">
+            Masterclass Courses <span class="badge bg-secondary ms-2">Coming Soon</span>
+          </a>
+        </li>
           <a href="{% url 'library' %}" class="nav-link text-white ps-3">My Digital Library</a>
         </div>
       </div>
-    {% endif %} -->
+    {% endif %} 
 
 
 
