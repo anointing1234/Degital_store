@@ -160,6 +160,17 @@ else:
 
 
 
+# Check if the app is running on Railway (or another production environment)
+if os.environ.get('ON_RAILWAY') == 'true':
+    # 🌟 PRODUCTION SETTING: Use the ABSOLUTE path for the Railway Volume mount.
+    # Assuming Railway places your project in /app, your media is at /app/core/media.
+    MEDIA_ROOT = '/app/media'
+else:
+    # DEVELOPMENT SETTING: Your current local path.
+    MEDIA_ROOT = BASE_DIR / 'media'
+
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
