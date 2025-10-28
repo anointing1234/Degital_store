@@ -170,9 +170,10 @@ else:
     MEDIA_ROOT = BASE_DIR / 'media'
 
 
-# Limit max upload size (e.g. 10MB)
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
-FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+# Limit max upload size (e.g. 50MB)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50 MB
+
 
 
 
