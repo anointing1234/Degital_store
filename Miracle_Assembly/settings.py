@@ -170,6 +170,12 @@ else:
     MEDIA_ROOT = BASE_DIR / 'media'
 
 
+# Limit max upload size (e.g. 10MB)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
